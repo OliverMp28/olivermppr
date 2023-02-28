@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Dino html</title>
+
+</head>
+<body>
+    <main id="cuerpo">
+        <header>
+            <h1>Dino html</h1>
+            <nav class="ventanas">
+                <ul class="opciones-ventanas">
+                    <li>
+                        <a href="/index.html" class="enlaces-ventanas">Lista de reproducion</a>
+                    </li>
+                    <!-- <li>
+                        <a href="" class="enlaces-ventanas">----- G A M E -----</a>
+                    </li> -->
+                </ul>
+            </nav>
+        </header>
+
+        
+        <audio  id="audio" onplay="myFunctionAudio()">       
+            <source src="audios/Running With the wolves - Aurora.mp3" type="audio/mpeg" id="cancion">               
+        </audio>
+
+        <audio  id="final">
+            <source src="audios/que bendición.mp3"  type="audio/mpeg">
+        </audio>
+
+        <audio id="pipipi">
+            <source src="audios/pi pi pi.mp3" type="audio/mpeg">
+        </audio>
+
+
+
+        <section>
+            <div class="nombre">Running With the wolves - Aurora</div>
+            <div class="contenedor">
+                <div class="suelo"></div>
+
+                <div class="dino dino-corriendo"></div>
+
+                <div class="score">0</div>
+
+                <div class="game-over">GAME OVER</div>
+
+                <div class="you-win">¡¡¡Win!!!!</div>
+
+                <div class="jugar-denuevo"><a href="" class="try-again">Try Again</a></div>
+            </div>
+
+            <div id="tiempox"> 
+            </div>
+        <!--<div id="comprobacion1"> </div>
+            <div id="comprobacion2"> </div> 
+
+            <div id="tiempoDuracion">166</div> -->
+            
+            <script src="interaccion.js">
+
+            </script>
+        </section>
+
+    </main>
+</body>
+</html>

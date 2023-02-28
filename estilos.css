@@ -1,0 +1,674 @@
+/* CUERPO */
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    height: 100vh;
+    background-image: url("img/fondo3.png");
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+header h1{
+    width: 90%;
+    text-align: center;
+    padding: 5%;
+    padding-top: 10%;
+    padding-bottom: 30px;
+    font-family: 'Franklin Gothic Medium';
+  
+    margin: auto;
+    font-size: 4rem;
+
+  
+}
+
+
+/*movil*/
+@media screen and (max-width:767px){
+    main{
+        background-color: rgba(230, 231, 242, 0.634);
+        width: 100%;
+        min-height: 100vh;
+
+        margin: auto;
+    }
+
+    .opciones{
+        width: 90%;
+        margin: auto;
+        position: relative;
+        list-style-type: none;
+        display: grid;
+        gap: 30px; /*esto es para separar ,los botones de la lista */  
+        padding: 0px 0px 0px 4%;
+    }
+   
+    /* .opciones li{    
+    } */
+    
+    .canciones{
+        padding: 8px 15px;
+        border-radius: 50px;
+        border: 0;
+        color: #501697;
+        background-color: white;
+        box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        transition: all .5s ease;
+        font-style: normal;
+        text-decoration: none;
+        font-family:   sans-serif;
+        position: relative;
+        display: block;
+
+        }
+    
+    a.canciones:hover {
+        letter-spacing: 3px;
+        background-color: rgb(82, 13, 209);
+        color: hsl(0, 0%, 100%);
+        box-shadow: rgb(81, 14, 204) 0px 7px 29px 0px;
+    }
+    
+    /*a.canciones:active {
+        letter-spacing: 3px;
+        background-color: hsl(261deg 80% 48%);
+        color: hsl(0, 0%, 100%);
+        box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+        transform: translateY(10px);
+        transition: 100ms;
+    }*/
+}
+
+/*tablet*/
+@media screen and (min-width:768px){
+    main{
+        background-color: rgba(230, 231, 242, 0.807);
+        width: 80%;
+        margin: auto;
+        min-height: 100vh;
+    }
+
+    .opciones{
+        width: 80%;
+        margin: auto;
+        position: relative;
+        list-style-type: none;
+        display: grid;
+        gap: 60px; /*esto es para separar ,los botones de la lista */  
+    
+    }
+    
+    /* .opciones li{
+    
+    } */
+    
+    .canciones {
+        padding: 12px;
+        border-radius: 50px;
+        border: 0;
+        background-color: white;
+        box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        transition: all .5s ease;
+        font-style: normal;
+        text-decoration: none;
+        font-family:   sans-serif;
+        position: absolute;
+        }
+    
+    a.canciones:hover {
+        letter-spacing: 3px;
+        background-color: rgb(82, 13, 209);
+        color: hsl(0, 0%, 100%);
+        box-shadow: rgb(81, 14, 204) 0px 7px 29px 0px;
+    }
+    
+    /*a.canciones:active {
+        letter-spacing: 3px;
+        background-color: hsl(261deg 80% 48%);
+        color: hsl(0, 0%, 100%);
+        box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+        transform: translateY(10px);
+        transition: 100ms;
+    }*/
+}
+
+/*escritorio */
+@media screen and (min-width: 990px){
+    main{
+        background-color: rgba(230, 231, 242, 0.849);
+        width: 60%;
+        min-height: 100vh;
+        margin: auto;
+
+    }
+
+    .opciones{
+        width: 80%;
+        margin: auto;
+        position: relative;
+        list-style-type: none;
+        display: grid;
+        gap: 60px; /*esto es para separar ,los botones de la lista */  
+    
+    }
+    
+    /* .opciones li{
+    
+    } */
+    
+    .canciones {
+        padding: 15px 20px;
+        border-radius: 50px;
+        border: 0;
+        background-color: white;
+        box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        transition: all .5s ease;
+        font-style: normal;
+        text-decoration: none;
+        font-family:   sans-serif;
+        position: absolute;
+        }
+    
+    a.canciones:hover {
+        letter-spacing: 3px;
+        background-color: rgb(82, 13, 209);
+        color: hsl(0, 0%, 100%);
+        box-shadow: rgb(81, 14, 204) 0px 7px 29px 0px;
+    }
+    
+    /*a.canciones:active {
+        letter-spacing: 3px;
+        background-color: hsl(261deg 80% 48%);
+        color: hsl(0, 0%, 100%);
+        box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+        transform: translateY(10px);
+        transition: 100ms;
+    }*/
+}
+
+header{
+    align-content: center;
+    align-items: center;
+}
+
+.ventanas{
+    margin-bottom: 50px;
+
+
+}
+
+.opciones-ventanas{
+    width: 60%;
+    list-style-type: none;   
+    text-align: center;
+    margin: auto;
+ 
+
+    background-color: #992828;
+    border-radius: 30px;
+
+
+    padding: 12px 40px;
+}
+
+.opciones-ventanas li{
+    display: inline-block;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.opciones-ventanas li a{
+    color: aliceblue;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+    transition: all .5s ease;
+    font-size: 1rem;
+}
+
+.opciones-ventanas li:hover{
+    letter-spacing: 3px;
+    background-color: rgb(209, 61, 61);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(214, 64, 64) 0px 7px 29px 0px;
+}
+
+.lista{
+    position: relative;
+}
+
+footer {
+    margin-top: 90px;
+    width: 100%;
+    height: 15%;
+    background-color: #b14757;
+
+  }
+
+  footer > div {
+    margin: auto;
+    border-radius: 10px;
+    padding: 3%;
+    padding-bottom: 2%;
+  }
+  .seccionpie {
+    height: 100%;
+    width: 100%;
+    color: #ffffff;
+
+  }
+
+
+  .seccionpie h1 {
+    font-size: 1.2rem;
+  }
+
+
+  .seccionpie p a{
+    margin-top: 5px;
+    font-size: 1rem;
+    transition: 0.1s;
+  }
+  .seccionpie p a:hover {
+    background-color: #9b2537;
+  } 
+
+  .seccionpie a {  
+    color: #e4e4e4;
+    text-decoration: none;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------------------  JUEGO --------------------*/
+
+/* movil*/
+@media screen and (max-width:767px){
+    .contenedor{
+        width: 100%;
+        height: 230px;
+        margin: 0 auto;
+        border-radius: 20px;
+
+        
+    
+        position: relative;
+    
+        background: linear-gradient(#aa8c8c, rgb(124, 147, 187));
+        overflow: hidden;
+    }
+
+    .dino{
+        width: 42px;
+        height: 42px;
+    
+        position: absolute;
+        bottom: 22px;
+        left: 2px;
+        z-index: 2;
+    
+        background: url(img/dino.png) repeat-x 0px 0px;
+        background-size: 168px 42px;
+        background-position-x: 0px;
+    }
+
+    .suelo{
+        width: 200%;
+        height: 40px;
+    
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    
+        background: url(/img/suelo.png) repeat-x 0px 0px;
+        background-size: 50% 40px;
+    }
+    
+    .cactus{
+        width: 23px;
+        height: 48px;
+    
+        position: absolute;
+        bottom: 16px;
+        left: 600px;
+        z-index: 1;
+    
+        background: url(img/cactus1.png) no-repeat;
+        background-size: 24px 48px;
+    }
+    .cactus2{
+        width: 49px;
+        height: 33px;
+    
+        background: url(img/cactus2.png) no-repeat;
+        background-size: 49px 33px;
+    }
+
+    @keyframes animarDino{
+        from{
+            background-position: -42px;
+        }
+        to{
+            background-position: -126px;
+        }
+    }
+}
+
+/* tablet*/
+@media screen and (min-width:768px){
+    .contenedor{
+        width: 90%;
+        height: 300px;
+        margin: 0 auto;
+        border-radius: 20px;
+    
+        position: relative;
+    
+        background: linear-gradient(#aa8c8c, rgb(124, 147, 187));
+        overflow: hidden;
+    }
+
+    .dino{
+        width: 84px;
+        height: 84px;
+    
+        position: absolute;
+        bottom: 22px;
+        left: 42px;
+        z-index: 2;
+    
+        background: url(/img/dino.png) repeat-x 0px 0px;
+        background-size: 336px 84px;
+        background-position-x: 0px;
+    }
+
+    .suelo{
+        width: 200%;
+        height: 42px;
+    
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    
+        background: url(/img/suelo.png) repeat-x 0px 0px;
+        background-size: 50% 42px;
+    }
+
+    .cactus{
+        width: 46px;
+        height: 96px;
+    
+        position: absolute;
+        bottom: 16px;
+        left: 600px;
+        z-index: 1;
+    
+        background: url(img/cactus1.png) no-repeat;
+    }
+    .cactus2{
+        width: 98px;
+        height: 66px;
+    
+        background: url(img/cactus2.png) no-repeat;
+    }
+
+    @keyframes animarDino{
+        from{
+            background-position: -84px;
+        }
+        to{
+            background-position: -252px;
+        }
+    }
+}
+
+/* ordenador*/
+@media screen and (min-width: 990px){
+    .contenedor{
+        width: 85%;
+        height: 300px;
+        margin: 0 auto;
+        border-radius: 20px;
+    
+        position: relative;
+    
+        background: linear-gradient(#aa8c8c, rgb(124, 147, 187));
+        overflow: hidden;
+    }
+
+    .dino{
+        width: 84px;
+        height: 84px;
+    
+        position: absolute;
+        bottom: 22px;
+        left: 42px;
+        z-index: 2;
+    
+        background: url(/img/dino.png) repeat-x 0px 0px;
+        background-size: 336px 84px;
+        background-position-x: 0px;
+    }
+
+    .suelo{
+        width: 200%;
+        height: 42px;
+    
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    
+        background: url(/img/suelo.png) repeat-x 0px 0px;
+        background-size: 50% 42px;
+    }
+
+    .cactus{
+        width: 46px;
+        height: 96px;
+    
+        position: absolute;
+        bottom: 16px;
+        left: 600px;
+        z-index: 1;
+    
+        background: url(img/cactus1.png) no-repeat;
+    }
+    .cactus2{
+        width: 98px;
+        height: 66px;
+    
+        background: url(img/cactus2.png) no-repeat;
+    }
+
+    @keyframes animarDino{
+        from{
+            background-position: -84px;
+        }
+        to{
+            background-position: -252px;
+        }
+    }
+}
+
+.nombre{
+    margin: auto;
+    text-align: center;
+    background-size: cover;
+    font-size: 20px;
+    width: 60%;
+    padding: 10px;
+}
+
+
+.mediodia {
+    transition: all 3s;
+
+    background: linear-gradient(#a6a6ad, rgb(178, 184, 193));
+
+}
+
+.tarde {
+    background: linear-gradient(#c06253, rgb(122, 143, 176));
+}
+
+.noche {
+    background: linear-gradient(#4d455f, rgb(158, 159, 193));
+}
+
+
+
+.dino-corriendo{
+    animation: animarDino 0.25s steps(2) infinite;
+}
+
+.dino-estrellado{
+    background-position: -252;
+}
+
+.nube{
+    width: 92px;
+    height: 26px;
+
+    position: absolute;
+    z-index: 0;
+
+    background: url(img/nube.png) no-repeat;
+    background-size: 92px 26px;
+}
+
+.score{
+    width: 100px;
+    height: 30px;
+
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    z-index: 10;
+
+    color: rgb(255, 255, 255);
+    font-family: verdana;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.game-over{
+    display: none;
+
+    position: absolute;
+    width: 100%;
+
+
+    text-align: center;
+    bottom: 50%;
+    color: #e6fff7;
+    font-size: 30px;
+    font-family: Verdana;
+    font-weight: 700;
+
+    z-index: 10;
+}
+
+.jugar-denuevo{
+    display: none;
+
+    position: absolute;
+    width: 100%;
+
+
+    text-align: center;
+    bottom: 30%;
+    color: #cfd8d5;
+    font-size: 30px;
+    font-family: Verdana;
+    font-weight: 700;
+
+    z-index: 10;
+}
+
+.try-again {
+    padding: 17px 40px;
+    border-radius: 50px;
+    border: 0;
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 15px;
+    transition: all .5s ease;
+    font-style: normal;
+    text-decoration: none;
+    }
+
+.try-again:hover {
+    letter-spacing: 3px;
+    background-color: hsl(261deg 80% 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+.try-again:active {
+    letter-spacing: 3px;
+    background-color: hsl(261deg 80% 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+    transform: translateY(10px);
+    transition: 100ms;
+}
+
+.you-win{
+    display: none;
+
+    position: absolute;
+    width: 100%;
+
+
+    text-align: center;
+    bottom: 50%;
+    color: #e6fff7;
+    font-size: 30px;
+    font-family: Verdana;
+    font-weight: 700;
+
+    z-index: 10;
+}
+
+
+#tiempox{
+    background: #902176;
+    width: 10%;
+    z-index: 10;
+    margin: auto;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+#tiempoDuracion{
+    display: none;
+}

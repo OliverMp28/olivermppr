@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Audio multiple</title>
+<style type="text/css">
+/*<![CDATA[*/
+button{
+box-shadow: 1px 1px 0px #383838;
+margin: 10px;
+}
+button:hover{
+background: lime;
+box-shadow: 1px 1px 0px #000;
+}
+/*]]>*/
+</style>
+<script type="text/javascript">
+//<![CDATA[
+
+
+var audio;
+audio = document.getElementById("sonido1");
+
+function myFunction(){
+    audio = document.getElementById("sonido1");
+
+// ejecutamos con setInterval cada 1 seg la función verifica_fin()
+var fin =window.setInterval(function(){
+    verifica_fin();
+    },1000);
+}
+ 
+function verifica_fin(){
+if(audio.ended){// cuando finaliza ó está en pausa.... detenemos el setInterval
+clearInterval(fin);
+}else{
+var ta = Math.round(audio.currentTime); // recuperamos el tiempo actual de reproducción y lo redondeamos a un entero
+var segs = ta.toString(); // convertimos el tiempo actual a una cadena para poder formatearlo en hh:mm:ss
+document.getElementById('tiempox').innerHTML = segs; // mandamos el tiempo actual a un div en pantalla
+
+var tt = audio.duration;
+var duracion = tt.toString();
+document.getElementById('tiempoTotal').innerHTML = duracion;
+}
+}
+
+ 
+//]]>
+</script>
+</head>
+<body>
+<audio preload="auto" id="sonido1" controls onplay="myFunction()">
+<source src="audios/Mi Fiesta - Bandalos Chino.mp3" type="audio/mp3"/>
+</audio>
+<p>
+
+<div id="tiempox">   
+</div>
+
+<div id="tiempoTotal"></div>
+</body>
+</html>
