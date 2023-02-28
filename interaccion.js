@@ -182,7 +182,7 @@ function MoverSuelo() {
 
 }
 
-//movil
+//ordenador
 if(screen.width < 767){
     var gameVel = 0.7;
 
@@ -244,7 +244,8 @@ if(screen.width < 767){
         }
     }
 }
-//ordenador
+
+//movil
 else if (screen.width > 767){
     var gameVel = 1;
 
