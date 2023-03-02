@@ -10,7 +10,6 @@ if (document.readyState === "complete" || document.readyState === "interactive")
 }
 
 
-
 var sueloY = 22;
 var velY = 0;
 var impulso = 900;
@@ -57,7 +56,6 @@ var audioFinal = document.getElementById("final");
 var audioPi = document.getElementById("pipipi");
 
 var areaTouch= document.getElementById("cuerpo");
-
 
 //esto escucha cuando el audio esta reproduciendo ejecuta la funcion Init, que ejecutara el juego
 if(audio1!=0){
