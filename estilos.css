@@ -11,26 +11,12 @@ body{
     background-attachment: fixed;
 }
 
-header h1{
-    width: 90%;
-    text-align: center;
-    padding: 5%;
-    padding-top: 10%;
-    padding-bottom: 30px;
-    font-family: 'Franklin Gothic Medium';
-  
-    margin: auto;
-    font-size: 3rem;
-}
-
 
 /*movil*/
 @media screen and (max-width:767px){
     main{
         background-color: rgba(230, 231, 242, 0.634);
         width: 100%;
-        min-height: 100vh;
-
         margin: auto;
     }
 
@@ -88,8 +74,7 @@ header h1{
     main{
         background-color: rgba(230, 231, 242, 0.807);
         width: 80%;
-        margin: auto;
-        min-height: 100vh;
+        margin: auto;  
     }
 
     .opciones{
@@ -146,8 +131,26 @@ header h1{
     main{
         background-color: rgba(230, 231, 242, 0.849);
         width: 60%;
-        min-height: 100vh;
         margin: auto;
+    }
+
+    header div{
+        width: 60%;
+        margin: auto;
+        /*background: linear-gradient(#a93d4d, #d36c6c);*/
+        background-color: rgba(242, 230, 230, 0.055);
+    }
+
+    header div h1{
+        width: 60%;
+        text-align: center;
+        padding: 40px;
+
+        font-family: 'Franklin Gothic Medium';
+      
+        margin: auto;
+        font-size: 4rem;
+        color: rgb(227, 218, 218);
     }
 
     .opciones{
@@ -196,6 +199,23 @@ header h1{
         transform: translateY(10px);
         transition: 100ms;
     }*/
+    footer {
+        width: 60%;
+
+        background-color: #b14757;
+        margin: 0 auto;
+      }
+    
+      footer > div {
+        width: 80%;
+        margin: auto;
+        padding: 10px;
+        border-radius: 10px;
+      }
+}
+
+article{
+    padding: 10px;
 }
 
 header{
@@ -203,24 +223,18 @@ header{
     align-items: center;
 }
 
-.ventanas{
-    margin-bottom: 50px;
 
-
-}
 
 .opciones-ventanas{
-    width: 60%;
+    width: 100%;
     list-style-type: none;   
     text-align: center;
     margin: auto;
- 
+    
+    background-color: #8e4343;
 
-    background-color: #992828;
-    border-radius: 30px;
-
-
-    padding: 12px 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .opciones-ventanas li{
@@ -235,7 +249,7 @@ header{
     display: block;
     text-decoration: none;
     transition: all .5s ease;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .opciones-ventanas li:hover{
@@ -245,8 +259,16 @@ header{
     box-shadow: rgb(214, 64, 64) 0px 7px 29px 0px;
 }
 
+/*poner en responsive*/
 .lista{
-    position: relative;
+    margin: 0;
+}
+
+.lista h2{
+    color: #360606;
+    font-size: 1.5rem;
+    width: 70%;
+    margin: auto;
 }
 
 .recuperar {
@@ -254,20 +276,7 @@ header{
     padding: 10px;
 }
 
-footer {
 
-    width: 100%;
-    height: 15%;
-    background-color: #b14757;
-
-  }
-
-  footer > div {
-    margin: auto;
-    border-radius: 10px;
-    padding: 3%;
-    padding-bottom: 2%;
-  }
   .seccionpie {
     height: 100%;
     width: 100%;
@@ -275,17 +284,16 @@ footer {
 
   }
 
-
   .seccionpie h1 {
     font-size: 1.2rem;
   }
-
 
   .seccionpie p a{
     margin-top: 5px;
     font-size: 1rem;
     transition: 0.1s;
   }
+
   .seccionpie p a:hover {
     background-color: #9b2537;
   } 
@@ -550,7 +558,7 @@ footer {
 }
 
 .dino-estrellado{
-    background-position: -252;
+    background-position: -252px;
 }
 
 .nube{
