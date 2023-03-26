@@ -2,12 +2,12 @@ var time = new Date();
 var deltaTime = 0;
 
 //aca da la señal al cargar la pagina
-if (document.readyState === "complete" || document.readyState === "interactive"){
+/*if (document.readyState === "complete" || document.readyState === "interactive"){
     setTimeout(AudioLoad,1);
     
 }else{
     document.addEventListener("DOMContentLoaded", AudioLoad);
-}
+}*/
 
 
 var sueloY = 22;
@@ -20,6 +20,7 @@ var dinoPosY = sueloY;
 
 var sueloX = 0;
 var velEscenario = 1280/3;
+var gameVel;
 
 var score = 0;
 
@@ -48,8 +49,10 @@ var gameOver;
 var tryAgain;
 var detectarFin = false;
 var x = false;
+var obstaculo;
 
-var audio1=1;
+var botonPlay = document.getElementById("play");
+var audio1;
 audio1 = document.getElementById("audio");
 var cancion = document.getElementById('cancion');
 var audioFinal = document.getElementById("final");
@@ -57,18 +60,116 @@ var audioPi = document.getElementById("pipipi");
 
 var areaTouch= document.getElementById("cuerpo");
 
-//esto escucha cuando el audio esta reproduciendo ejecuta la funcion Init, que ejecutara el juego
-if(audio1!=0){
-    audio.addEventListener("play", function(){
-        Init();
-    });
-    
+var nuevaCancion;
+var caja1 = document.querySelector("#juegazo");
+var cajaLista = document.querySelector(".lista");
+var play = document.querySelector(".contenedor-boton");
+
+
+botonPlay.addEventListener("click", function(evento){
+    AudioOn();
+    play.style.display ="none";
+});
+
+function accion(){
+    caja1.style.display ="block";
+    cajaLista.style.display = "none";
+    var cancion0 = document.getElementById("cancion0");
+    cancion0.src = "audios/Sugar Red.mp3";
+    /*nuevaCancion = cancion0.cloneNode(true);
+    audio1.appendChild(nuevaCancion);*/
+    play.style.display = "block";
+
+    AudioLoad();
 }
 
-    
+function accion2(){
+    caja1.style.display ="block";
+    cajaLista.style.display = "none";
+    var cancion0 = document.getElementById("cancion0");
+    cancion0.src = "audios/HOPE.mp3";
+    play.style.display = "block";
+
+    AudioLoad();
+}
+
+function accion3(){
+    caja1.style.display ="block";
+    cajaLista.style.display = "none";
+    var cancion0 = document.getElementById("cancion0");
+    cancion0.src = "audios/Running With the wolves - Aurora.mp3";
+    play.style.display = "block";
+
+    AudioLoad();
+}
+
+function accion4(){
+    caja1.style.display ="block";
+    cajaLista.style.display = "none";
+    var cancion0 = document.getElementById("cancion0");
+    cancion0.src = "audios/Time.mp3";
+    play.style.display = "block";
+
+    AudioLoad();
+}
+
+function accion5(){
+    caja1.style.display ="block";
+    cajaLista.style.display = "none";
+    var cancion0 = document.getElementById("cancion0");
+    cancion0.src = "audios/Mi Fiesta.mp3";
+    play.style.display = "block";
+
+    AudioLoad();
+}
+
+function accion6(){
+    caja1.style.display ="block";
+    cajaLista.style.display = "none";
+    var cancion0 = document.getElementById("cancion0");
+    cancion0.src = "audios/Dawn of Faith - Eternal Eclipse.mp3";
+    play.style.display = "block";
+
+    AudioLoad();
+}
+
+function accion7(){
+    caja1.style.display ="block";
+    cajaLista.style.display = "none";
+    var cancion0 = document.getElementById("cancion0");
+    cancion0.src = "audios/What's Up Danger.mp3";
+    play.style.display = "block";
+
+    AudioLoad();
+}
+
+var repetir = document.getElementById("repetir");
+
+repetir.addEventListener("click", function(){
+    for(let i = 0; i<=obstaculos.length; i++){
+        obstaculos[i].style.display="none";
+        x=false;
+        gameOver.style.display = "none";
+        tryAgain.style.display = "none";
+        
+        audio1.currentTime=0;
+        audio1.play();
+        JuegoPlay();
+        score = 0;
+    }
+    MoverObstaculos();
+
+});
+
+//esto escucha cuando el audio esta reproduciendo ejecuta la funcion Loop, que ejecutara el juego
+if(audio1!=0){
+    audio1.addEventListener("play", function(){
+        Init();
+    });
+}
+
 
 function detectar(){
-
     if(x==false){
         window.addEventListener("blur", function() {
             audio1.pause();
@@ -89,22 +190,23 @@ function detectar(){
     }
 }
 
-
 function Init(){
     time = new Date();
     Start();
     Loop();
     myFunctionAudio();
     detectar();
+
+
+    dino.classList.add("dino-corriendo");   
 }
 
 function Loop(){
     deltaTime = (new Date() - time) / 1000;
     time = new Date();
-    Update()
+    Update();
     requestAnimationFrame(Loop);
 }
-
 
 function Start() {
     gameOver = document.querySelector(".game-over");
@@ -123,17 +225,16 @@ function Update() {
     MoverDinosaurio();
     MoverSuelo();
     DecidirCrearObstaculos();
-    DecidirCrearNubes();7
+    DecidirCrearNubes();
     MoverObstaculos();
     MoverNubes();
     DetectarColision();
 
-
     velY -= gravedad * deltaTime;
 }
 
-function HandleKeyDown(ev){       
-    if(ev.keyCode == 32 ){
+function HandleKeyDown(evento){       
+    if(evento.keyCode == 32 ){
         Saltar();
     }
 }
@@ -177,19 +278,18 @@ function TocarSuelo() {
 function MoverSuelo() {
     sueloX += CalcularDesplazamiento();
     suelo.style.left = -(sueloX % contenedor.clientWidth) + "px";
-
 }
 
-//ordenador
+//movil
 if(screen.width < 767){
-    var gameVel = 0.7;
+    gameVel = 0.7;
 
     function CalcularDesplazamiento() {
         return velEscenario * deltaTime * gameVel; 
     }
 
     function CrearObstaculo() {
-        var obstaculo = document.createElement("div");
+         obstaculo = document.createElement("div");
         contenedor.appendChild(obstaculo);
         obstaculo.classList.add("cactus");
         if(Math.random() > 0.5) obstaculo.classList.add("cactus2");
@@ -198,6 +298,7 @@ if(screen.width < 767){
     
         obstaculos.push(obstaculo);
         tiempoHastaObstaculo = tiempoObstaculoMin + Math.random() * (tiempoObstaculoMax-tiempoObstaculoMin) / gameVel;
+        return obstaculos;
     }
     
     function CrearNube() {
@@ -216,14 +317,26 @@ if(screen.width < 767){
         score++;
         textoScore.innerText = score;
         
-        if(score == 5){
+        if(score < 5){
+            gameVel = 0.7;
+            contenedor.classList.remove("mediodia");
+            contenedor.classList.remove("tarde");
+            contenedor.classList.remove("noche"); 
+        }
+        else if(score >= 5 && score < 15){
             gameVel = 1.2;
+            contenedor.classList.remove("tarde");
+            contenedor.classList.remove("noche");
             contenedor.classList.add("mediodia");
-        }else if(score == 15) {
+        }else if(score >= 15 && score < 25) {
             gameVel = 1.4;
+            contenedor.classList.remove("mediodia");
+            contenedor.classList.remove("noche");
             contenedor.classList.add("tarde");
-        } else if(score == 25) {
+        } else if(score >= 25) {
             gameVel = 2.1;
+            contenedor.classList.remove("mediodia");
+            contenedor.classList.remove("tarde");
             contenedor.classList.add("noche");
         }
         suelo.style.animationDuration = (3/gameVel)+"s";
@@ -243,16 +356,16 @@ if(screen.width < 767){
     }
 }
 
-//movil
+//computadora
 else if (screen.width > 767){
-    var gameVel = 1;
+    gameVel = 1;
 
     function CalcularDesplazamiento() {
         return velEscenario * deltaTime * gameVel;
     }
 
     function CrearObstaculo() {
-        var obstaculo = document.createElement("div");
+         obstaculo = document.createElement("div");
         contenedor.appendChild(obstaculo);
         obstaculo.classList.add("cactus");
         if(Math.random() > 0.5) obstaculo.classList.add("cactus2");
@@ -278,15 +391,26 @@ else if (screen.width > 767){
     function GanarPuntos() {
         score++;
         textoScore.innerText = score;
-         if(score == 5){
+        if(score < 5){
+            gameVel = 1;
+            contenedor.classList.remove("mediodia");
+            contenedor.classList.remove("tarde");
+            contenedor.classList.remove("noche"); 
+        }
+        else if(score >= 5 && score < 15){
             gameVel = 1.5;
+            contenedor.classList.remove("tarde");
+            contenedor.classList.remove("noche");
             contenedor.classList.add("mediodia");
-        }else if(score == 15) {
+        }else if(score >= 15 && score < 25) {
             gameVel = 2;
- 
+            contenedor.classList.remove("mediodia");
+            contenedor.classList.remove("noche");
             contenedor.classList.add("tarde");
-        } else if(score == 25) {
+        } else if(score >= 25) {
             gameVel = 3;
+            contenedor.classList.remove("mediodia");
+            contenedor.classList.remove("tarde");
             contenedor.classList.add("noche");
         }
         suelo.style.animationDuration = (3/gameVel)+"s";
@@ -308,11 +432,10 @@ else if (screen.width > 767){
 
 
 function Estrellarse() {
-    dino.classList.remove("dino-corriendo");
-    dino.classList.add("dino-estrellado");
-    parado = true;
-    AudioOff();
-    AudioPipipi();
+        dino.classList.remove("dino-corriendo");
+        dino.classList.add("dino-estrellado");
+        parado = true;
+        AudioOff();
 }
 
 function DecidirCrearObstaculos() {
@@ -354,11 +477,13 @@ function MoverNubes() {
     }
 }
 
+
+
 function GameOver() {
     Estrellarse();
     gameOver.style.display = "block";
     tryAgain.style.display = "block";
-    Terminar();
+    
 }
 
 function JuegoStop() {
@@ -384,7 +509,6 @@ function IsCollision(a, b, paddingTop, paddingRight, paddingBottom, paddingLeft)
 
 function AudioLoad(){
     audio1.load();
-    audio1.play();
 }
   
 function AudioOn(){

@@ -24,16 +24,26 @@
         </div>
     </header>
 
-    <main>
+    <main id="cuerpo">
     <section class="lista">
         <article>
             <h2>Facil</h2>
             <ul class="opciones"> 
                 <li>
-                    <a href="song1.html" class="canciones">Sugar red - 0:40</a>
+                    <button onclick="accion()" id="boton2">
+                        <div id="circulo"></div>
+                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
+                        <p id="minuto">2:30</p>
+                    </button>
+                <!--  <a href="song1.html" class="canciones">Sugar red - 0:40</a> -->
                 </li>
-                <li>       
-                    <a href="song7.html" class="canciones">Hope - 1:19</a>
+                <li> 
+                    <button onclick="accion2()" id="boton2">
+                        <div id="circulo"></div>
+                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
+                        <p id="minuto">2:30</p>
+                    </button>
+                 <!-- <a href="song7.html" class="canciones">Hope - 1:19</a> -->  
                 </li>
             </ul>
         </article>
@@ -41,11 +51,20 @@
             <h2>Medio</h2>
             <ul class="opciones"> 
                 <li>
-                    <a href="/song2.html" class="canciones">Running With the wolves - 2:43</a>
+                    <button onclick="accion3()" id="boton2">
+                        <div id="circulo"></div>
+                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
+                        <p id="minuto">2:30</p>
+                    </button>
+                <!--    <a href="/song2.html" class="canciones">Running With the wolves - 2:43</a> -->
                 </li>
                 <li>
-                    <a href="song4.html" class="canciones">Time - 2:46</a>
-                    
+                    <button onclick="accion4()" id="boton2">
+                        <div id="circulo"></div>
+                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
+                        <p id="minuto">2:30</p>
+                    </button>
+                <!--    <a href="song4.html" class="canciones">Time - 2:46</a> --> 
                 </li>
             </ul>
         </article>
@@ -53,18 +72,90 @@
             <h2>Dificil</h2>
             <ul class="opciones">
                 <li>
-                    <a href="song5.html" class="canciones">Mi Fiesta - 3:13</a> 
+                    <button onclick="accion5()" id="boton2">
+                        <div id="circulo"></div>
+                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
+                        <p id="minuto">2:30</p>
+                    </button>
+                    <!--<a href="song5.html" class="canciones">Mi Fiesta - 3:13</a>  --> 
                 </li>
                 <li>
-                    <a href="song3.html" class="canciones">Dawn of Faith - 3:16</a>
+                    <button onclick="accion6()" id="boton2">
+                        <div id="circulo"></div>
+                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
+                        <p id="minuto">3:30</p>
+                    </button>
+                    <!-- <a href="song3.html" class="canciones">Dawn of Faith - 3:16</a> --> 
                 </li>
                 <li>
-                    <a href="song6.html" class="canciones">What's Up Danger - 3:35</a>
+                    <button onclick="accion7()" id="boton2">
+                        <div id="circulo"></div>
+                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
+                        <p id="minuto">3:30</p>
+                    </button>
+               <!-- <a href="song6.html" class="canciones">What's Up Danger - 3:35</a> -->  
                 </li>
             </ul>
         </article>         
     </section>
+
+    <source src="audios/Sugar Red.mp3" type="audio/mpeg" id="cancion1">
+    <source src="audios/HOPE.mp3" type="audio/mpeg" id="cancion2">       
+
+    <source src="audios/Running With the wolves - Aurora.mp3" type="audio/mpeg" id="cancion3">  
+    <source src="audios/Time - Hans Zimmer 2.mp3" type="audio/mpeg" id="cancion4">  
+
+    <source src="audios/Mi Fiesta - Bandalos Chino.mp3" type="audio/mpeg" id="cancion5">  
+    <source src="audios/Dawn of Faith - Eternal Eclipse.mp3" type="audio/mpeg" id="cancion6">  
+    <source src="audios/What's Up Danger.mp3" type="audio/mpeg" id="cancion7">  
+    
+    <audio  id="audio" onplay="myFunctionAudio()"> 
+        <source  type="audio/mpeg" id="cancion0">
+    </audio>
+
+    <audio  id="final">
+        <source src="audios/que bendición.mp3"  type="audio/mpeg">
+    </audio>
+
+    <audio id="pipipi">
+        <source src="audios/pi pi pi.mp3" type="audio/mpeg">
+    </audio>
+
+    <section id="juegazo">
+        <div>
+            <a href="" class="canciones">Volverr</a>
+            <p class="nombre">  Sugar red</p>
+        </div>
+        <div class="contenedor">
+            <div class="suelo"></div>
+
+            <div class="dino"></div>
+
+            <div class="score">0</div>
+
+            <div class="game-over">GAME OVER</div>
+
+            <div class="you-win">¡¡¡Win!!!!</div>
+
+            <div class="jugar-denuevo">
+                <button onclick="reiniciar()" id="repetir" class="try-again">
+                    Try Again
+                </button>
+            </div>
+
+            <div class="contenedor-boton"> <button id="play"> Play!! </button></div>
+        </div>
+
+        <div id="tiempox"> </div>
+    <!--<div id="comprobacion1"> </div>
+        <div id="comprobacion2"> </div> 
+
+        <div id="tiempoDuracion">166</div> -->
+        
+        <script src="interaccion.js"></script>
+    </section>
     </main>
+    
     <footer>
         <div>
           <section class="seccionpie">
