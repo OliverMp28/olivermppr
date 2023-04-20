@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino html</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <style>
+        #atlantida{
+            float: right;
+            position: sticky;
+            background-attachment: fixed;
+        }
+        .recuperar {
+            clear: both;
+            padding: 10px;
+        }
+
+        @media screen and (max-width:767px){
+                article{
+                width: 80%;
+                float: left;
+            }
+                #titulo{
+                text-align: center;
+                font-size: 2rem;
+                margin-top: 60px;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+                .parrafo{
+                font-size: 1rem;
+                margin: 20px;
+            }
+        }
+        @media screen and (min-width: 768px){
+            article{
+            width: 50%;
+            float: left;
+            }
+            #titulo{
+                text-align: center;
+                font-size: 3rem;
+                margin-top: 80px;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+            .parrafo{
+                font-size: 2rem;
+                margin: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <header>
+        <div>
+            <nav class="ventanas">
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+            </label>
+                <ul class="opciones-ventanas">
+                    <li>
+                        <a href="/index.html" class="enlaces-ventanas">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="/quienesSomos.html" class="enlaces-ventanas">Quienes Somos</a>
+                    </li>
+                    <li>
+                        <a href="/Contacto.html" class="enlaces-ventanas">Contacto</a>
+                    </li>
+                </ul>
+            </nav> 
+            <h1>Dino HTML</h1>
+
+        </div>
+    </header>
+
+    <main id="cuerpo">
+    <section>
+       <article>
+        <h1 id="titulo">¡Trabajando con expertos!</h1>
+        <p class="parrafo">Somos parte del nuevo mundo, las actuales innovaciones y las nuevas tecnologias
+            componen un rumbo de continuo aprendizaje de la cual estamos involucrados. 
+        </p> 
+        
+        <p class="parrafo">   En Atlantida Cidep desarrollamos conocimientos en desarrollo de modo tal que logremos 
+        adentrarnos en el mundo laboral y mantener esa curiosidad que define a los programadores, 
+        la curiosidad y las ganas de no parar de aprender.  </p>
+       </article>
+        <img src="img/atlantida.jpg" alt="" id="atlantida">
+        <div class="recuperar"></div>
+        
+       
+    </section>
+    </main>
+    
+    <footer id="pielogo">
+        <div>
+          <section class="seccionpie">
+            <h1>Sitio Web</h1>
+            <p><a href="index.html">Inicio</a></p>
+            <p><a href="fotos.html">Quienes Somos</a></p>
+            <p><a href="videos.html">Contacto</a></p>
+          </section>
+    
+          <section class="seccionpie">
+            <h1>Version</h1>
+            <p><a href="contacto.html">3.0</a></p>
+          </section>
+    
+          <section class="seccionpie">
+            <address>Granada, España</address>
+            <small>&copy; Derechos Reservados 2023</small>
+          </section>
+    
+          <div class="recuperar"></div>
+        </div>
+      </footer>
+</body>
+</html>

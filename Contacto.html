@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino html</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <style>
+
+        .recuperar {
+            clear: both;
+            padding: 10px;
+        }
+
+        article h1{
+            font-size: 3rem;
+            margin: 40px;
+            text-align: center;
+
+        }
+        li{
+            list-style: none;
+            padding: 5px;
+            font-size: 2rem;
+        }
+
+        .mapa{
+            width: 60%;
+            border-radius: 10px;
+
+            border: 1px rgb(170, 35, 35) solid;
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+
+        @media screen and (max-width:767px){
+            #fondo{    
+            background-image: url("img/atlantida.jpg");
+            
+            width: 100%;
+            margin: 0 auto;
+           
+            height: 100vh;
+            background-size: contain;
+
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            float: left;
+        }
+            article{
+                width: 80%;
+                float: left;
+            }
+                #titulo{
+                text-align: center;
+                font-size: 2rem;
+                margin-top: 40px;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+                .parrafo{
+                font-size: 1rem;
+                margin: 20px;
+            }
+        }
+        @media screen and (min-width: 768px){
+            #fondo{    
+            background-image: url("img/atlantida.jpg");
+            width: 48%;
+           
+            height: 100vh;
+            background-size: contain;
+
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            float: left;
+            }
+            article{
+            width: 42%;
+            margin: 3%;
+            float: left;
+            }
+            #titulo{
+                text-align: center;
+                font-size: 3rem;
+                margin-top: 80px;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+            .parrafo{
+                font-size: 2rem;
+                margin: 30px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+   
+    <header>
+        <div>
+            <nav class="ventanas">
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn"><i class="fas fa-bars"></i>
+        </label>
+                <ul class="opciones-ventanas">
+                    <li>
+                        <a href="/index.html" class="enlaces-ventanas">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="/quienesSomos.html" class="enlaces-ventanas">Quienes Somos</a>
+                    </li>
+                    <li>
+                        <a href="/Contacto.html" class="enlaces-ventanas">Contacto</a>
+                    </li>
+                </ul>
+            </nav> 
+            <h1>Dino HTML</h1>
+
+        </div>
+    </header>
+
+    <main id="cuerpo">
+    <section>
+        <div id="fondo"></div>
+
+
+       <article>
+        <h1>Datos generales</h1>
+        <ul>
+            <li style="list-style: inside;">
+                <strong>Ubicacion</strong><br>
+            </li>
+            <li> C/ Acequia del Zute, 2 
+            <li> Granada - España</li> 
+            <li>CP: 18015 </li>
+        </ul>
+        <ul>
+            <li style="list-style: inside;"><strong>Telefono</strong></li>
+            <li>+34 93 566 83 02</li>
+        </ul>
+        <ul>
+            <li style="list-style: inside;"><strong>Email</strong></li>
+            <li>olivermppr@gmail.com</li>
+        </ul>
+
+       </article>
+       <div class="recuperar"></div>
+       
+    </section>
+    <section>
+        <div id="wrapper-9cd199b9cc5410cd3b1ad21cab2e54d3" class="mapa">
+            <div id="map-9cd199b9cc5410cd3b1ad21cab2e54d3" class="mapa2"></div><script>(function () {
+            var setting = {"height":557,"width":803,"zoom":17,"queryString":"C. Acequia del Zute, 2, 18015 Granada, España","place_id":"ChIJ8atIIs79cQ0RdYDdeyGohYI","satellite":false,"centerCoord":[37.205097812056046,-3.651759049999992],"cid":"0x8285a8217bdd8075","lang":"es","cityUrl":"/spain/granada","cityAnchorText":"Mapa de Granada, Andalucía, España","id":"map-9cd199b9cc5410cd3b1ad21cab2e54d3","embed_id":"903253"};
+            var d = document;
+            var s = d.createElement('script');
+            s.src = 'https://1map.com/js/script-for-user.js?embed_id=903253';
+            s.async = true;
+            s.onload = function (e) {
+              window.OneMap.initMap(setting)
+            };
+            var to = d.getElementsByTagName('script')[0];
+            to.parentNode.insertBefore(s, to);
+          })();</script><a href="https://1map.com/es/map-embed">1 Map</a>
+        </div>
+    </section>
+    </main>
+    
+    <footer id="pielogo">
+        <div>
+          <section class="seccionpie">
+            <h1>Sitio Web</h1>
+            <p><a href="index.html">Inicio</a></p>
+            <p><a href="fotos.html">Quienes Somos</a></p>
+            <p><a href="videos.html">Contacto</a></p>
+          </section>
+    
+          <section class="seccionpie">
+            <h1>Version</h1>
+            <p><a href="contacto.html">3.0</a></p>
+          </section>
+    
+          <section class="seccionpie">
+            <address>Granada, España</address>
+            <small>&copy; Derechos Reservados 2023</small>
+          </section>
+    
+          <div class="recuperar"></div>
+        </div>
+      </footer>
+</body>
+</html>

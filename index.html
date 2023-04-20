@@ -6,124 +6,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dino html</title>
     <link rel="stylesheet" href="estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <style>
+  
+
+    </style>
 </head>
 <body>
     <header>
         <div>
-            <h1>Dino html</h1>
             <nav class="ventanas">
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
                 <ul class="opciones-ventanas">
                     <li>
-                        <a href="/index.html" class="enlaces-ventanas">Lista de reproducion</a>
+                        <a href="/index.html" class="enlaces-ventanas">Inicio</a>
                     </li>
-                <!--   <li>
-                        <a href="" class="enlaces-ventanas">- - - G A M E - - -</a>
-                    </li>--> 
+                    <li>
+                        <a href="/quienesSomos.html" class="enlaces-ventanas">Quienes Somos</a>
+                    </li>
+                    <li>
+                        <a href="/Contacto.html" class="enlaces-ventanas">Contacto</a>
+                    </li>
                 </ul>
-        </nav>
+            </nav> 
+            <h1>Dino HTML</h1>
+
         </div>
     </header>
 
     <main id="cuerpo">
-    <section class="lista">
-        <article>
+    <div class="lista">
+        <article class="contenedorCanciones" >
             <h2>Facil</h2>
             <ul class="opciones"> 
                 <li>
-                    <button onclick="accion()" id="boton2">
-                        <div id="circulo"></div>
-                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
-                        <p id="minuto">2:30</p>
-                    </button>
-                <!--  <a href="song1.html" class="canciones">Sugar red - 0:40</a> -->
+                    <div id="boton1" class="botones">
+                        <img src="img/fondo.png" alt="" class="circulo">
+                        <p class="titulo-cancion">Sugar Red</p>
+                        <p class="minuto">0:40</p>
+                    <!--  <a href="song1.html" class="canciones">Sugar red - 0:40</a> -->
+                    </div>
                 </li>
                 <li> 
-                    <button onclick="accion2()" id="boton2">
-                        <div id="circulo"></div>
-                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
-                        <p id="minuto">2:30</p>
-                    </button>
+                    <div id="boton2" class="botones">
+                        <img src="img/fondo.png" alt="" class="circulo">
+                        <p class="titulo-cancion">Hope</p>
+                        <p class="minuto">1:19</p>
+                    </div>
+                    <!--<button onclick="accion2()"  class="botones">
+                            Hope 1:19</button>--> 
                  <!-- <a href="song7.html" class="canciones">Hope - 1:19</a> -->  
                 </li>
+
             </ul>
-        </article>
-        <article>
+        </article> 
+        <article class="contenedorCanciones">
             <h2>Medio</h2>
             <ul class="opciones"> 
                 <li>
-                    <button onclick="accion3()" id="boton2">
-                        <div id="circulo"></div>
-                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
-                        <p id="minuto">2:30</p>
-                    </button>
+                    <div id="boton3" class="botones">
+                        <img src="img/fondo.png" alt="" class="circulo">
+                        <p class="titulo-cancion">Running With the wolves</p>
+                        <p class="minuto">2:43</p>
+                    </div>
                 <!--    <a href="/song2.html" class="canciones">Running With the wolves - 2:43</a> -->
                 </li>
                 <li>
-                    <button onclick="accion4()" id="boton2">
-                        <div id="circulo"></div>
-                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
-                        <p id="minuto">2:30</p>
-                    </button>
+                    <div id="boton4" class="botones">
+                        <img src="img/fondo.png" alt="" class="circulo">
+                        <p class="titulo-cancion">Time</p>
+                        <p class="minuto">2:46</p>
+                    </div>
                 <!--    <a href="song4.html" class="canciones">Time - 2:46</a> --> 
                 </li>
             </ul>
         </article>
-        <article>
+        <article  class="contenedorCanciones">
             <h2>Dificil</h2>
             <ul class="opciones">
                 <li>
-                    <button onclick="accion5()" id="boton2">
-                        <div id="circulo"></div>
-                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
-                        <p id="minuto">2:30</p>
-                    </button>
+                    <div id="boton5" class="botones">
+                        <img src="img/fondo.png" alt="" class="circulo">
+                        <p class="titulo-cancion">Mi Fiesta</p>
+                        <p class="minuto">3:13</p>
+                    </div>
                     <!--<a href="song5.html" class="canciones">Mi Fiesta - 3:13</a>  --> 
                 </li>
                 <li>
-                    <button onclick="accion6()" id="boton2">
-                        <div id="circulo"></div>
-                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
-                        <p id="minuto">3:30</p>
-                    </button>
+                    <div id="boton6" class="botones">
+                        <img src="img/fondo.png" alt="" class="circulo">
+                        <p class="titulo-cancion">Dawn of Faith</p>
+                        <p class="minuto">3:16</p>
+                    </div>
                     <!-- <a href="song3.html" class="canciones">Dawn of Faith - 3:16</a> --> 
                 </li>
                 <li>
-                    <button onclick="accion7()" id="boton2">
-                        <div id="circulo"></div>
-                        <p id="titulo2">ESTA ES LA PRIMERA PRUEBA</p>
-                        <p id="minuto">3:30</p>
-                    </button>
+                    <div id="boton7" class="botones">
+                        <img src="img/fondo.png" alt="" class="circulo">
+                        <p class="titulo-cancion">What's Up Danger</p>
+                        <p class="minuto">3:35</p>
+                    </div>
                <!-- <a href="song6.html" class="canciones">What's Up Danger - 3:35</a> -->  
                 </li>
             </ul>
         </article>         
-    </section>
+    </div>
 
-    <source src="audios/Sugar Red.mp3" type="audio/mpeg" id="cancion1">
-    <source src="audios/HOPE.mp3" type="audio/mpeg" id="cancion2">       
-
-    <source src="audios/Running With the wolves - Aurora.mp3" type="audio/mpeg" id="cancion3">  
-    <source src="audios/Time - Hans Zimmer 2.mp3" type="audio/mpeg" id="cancion4">  
-
-    <source src="audios/Mi Fiesta - Bandalos Chino.mp3" type="audio/mpeg" id="cancion5">  
-    <source src="audios/Dawn of Faith - Eternal Eclipse.mp3" type="audio/mpeg" id="cancion6">  
-    <source src="audios/What's Up Danger.mp3" type="audio/mpeg" id="cancion7">  
-    
     <audio  id="audio" onplay="myFunctionAudio()"> 
-        <source  type="audio/mpeg" id="cancion0">
+        <source  type="audio/mpeg" id="cancion0" src="a">
     </audio>
 
     <audio  id="final">
-        <source src="audios/que bendición.mp3"  type="audio/mpeg">
+        <source src="audios/quebendición.mp3"  type="audio/mpeg">
     </audio>
 
     <audio id="pipipi">
-        <source src="audios/pi pi pi.mp3" type="audio/mpeg">
+        <source src="audios/pipipi.mp3" type="audio/mpeg">
     </audio>
 
     <section id="juegazo">
         <div>
-            <a href="" class="canciones">Volverr</a>
+            <a href="" id="volver">Volver</a>
             <p class="nombre">  Sugar red</p>
         </div>
         <div class="contenedor">
@@ -156,18 +162,27 @@
     </section>
     </main>
     
-    <footer>
+    <footer id="pielogo">
         <div>
           <section class="seccionpie">
-            <h2>Comentarios </h2>
-            <p><a href="https://forms.gle/UwaytcaF8j7fq5WW8">-> Ingresar comentarios aqui</a></p>
+            <h1>Sitio Web</h1>
+            <p><a href="index.html">Inicio</a></p>
+            <p><a href="fotos.html">Quienes Somos</a></p>
+            <p><a href="videos.html">Contacto</a></p>
           </section>
+    
           <section class="seccionpie">
-            <h4>version 3.0</h4>
-            <address>Granada, España</address> 
+            <h1>Version</h1>
+            <p><a href="contacto.html">3.0</a></p>
+          </section>
+    
+          <section class="seccionpie">
+            <address>Granada, España</address>
             <small>&copy; Derechos Reservados 2023</small>
           </section>
+    
+          <div class="recuperar"></div>
         </div>
-    </footer>
+      </footer>
 </body>
 </html>

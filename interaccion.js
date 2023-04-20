@@ -65,13 +65,29 @@ var caja1 = document.querySelector("#juegazo");
 var cajaLista = document.querySelector(".lista");
 var play = document.querySelector(".contenedor-boton");
 
+//botones
+const boton1= document.getElementById("boton1");
+const boton2= document.getElementById("boton2");
+const boton3= document.getElementById("boton3");
+const boton4= document.getElementById("boton4");
+const boton5= document.getElementById("boton5");
+const boton6= document.getElementById("boton6");
+const boton7= document.getElementById("boton7");
 
 botonPlay.addEventListener("click", function(evento){
     AudioOn();
     play.style.display ="none";
 });
 
-function accion(){
+boton1.addEventListener("click", accion1);
+boton2.addEventListener("click", accion2);
+boton3.addEventListener("click", accion3);
+boton4.addEventListener("click", accion4);
+boton5.addEventListener("click", accion5);
+boton6.addEventListener("click", accion6);
+boton7.addEventListener("click", accion7);
+
+function accion1(){
     caja1.style.display ="block";
     cajaLista.style.display = "none";
     var cancion0 = document.getElementById("cancion0");
@@ -143,21 +159,22 @@ function accion7(){
     AudioLoad();
 }
 
+
 var repetir = document.getElementById("repetir");
 
 repetir.addEventListener("click", function(){
     for(let i = 0; i<=obstaculos.length; i++){
         obstaculos[i].style.display="none";
-        x=false;
         gameOver.style.display = "none";
         tryAgain.style.display = "none";
-        
+        x=false;
         audio1.currentTime=0;
         audio1.play();
         JuegoPlay();
         score = 0;
     }
-    MoverObstaculos();
+    
+   
 
 });
 
@@ -177,8 +194,11 @@ function detectar(){
         });
     
         window.addEventListener("focus", function() {
+          if(!x){
             audio1.play();
             JuegoPlay();
+          }
+
         });
           
      }
@@ -483,7 +503,7 @@ function GameOver() {
     Estrellarse();
     gameOver.style.display = "block";
     tryAgain.style.display = "block";
-    
+    Terminar();
 }
 
 function JuegoStop() {

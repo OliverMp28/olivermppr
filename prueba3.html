@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .boton-con-imagen {
+  display: inline-block;
+  position: relative;
+  background-color: brown;
+  padding: 90px;
+  width: 200px;
+}
+
+.imagen-boton {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  width: 50%;
+}
+
+
+.texto-boton {
+  padding-left: 50px; /* ajusta este valor para el espacio entre la imagen y el texto */
+}
+    </style>
+</head>
+<body>
+    <div class="boton-con-imagen" id="miBoton">
+        <img src="img/fondo.png" alt="Imagen del botón" class="imagen-boton">
+        <button class="texto-boton">Mi botón</button>
+        <p>asdfg</p>
+      </div>
+    </body>
+    <script>
+        const miBoton = document.querySelector("#miBoton");
+
+miBoton.addEventListener("click", function() {
+  alert("Haz hecho clic en el botón");
+});
+    </script>
+</html>

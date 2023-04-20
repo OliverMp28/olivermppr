@@ -1,63 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>Audio multiple</title>
-<style type="text/css">
-/*<![CDATA[*/
-button{
-box-shadow: 1px 1px 0px #383838;
-margin: 10px;
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Responsive</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+<style>
+    *{
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
 }
-button:hover{
-background: lime;
-box-shadow: 1px 1px 0px #000;
+
+nav{
+    background: #2fcdcd;
+    height: 80px;
+    width: 100%;
 }
-/*]]>*/
+.enlace{
+    position: absolute;
+    padding: 20px 50px;
+}
+.logo{
+    height: 40px;
+}
+nav ul{
+    float: right;
+    margin-right: 20px;
+}
+nav ul li{
+    display: inline-block;
+    line-height: 80px;
+    margin: 0 5px;
+}
+nav ul li a{
+    color: #fff;
+    font-size: 18px;
+    padding: 7px 13px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+li a.active, li a:hover{
+    background: #000090;
+    transition: .5s;
+}
+.checkbtn{
+    font-size: 30px;
+    color: #fff;
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+}
+#check{
+    display: none;
+}
+section{
+    background: url(fondo.jpg) no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: calc(100vh - 80px);
+}
+
+@media (max-width: 952px){
+    .enlace{
+        padding-left: 20px;
+    }
+    nav ul li a{
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 858px){
+    .checkbtn{
+        display: block;
+    }
+    ul{
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: #2c3e50;
+        top: 80px;
+        left: -100%;
+        text-align: center;
+        transition: all .5s;
+    }
+    nav ul li{
+        display: block;
+        margin: 50px 0;
+        line-height: 30px;
+    }
+    nav ul li a{
+        font-size: 20px;
+    }
+    li a:hover, li a.active{
+        background: none;
+        color: red;
+    }
+    #check:checked ~ ul{
+        left:0;
+    }
+}
 </style>
-<script type="text/javascript">
-//<![CDATA[
 
-
-var audio;
-audio = document.getElementById("sonido1");
-
-function myFunction(){
-    audio = document.getElementById("sonido1");
-
-// ejecutamos con setInterval cada 1 seg la función verifica_fin()
-var fin =window.setInterval(function(){
-    verifica_fin();
-    },1000);
-}
- 
-function verifica_fin(){
-if(audio.ended){// cuando finaliza ó está en pausa.... detenemos el setInterval
-clearInterval(fin);
-}else{
-var ta = Math.round(audio.currentTime); // recuperamos el tiempo actual de reproducción y lo redondeamos a un entero
-var segs = ta.toString(); // convertimos el tiempo actual a una cadena para poder formatearlo en hh:mm:ss
-document.getElementById('tiempox').innerHTML = segs; // mandamos el tiempo actual a un div en pantalla
-
-var tt = audio.duration;
-var duracion = tt.toString();
-document.getElementById('tiempoTotal').innerHTML = duracion;
-}
-}
-
- 
-//]]>
-</script>
 </head>
 <body>
-<audio preload="auto" id="sonido1" controls onplay="myFunction()">
-<source src="audios/Mi Fiesta - Bandalos Chino.mp3" type="audio/mp3"/>
-</audio>
-<p>
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
 
-<div id="tiempox">   
-</div>
+        <ul>
+            <li><a class="active" href="#">Inicio</a></li>
+            <li><a href="#">Nosotros</a></li>
+            <li><a href="#">Servicios</a></li>
+            <li><a href="#">Portafolio</a></li>
+            <li><a href="#">Contacto</a></li>
+        </ul>
+    </nav>
+    <section></section>
 
-<div id="tiempoTotal"></div>
+    <main id="cuerpo">
+        <section class="lista">
+            <article class="contenedorCanciones" >
+                <h2>Facil</h2>
+                <ul class="opciones"> 
+                    <li>
+                        <button onclick="accion()" id="boton2" class="botones">
+                            <div class="circulo" id="circulo1"></div>
+                            <p class="titulo">Sugar Red</p>
+                            <p id="minuto">0:40</p>
+                        </button>
+                    <!--  <a href="song1.html" class="canciones">Sugar red - 0:40</a> -->
+                    </li>
+                    <li> 
+                        <button onclick="accion2()" id="boton2" class="botones">
+                            <div class="circulo" id="circulo2"></div>
+                            <p class="titulo">Hope</p>
+                            <p id="minuto">1:19</p>
+                        </button>
+                     <!-- <a href="song7.html" class="canciones">Hope - 1:19</a> -->  
+                    </li>
+    
+                </ul>
+            </article>
+            <article class="contenedorCanciones">
+                <h2>Medio</h2>
+                <ul class="opciones"> 
+                    <li>
+                        <button onclick="accion3()" id="boton2" class="botones">
+                            <div class="circulo" id="circulo3"></div>
+                            <p class="titulo">Running With the wolves</p>
+                            <p id="minuto">2:43</p>
+                        </button>
+                    <!--    <a href="/song2.html" class="canciones">Running With the wolves - 2:43</a> -->
+                    </li>
+                    <li>
+                        <button onclick="accion4()" id="boton2" class="botones">
+                            <div class="circulo" id="circulo4"></div>
+                            <p class="titulo">Time</p>
+                            <p id="minuto">2:46</p>
+                        </button>
+                        
+                    <!--    <a href="song4.html" class="canciones">Time - 2:46</a> --> 
+                    </li>
+                </ul>
+            </article>
+            <article  class="contenedorCanciones">
+                <h2>Dificil</h2>
+                <ul class="opciones">
+                    <li>
+                        <button onclick="accion5()" id="boton2" class="botones">
+                            <div class="circulo" id="circulo5"></div>
+                            <p class="titulo">Mi Fiesta</p>
+                            <p id="minuto">3:13</p>
+                        </button>
+                        <!--<a href="song5.html" class="canciones">Mi Fiesta - 3:13</a>  --> 
+                    </li>
+                    <li>
+                        <button onclick="accion6()" id="boton2" class="botones">
+                            <div class="circulo" id="circulo6"></div>
+                            <p class="titulo">Dawn of Faith</p>
+                            <p id="minuto">3:16</p>
+                        </button>
+                        <!-- <a href="song3.html" class="canciones">Dawn of Faith - 3:16</a> --> 
+                    </li>
+                    <li>
+                        <button onclick="accion7()" id="boton2" class="botones">
+                            <div class="circulo" id="circulo7"></div>
+                            <p class="titulo">What's Up Danger</p>
+                            <p id="minuto">3:35</p>
+                        </button>
+                   <!-- <a href="song6.html" class="canciones">What's Up Danger - 3:35</a> -->  
+                    </li>
+                </ul>
+            </article>         
+        </section>
+    
+        <audio  id="audio" onplay="myFunctionAudio()"> 
+            <source  type="audio/mpeg" id="cancion0">
+        </audio>
+    
+        <audio  id="final">
+            <source src="audios/que bendición.mp3"  type="audio/mpeg">
+        </audio>
+    
+        <audio id="pipipi">
+            <source src="audios/pi pi pi.mp3" type="audio/mpeg">
+        </audio>
+    
+        <section id="juegazo">
+            <div>
+                <a href="" id="volver">Volverr</a>
+                <p class="nombre">  Sugar red</p>
+            </div>
+            <div class="contenedor">
+                <div class="suelo"></div>
+    
+                <div class="dino"></div>
+    
+                <div class="score">0</div>
+    
+                <div class="game-over">GAME OVER</div>
+    
+                <div class="you-win">¡¡¡Win!!!!</div>
+    
+                <div class="jugar-denuevo">
+                    <button onclick="reiniciar()" id="repetir" class="try-again">
+                        Try Again
+                    </button>
+                </div>
+    
+                <div class="contenedor-boton"> <button id="play"> Play!! </button></div>
+            </div>
+    
+            <div id="tiempox"> </div>
+        <!--<div id="comprobacion1"> </div>
+            <div id="comprobacion2"> </div> 
+    
+            <div id="tiempoDuracion">166</div> -->
+            
+            <script src="interaccion.js"></script>
+        </section>
+        </main>
 </body>
 </html>

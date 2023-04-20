@@ -6,33 +6,39 @@
 
 body{
     height: 100vh;
-    background-image: url("img/fondo3.png");
-    background-size: cover;
-    background-attachment: fixed;
 }
 
 
 /*movil*/
 @media screen and (max-width:767px){
     main{
-        background-color: rgba(230, 231, 242, 0.634);
+        background-color: rgb(230, 231, 242);
         width: 100%;
         margin: auto;
     }
 
     .opciones{
-        width: 85%;
-        margin: auto;
+        width: 100%;
+        margin: 0 auto;
         position: relative;
         list-style-type: none;
         display: grid;
         gap: 20px; /*esto es para separar ,los botones de la lista */  
-     
+        background-color: #9d9d9d;
+        padding: 15px;
+        border-radius: 20px;
     }
-   
-    /* .opciones li{    
-    } */
-    
+    header div h1{
+        width: 55%;
+        text-align: center;
+        padding: 35px;
+
+        font-family: 'Franklin Gothic Medium';
+      
+        margin: auto;
+        font-size: 2.5rem;
+        color: rgb(227, 218, 218);
+    }
     .canciones{
         padding: 12px 15px;
         border-radius: 50px;
@@ -72,21 +78,34 @@ body{
 /*tablet*/
 @media screen and (min-width:768px){
     main{
-        background-color: rgba(230, 231, 242, 0.807);
-        width: 80%;
+        background-color: rgb(230, 231, 242);
+        width: 100%;
         margin: auto;  
     }
 
     .opciones{
-        width: 75%;
+        width: 70%;
         margin: auto;
         position: relative;
         list-style-type: none;
         display: grid;
         gap: 20px; /*esto es para separar ,los botones de la lista */  
-    
+        background-color: #838383;
+        padding: 20px;
+        border-radius: 20px;
     }
     
+    header div h1{
+        width: 60%;
+        text-align: center;
+        padding: 40px;
+
+        font-family: 'Franklin Gothic Medium';
+      
+        margin: auto;
+        font-size: 3rem;
+        color: rgb(227, 218, 218);
+    }
     /* .opciones li{
     
     } */
@@ -129,38 +148,40 @@ body{
 /*escritorio */
 @media screen and (min-width: 990px){
     main{
-        background-color: rgba(230, 231, 242, 0.849);
-        width: 60%;
+        background-color: rgb(230, 231, 242);
+        width: 100%;
         margin: auto;
     }
 
     header div{
-        width: 60%;
         margin: auto;
         /*background: linear-gradient(#a93d4d, #d36c6c);*/
         background-color: rgba(242, 230, 230, 0.055);
     }
 
     header div h1{
-        width: 60%;
+        width: 20%;
         text-align: center;
-        padding: 40px;
+      
 
         font-family: 'Franklin Gothic Medium';
       
         margin: auto;
+        margin-left: 36%;
         font-size: 4rem;
-        color: rgb(227, 218, 218);
+        color: rgb(255, 255, 255);
     }
 
     .opciones{
-        width: 65%;
+        width: 50%;
         margin: auto;
         position: relative;
         list-style-type: none;
         display: grid;
         gap: 20px; /*esto es para separar ,los botones de la lista */  
-    
+        background-color: #aa5d5d;
+        padding: 20px;
+        border-radius: 20px;
     }
     
     /* .opciones li{
@@ -221,20 +242,21 @@ article{
 header{
     align-content: center;
     align-items: center;
+
+    background-image: url("img/fondo3.png");
+    background-size: cover;
 }
 
 
 
 .opciones-ventanas{
-    width: 100%;
+    width: 40%;
     list-style-type: none;   
     text-align: center;
-    margin: auto;
     
-    background-color: #8e4343;
-
-    padding-top: 5px;
-    padding-bottom: 5px;
+    float: right;
+  
+    margin-bottom: 100px;
 }
 
 .opciones-ventanas li{
@@ -245,7 +267,7 @@ header{
 
 .opciones-ventanas li a{
     color: aliceblue;
-    padding: 10px;
+
     display: block;
     text-decoration: none;
     transition: all .5s ease;
@@ -278,32 +300,186 @@ header{
 }
 
 
-  .seccionpie {
-    height: 100%;
+
+/* CSS */
+
+.opciones li div{
+    display: inline-block; /*con esto hago que todo el contenido incluso el contenido vacio sea parte del boton*/
     width: 100%;
-    color: #ffffff;
+    margin: 0 auto;
+    border-radius: 50px;
+    border: 0;
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all .5s ease;
+    font-style: normal;
+    text-decoration: none;
+    font-family:   sans-serif;
+    position: relative;
+    height: 62px;
+    }
 
-  }
+.opciones li div:hover {
+    letter-spacing: 3px;
+    background-color: rgb(82, 13, 209);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(81, 14, 204) 0px 7px 29px 0px;
+}
 
-  .seccionpie h1 {
-    font-size: 1.2rem;
-  }
 
-  .seccionpie p a{
+.contenedorCanciones{
+    width: 60%;
+   
+    margin: 0 auto;
+    
+    
+    display: block;
+}
+
+.circulo{
+    background-size: auto;
+
+    border-radius: 50%;
+    float: left;
+    width: 52px;
+    height: 52px;
+    margin-left: 5px;
     margin-top: 5px;
-    font-size: 1rem;
-    transition: 0.1s;
+}
+
+
+.titulo-cancion{
+    float: left;
+    margin-left: 12px;
+    font-family: 'Franklin Gothic Medium';
+    font-size: 1.2rem;
+    line-height: 30px;
+
+    width: 55%;
+}
+.minuto{
+    color: rgb(67, 42, 165);
+    float: right;
+    line-height: 62px; /* esto lo uso para centrar el texto verticalmente, al cual le paso la medida del contenedor en pixeles*/
+    margin-right: 10px;
+}
+
+/*footer*/
+#pielogo {
+    width: 98%;
+    background-image: url("img/fondo3.png");
+    padding: 2%;
   }
-
-  .seccionpie p a:hover {
-    background-color: #9b2537;
-  } 
-
-  .seccionpie a {  
-    color: #e4e4e4;
+  #pielogo > div {
+    width: 90%;
+    margin: 0px auto;
+    background-color: #b5a6d5;
+    border-radius: 10px;
+  }
+  .seccionpie {
+    float: left;
+    width: 27.33%;
+    padding: 3%;
+    
+  }
+  .seccionpie h1 {
+    font: bold 20px Arial, sans-serif;
+  }
+  .seccionpie p {
+    margin-top: 5px;
+    vertical-align:bottom;
+  }
+  .seccionpie a {
+    font: bold 16px Arial, sans-serif;
+    color: #666666;
     text-decoration: none;
   }
 
+  nav{
+    background: #263aa900;
+    height: 80px;
+    width: 100%;
+}
+
+.logo{
+    height: 40px;
+}
+nav .opciones-ventanas{
+    float: right;
+}
+nav .opciones-ventanas li{
+    display: inline-block;
+    line-height: 80px;
+    margin: 0 5px;
+}
+nav ul li a{
+    color: #fff;
+    font-size: 18px;
+
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+li a.active, li a:hover{
+    background: #1d1d72f8;
+    transition: .5s;
+}
+.checkbtn{
+    font-size: 30px;
+    color: #fff;
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+}
+#check{
+    display: none;
+}
+
+
+@media (max-width: 952px){
+    .enlace{
+        padding-left: 20px;
+    }
+    nav ul li a{
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 858px){
+    .checkbtn{
+        display: block;
+    }
+    .opciones-ventanas{
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: #1e3f60fb;
+        top: 80px;
+        left: -100%;
+        text-align: center;
+        transition: all .0.2s;
+        z-index: 5;
+    }
+    nav .opciones-ventanas li{
+        display: block;
+        margin: 50px 0;
+        line-height: 30px;
+    }
+    nav .opciones-ventanas li a{
+        font-size: 20px;
+    }
+    li a:hover, li a.active{
+        background: none;
+        color: rgb(243, 243, 243);
+    }
+    #check:checked ~ .opciones-ventanas{
+        left:0;
+    }
+}
 
 
 
@@ -318,7 +494,30 @@ header{
 
 
 /* -------------------  JUEGO --------------------*/
-
+#volver{
+    width: 70px;
+    text-align: center;
+    text-decoration: none;
+    float: right;
+    margin-right: 20%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    color: #fefdff;
+    background-color: rgb(135, 42, 50);
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    font-size: 1rem;
+    transition: all .5s ease;
+    font-style: normal;
+    font-family:   sans-serif;
+    position: relative;
+    display: block;
+}
+#volver:hover {
+    letter-spacing: 3px;
+    background-color: rgb(135, 42, 50);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(61, 37, 106) 0px 7px 29px 0px;
+}
 /* movil*/
 @media screen and (max-width:767px){
     .contenedor{
@@ -394,7 +593,7 @@ header{
 /* tablet*/
 @media screen and (min-width:768px){
     .contenedor{
-        width: 90%;
+        width: 70%;
         height: 300px;
         margin: 0 auto;
         border-radius: 20px;
@@ -462,7 +661,7 @@ header{
 /* ordenador*/
 @media screen and (min-width: 990px){
     .contenedor{
-        width: 85%;
+        width: 60%;
         height: 300px;
         margin: 0 auto;
         border-radius: 20px;
