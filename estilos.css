@@ -179,7 +179,7 @@ body{
         list-style-type: none;
         display: grid;
         gap: 20px; /*esto es para separar ,los botones de la lista */  
-        background-color: #aa5d5d;
+        background-color: #9c2a2a;
         padding: 20px;
         border-radius: 20px;
     }
@@ -324,9 +324,9 @@ header{
 
 .opciones li div:hover {
     letter-spacing: 3px;
-    background-color: rgb(82, 13, 209);
+    background-color: rgb(112, 25, 61);
     color: hsl(0, 0%, 100%);
-    box-shadow: rgb(81, 14, 204) 0px 7px 29px 0px;
+   box-shadow:  rgb(112, 25, 61) 0px 7px 29px 0px; 
 }
 
 
@@ -361,11 +361,12 @@ header{
     width: 55%;
 }
 .minuto{
-    color: rgb(67, 42, 165);
     float: right;
     line-height: 62px; /* esto lo uso para centrar el texto verticalmente, al cual le paso la medida del contenedor en pixeles*/
     margin-right: 10px;
+    font-size: 1.1rem;
 }
+
 
 /*footer*/
 #pielogo {
