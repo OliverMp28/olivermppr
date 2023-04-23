@@ -303,7 +303,7 @@ header{
 
 /* CSS */
 
-.opciones li div{
+.opciones li .botones{
     display: inline-block; /*con esto hago que todo el contenido incluso el contenido vacio sea parte del boton*/
     width: 100%;
     margin: 0 auto;
@@ -320,9 +320,10 @@ header{
     font-family:   sans-serif;
     position: relative;
     height: 62px;
+    line-height: 62px;
     }
 
-.opciones li div:hover {
+.opciones li .botones:hover {
     letter-spacing: 3px;
     background-color: rgb(112, 25, 61);
     color: hsl(0, 0%, 100%);
@@ -340,27 +341,37 @@ header{
 }
 
 .circulo{
+    margin-top: 5px;
     background-size: auto;
+    margin-left: 5px;
 
     border-radius: 50%;
     float: left;
     width: 52px;
     height: 52px;
-    margin-left: 5px;
-    margin-top: 5px;
 }
 
 
 .titulo-cancion{
-    float: left;
+    
     margin-left: 12px;
-    font-family: 'Franklin Gothic Medium';
-    font-size: 1.2rem;
-    line-height: 30px;
-
+    font-size: 1.1rem;
+    text-transform: none;
     width: 55%;
+    
+    line-height: 1;
+    display: inline-block;
+    vertical-align: middle;
+}
+.subtitulo-cancion1{
+    font-weight: bold;
+}
+.subtitulo-cancion2{
+    margin-left: 10px;
+    font-size: 0.9rem;
 }
 .minuto{
+    width: 45px;
     float: right;
     line-height: 62px; /* esto lo uso para centrar el texto verticalmente, al cual le paso la medida del contenedor en pixeles*/
     margin-right: 10px;
@@ -368,11 +379,12 @@ header{
 }
 
 
+
 /*footer*/
 #pielogo {
     width: 98%;
     background-image: url("img/fondo3.png");
-    padding: 2%;
+    padding: 1%;
   }
   #pielogo > div {
     width: 90%;
