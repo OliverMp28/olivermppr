@@ -79,6 +79,7 @@ botonPlay.addEventListener("click", function(evento){
     play.style.display ="none";
 });
 
+//ejecutar las funciones para el inicio de cada nivel
 boton1.addEventListener("click", accion1);
 boton2.addEventListener("click", accion2);
 boton3.addEventListener("click", accion3);
@@ -86,6 +87,16 @@ boton4.addEventListener("click", accion4);
 boton5.addEventListener("click", accion5);
 boton6.addEventListener("click", accion6);
 boton7.addEventListener("click", accion7);
+
+//asignar constantes para los nombres de cada cancion
+const nombreCancion1 = document.getElementById("nombre-cancion1");
+const nombreCancion2= document.getElementById("nombre-cancion2");
+const nombreCancion3= document.getElementById("nombre-cancion3");
+const nombreCancion4= document.getElementById("nombre-cancion4");
+const nombreCancion5= document.getElementById("nombre-cancion5");
+const nombreCancion6= document.getElementById("nombre-cancion6");
+const nombreCancion7= document.getElementById("nombre-cancion7");
+const nombre=document.getElementById("nombre");
 
 function accion1(){
     caja1.style.display ="block";
@@ -97,6 +108,9 @@ function accion1(){
     play.style.display = "block";
 
     AudioLoad();
+
+    //obtener nombre de cancion
+    nombre.innerHTML=nombreCancion1.innerHTML;
 }
 
 function accion2(){
@@ -107,6 +121,9 @@ function accion2(){
     play.style.display = "block";
 
     AudioLoad();
+
+    //obtener nombre de cancion
+    nombre.innerHTML=nombreCancion2.innerHTML;
 }
 
 function accion3(){
@@ -117,6 +134,9 @@ function accion3(){
     play.style.display = "block";
 
     AudioLoad();
+
+    //obtener nombre de cancion
+    nombre.innerHTML=nombreCancion3.innerHTML;
 }
 
 function accion4(){
@@ -127,6 +147,9 @@ function accion4(){
     play.style.display = "block";
 
     AudioLoad();
+
+    //obtener nombre de cancion
+    nombre.innerHTML=nombreCancion4.innerHTML;
 }
 
 function accion5(){
@@ -137,6 +160,9 @@ function accion5(){
     play.style.display = "block";
 
     AudioLoad();
+
+    //obtener nombre de cancion
+    nombre.innerHTML=nombreCancion5.innerHTML;
 }
 
 function accion6(){
@@ -147,6 +173,9 @@ function accion6(){
     play.style.display = "block";
 
     AudioLoad();
+
+    //obtener nombre de cancion
+    nombre.innerHTML=nombreCancion6.innerHTML;
 }
 
 function accion7(){
@@ -157,6 +186,9 @@ function accion7(){
     play.style.display = "block";
 
     AudioLoad();
+
+    //obtener nombre de cancion
+    nombre.innerHTML=nombreCancion7.innerHTML;
 }
 
 
@@ -619,4 +651,3 @@ function Win(){
         return porcentajeHallado;                
         }     
     }
-

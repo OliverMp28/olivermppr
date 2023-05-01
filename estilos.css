@@ -18,26 +18,26 @@ body{
     }
 
     .opciones{
-        width: 100%;
+        width: 95%;
         margin: 0 auto;
         position: relative;
         list-style-type: none;
         display: grid;
         gap: 20px; /*esto es para separar ,los botones de la lista */  
-        background-color: #9d9d9d;
+        background-color: #aa5d5d;
         padding: 15px;
         border-radius: 20px;
     }
     header div h1{
         width: 55%;
         text-align: center;
-        padding: 35px;
+        padding: 0 40px 40px;
 
         font-family: 'Franklin Gothic Medium';
       
-        margin: auto;
+        margin: 0 auto;
         font-size: 2.5rem;
-        color: rgb(227, 218, 218);
+        color: rgb(252, 252, 252);
     }
     .canciones{
         padding: 12px 15px;
@@ -90,7 +90,7 @@ body{
         list-style-type: none;
         display: grid;
         gap: 20px; /*esto es para separar ,los botones de la lista */  
-        background-color: #838383;
+        background-color: #aa5d5d;
         padding: 20px;
         border-radius: 20px;
     }
@@ -98,13 +98,13 @@ body{
     header div h1{
         width: 60%;
         text-align: center;
-        padding: 40px;
+        padding: 0 40px 40px;
 
         font-family: 'Franklin Gothic Medium';
       
         margin: auto;
         font-size: 3rem;
-        color: rgb(227, 218, 218);
+        color: rgb(255, 255, 255);
     }
     /* .opciones li{
     
@@ -153,33 +153,27 @@ body{
         margin: auto;
     }
 
-    header div{
-        margin: auto;
-        /*background: linear-gradient(#a93d4d, #d36c6c);*/
-        background-color: rgba(242, 230, 230, 0.055);
-    }
 
     header div h1{
-        width: 20%;
+        width: 38%;
         text-align: center;
       
 
         font-family: 'Franklin Gothic Medium';
       
         margin: auto;
-        margin-left: 36%;
         font-size: 4rem;
         color: rgb(255, 255, 255);
     }
 
     .opciones{
-        width: 50%;
+        width: 42%;
         margin: auto;
         position: relative;
         list-style-type: none;
         display: grid;
         gap: 20px; /*esto es para separar ,los botones de la lista */  
-        background-color: #9c2a2a;
+        background-color: #aa5d5d;
         padding: 20px;
         border-radius: 20px;
     }
@@ -230,7 +224,7 @@ body{
       footer > div {
         width: 80%;
         margin: auto;
-        padding: 10px;
+        
         border-radius: 10px;
       }
 }
@@ -250,13 +244,11 @@ header{
 
 
 .opciones-ventanas{
-    width: 40%;
+    margin-right: 50px;
     list-style-type: none;   
     text-align: center;
     
     float: right;
-  
-    margin-bottom: 100px;
 }
 
 .opciones-ventanas li{
@@ -274,12 +266,7 @@ header{
     font-size: 1.2rem;
 }
 
-.opciones-ventanas li:hover{
-    letter-spacing: 3px;
-    background-color: rgb(209, 61, 61);
-    color: hsl(0, 0%, 100%);
-    box-shadow: rgb(214, 64, 64) 0px 7px 29px 0px;
-}
+
 
 /*poner en responsive*/
 .lista{
@@ -296,7 +283,7 @@ header{
 
 .recuperar {
     clear: both;
-    padding: 10px;
+    padding: 2px;
 }
 
 
@@ -332,7 +319,7 @@ header{
 
 
 .contenedorCanciones{
-    width: 60%;
+    width: 90%;
    
     margin: 0 auto;
     
@@ -395,7 +382,7 @@ header{
   .seccionpie {
     float: left;
     width: 27.33%;
-    padding: 3%;
+    padding: 2%;
     
   }
   .seccionpie h1 {
@@ -406,9 +393,13 @@ header{
     vertical-align:bottom;
   }
   .seccionpie a {
-    font: bold 16px Arial, sans-serif;
-    color: #666666;
+    font: bold 1.1rem Arial, sans-serif;
+    color: #3b3a3a;
     text-decoration: none;
+  }
+  .seccionpie a span{
+    font: bold 0.8rem Arial, sans-serif;
+    color: #292828;
   }
 
   nav{
@@ -435,10 +426,7 @@ nav ul li a{
     border-radius: 3px;
     text-transform: uppercase;
 }
-li a.active, li a:hover{
-    background: #1d1d72f8;
-    transition: .5s;
-}
+
 .checkbtn{
     font-size: 30px;
     color: #fff;
@@ -507,32 +495,13 @@ li a.active, li a:hover{
 
 
 /* -------------------  JUEGO --------------------*/
-#volver{
-    width: 70px;
-    text-align: center;
-    text-decoration: none;
-    float: right;
-    margin-right: 20%;
-    padding: 12px 15px;
-    border-radius: 10px;
-    color: #fefdff;
-    background-color: rgb(135, 42, 50);
-    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
-    font-size: 1rem;
-    transition: all .5s ease;
-    font-style: normal;
-    font-family:   sans-serif;
-    position: relative;
-    display: block;
-}
-#volver:hover {
-    letter-spacing: 3px;
-    background-color: rgb(135, 42, 50);
-    color: hsl(0, 0%, 100%);
-    box-shadow: rgb(61, 37, 106) 0px 7px 29px 0px;
-}
+
 /* movil*/
 @media screen and (max-width:767px){
+    #cabecera-juego{
+        margin: 15px auto;
+        width: 100%;
+    }
     .contenedor{
         width: 100%;
         height: 230px;
@@ -605,6 +574,10 @@ li a.active, li a:hover{
 
 /* tablet*/
 @media screen and (min-width:768px){
+    #cabecera-juego{
+        margin: 20px auto;
+        width: 70%;
+    }
     .contenedor{
         width: 70%;
         height: 300px;
@@ -673,6 +646,10 @@ li a.active, li a:hover{
 
 /* ordenador*/
 @media screen and (min-width: 990px){
+    #cabecera-juego{
+        margin: 20px auto;
+        width: 60%;
+    }
     .contenedor{
         width: 60%;
         height: 300px;
@@ -739,13 +716,36 @@ li a.active, li a:hover{
     }
 }
 
-.nombre{
+
+#nombre{
     margin: auto;
     text-align: center;
     background-size: cover;
     font-size: 20px;
-    width: 60%;
+    width: 50%;
     padding: 10px;
+}
+#volver{
+    width: 70px;
+    text-align: center;
+    text-decoration: none;
+    float: right;
+    padding: 12px 15px;
+    border-radius: 10px;
+    color: #fefdff;
+    background-color: rgb(135, 42, 50);
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    font-size: 1rem;
+    transition: all .5s ease;
+    font-style: normal;
+    font-family:   sans-serif;
+
+}
+#volver:hover {
+    letter-spacing: 3px;
+    background-color: rgb(135, 42, 50);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(61, 37, 106) 0px 7px 29px 0px;
 }
 
 
@@ -924,4 +924,6 @@ li a.active, li a:hover{
 
 #juegazo{
     display: none;
+    padding: 2%;
+    padding-bottom: 10vh;
 }

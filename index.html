@@ -16,21 +16,21 @@
     <header>
         <div>
             <nav class="ventanas">
-            <input type="checkbox" id="check">
-            <label for="check" class="checkbtn">
-            <i class="fas fa-bars"></i>
-        </label>
-                <ul class="opciones-ventanas">
-                    <li>
-                        <a href="/index.html" class="enlaces-ventanas">Inicio</a>
-                    </li>
-                    <li>
-                        <a href="/quienesSomos.html" class="enlaces-ventanas">Quienes Somos</a>
-                    </li>
-                    <li>
-                        <a href="/Contacto.html" class="enlaces-ventanas">Contacto</a>
-                    </li>
-                </ul>
+                <input type="checkbox" id="check">
+                <label for="check" class="checkbtn">
+                <i class="fas fa-bars"></i>
+                </label>
+                    <ul class="opciones-ventanas">
+                        <li>
+                            <a href="/index.html" class="enlaces-ventanas" >Inicio</a>
+                        </li>
+                        <li>
+                            <a href="https://forms.gle/D8NNqERVakWrsNkA9" class="enlaces-ventanas" target="_blank">Comentarios</a>
+                        </li>
+                        <li>
+                            <a href="/Contacto.html" class="enlaces-ventanas">Contacto</a>
+                        </li>
+                    </ul>
             </nav> 
             <h1>Dino HTML</h1>
 
@@ -46,7 +46,7 @@
                     <div id="boton1" class="botones">
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
-                            <p class="subtitulo-cancion1">Sugar Red</p>
+                            <p class="subtitulo-cancion1" id="nombre-cancion1">Sugar Red</p>
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
                         <p class="minuto">0:40</p>
@@ -57,7 +57,7 @@
                     <div id="boton2" class="botones">
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
-                            <p class="subtitulo-cancion1">Hope</p>
+                            <p class="subtitulo-cancion1" id="nombre-cancion2">Hope</p>
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
                         <p class="minuto">1:19</p>
@@ -76,7 +76,7 @@
                     <div id="boton3" class="botones">
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
-                            <p class="subtitulo-cancion1">Running With the wolves</p>
+                            <p class="subtitulo-cancion1" id="nombre-cancion3">Running With the wolves</p>
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
 
@@ -88,7 +88,7 @@
                     <div id="boton4" class="botones">
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
-                            <p class="subtitulo-cancion1">Time</p>
+                            <p class="subtitulo-cancion1" id="nombre-cancion4">Time</p>
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
                         <p class="minuto">2:46</p>
@@ -104,7 +104,7 @@
                     <div id="boton5" class="botones">
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
-                            <p class="subtitulo-cancion1">Mi Fiesta</p>
+                            <p class="subtitulo-cancion1" id="nombre-cancion5">Mi Fiesta</p>
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
                         <p class="minuto">3:13</p>
@@ -115,7 +115,7 @@
                     <div id="boton6" class="botones">
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
-                            <p class="subtitulo-cancion1">Dawn of Faith</p>
+                            <p class="subtitulo-cancion1" id="nombre-cancion6">Dawn of Faith</p>
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
                         <p class="minuto">3:16</p>
@@ -126,7 +126,7 @@
                     <div id="boton7" class="botones">
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
-                            <p class="subtitulo-cancion1">What's Up Danger</p>
+                            <p class="subtitulo-cancion1" id="nombre-cancion7">What's Up Danger</p>
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
                         <p class="minuto">3:35</p>
@@ -149,10 +149,11 @@
         <source src="audios/pipipi.mp3" type="audio/mpeg">
     </audio>
 
-    <section id="juegazo">
-        <div>
+    <div id="juegazo">
+        <div id="cabecera-juego">
             <a href="" id="volver">Volver</a>
-            <p class="nombre">  Sugar red</p>
+            <p id="nombre">d </p>
+
         </div>
         <div class="contenedor">
             <div class="suelo"></div>
@@ -181,16 +182,16 @@
         <div id="tiempoDuracion">166</div> -->
         
         <script src="interaccion.js"></script>
-    </section>
+    </div>
     </main>
     
     <footer id="pielogo">
         <div>
           <section class="seccionpie">
             <h1>Sitio Web</h1>
-            <p><a href="index.html">Inicio</a></p>
-            <p><a href="fotos.html">Quienes Somos</a></p>
-            <p><a href="videos.html">Contacto</a></p>
+            <p><a href="/index.html">Inicio</a></p>
+            <p><a href="https://forms.gle/D8NNqERVakWrsNkA9" target="_blank"> Comentarios <br> <span>sus comentarios son de gran ayuda</span></a></p>
+            <p><a href="/Contacto.html">  Contacto </a></p>
           </section>
     
           <section class="seccionpie">
