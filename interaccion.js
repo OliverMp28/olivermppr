@@ -74,10 +74,11 @@ const boton5= document.getElementById("boton5");
 const boton6= document.getElementById("boton6");
 const boton7= document.getElementById("boton7");
 
-botonPlay.addEventListener("click", function(evento){
+botonPlay.addEventListener("click", Iniciar);
+function Iniciar(){
     AudioOn();
     play.style.display ="none";
-});
+}
 
 //ejecutar las funciones para el inicio de cada nivel
 boton1.addEventListener("click", accion1);
@@ -194,7 +195,9 @@ function accion7(){
 
 var repetir = document.getElementById("repetir");
 
-repetir.addEventListener("click", function(){
+repetir.addEventListener("click", Reiniciar);
+
+function Reiniciar(){
     for(let i = 0; i<=obstaculos.length; i++){
         obstaculos[i].style.display="none";
         gameOver.style.display = "none";
@@ -205,10 +208,7 @@ repetir.addEventListener("click", function(){
         JuegoPlay();
         score = 0;
     }
-    
-   
-
-});
+}
 
 //esto escucha cuando el audio esta reproduciendo ejecuta la funcion Loop, que ejecutara el juego
 if(audio1!=0){
@@ -266,7 +266,7 @@ function Start() {
     contenedor = document.querySelector(".contenedor");
     textoScore = document.querySelector(".score");
     dino = document.querySelector(".dino");
-    document.addEventListener("keydown", HandleKeyDown);
+    window.addEventListener("keydown", HandleKeyDown);
     tryAgain = document.querySelector(".jugar-denuevo");
     youWin = document.querySelector(".you-win");
 }
@@ -286,8 +286,9 @@ function Update() {
 }
 
 function HandleKeyDown(evento){       
-    if(evento.keyCode == 32 ){
+    if(evento.keyCode == 32 || evento.keyCode == 38){
         Saltar();
+        evento.preventDefault();
     }
 }
 

@@ -792,7 +792,7 @@ nav ul li a{
     position: absolute;
     top: 5px;
     right: 15px;
-    z-index: 10;
+    z-index: 3;
 
     color: rgb(255, 255, 255);
     font-family: verdana;
@@ -815,7 +815,7 @@ nav ul li a{
     font-family: Verdana;
     font-weight: 700;
 
-    z-index: 10;
+    z-index: 3;
 }
 
 .jugar-denuevo{
@@ -832,7 +832,7 @@ nav ul li a{
     font-family: Verdana;
     font-weight: 700;
 
-    z-index: 10;
+    z-index: 3;
 }
 
 .try-again {
@@ -847,6 +847,8 @@ nav ul li a{
     transition: all .5s ease;
     font-style: normal;
     text-decoration: none;
+
+    z-index: -10;
     }
 
 .try-again:hover {
