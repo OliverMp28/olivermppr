@@ -206,7 +206,7 @@ function Reiniciar(){
         audio1.currentTime=0;
         audio1.play();
         JuegoPlay();
-        score = 0;
+        score = 0; 
     }
 }
 
@@ -214,6 +214,9 @@ function Reiniciar(){
 if(audio1!=0){
     audio1.addEventListener("play", function(){
         Init();
+        if(parado==false){
+            document.addEventListener("click", Saltar);
+        }
     });
 }
 
@@ -269,6 +272,7 @@ function Start() {
     window.addEventListener("keydown", HandleKeyDown);
     tryAgain = document.querySelector(".jugar-denuevo");
     youWin = document.querySelector(".you-win");
+    
 }
 
 function Update() {
@@ -537,6 +541,7 @@ function GameOver() {
     gameOver.style.display = "block";
     tryAgain.style.display = "block";
     Terminar();
+    AudioPipipi();
 }
 
 function JuegoStop() {
@@ -599,6 +604,7 @@ audio1.addEventListener("ended", function(){
 
 
 function Win(){
+    AudioFinalOn();
     youWin.style.display = "block";
     tryAgain.style.display = "block";
 
@@ -651,4 +657,27 @@ function Win(){
         document.getElementById('tiempox').innerHTML = Math.round(porcentajeHallado)  + "%"; 
         return porcentajeHallado;                
         }     
+    }
+
+
+
+
+
+
+
+    /*---------------MODO OSCURO -------------------- */
+    let botonDark=document.getElementById("boton-darkmode");
+    let body=document.body;
+
+    botonDark.addEventListener("click", function(){
+        let val=body.classList.toggle("dark");
+        localStorage.setItem("modo",val)
+    })
+
+    let valor=localStorage.getItem("modo")
+
+    if (valor=="true") {
+        body.classList.add("dark")
+    } else {
+        body.classList.remove("dark")
     }
