@@ -1,0 +1,118 @@
+#contenedor-login{
+    margin: auto;
+
+    border-radius: 30px;
+
+    box-shadow: 1px 1px 12px 0px rgba(13, 8, 8, 0.25);
+    background-color: rgb(255, 255, 255);
+}
+#titulo-login{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 26px;
+    color: #000000;
+    font-weight: 700;
+    margin: 5px;
+    margin-bottom: 15px;
+}
+.lbl-login{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.6px;
+    color: #656565;
+    font-weight: 700;
+}
+.separador-login{
+    width: 100%;
+    border-top: 1.5px solid rgb(174, 174, 174);
+    height: 2px;
+    padding: 0;
+    margin: 4px  auto 10px auto;
+}
+.input-login{
+    border:0px; 
+    width: 100%;    
+}
+.input-login:focus {
+    outline: none;
+}
+.input-login::placeholder {
+    color: #bebebe;
+}
+#enviarLogin {
+    width: 100%;
+    margin-top: 10px;
+    background-color:#2975ab;
+    border-radius:26px;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:21px;
+    font-weight:bold;
+    padding:8px 36px;
+    text-decoration:none;
+    border: 0px;
+}
+#enviarLogin:hover {
+    background-color:#32659c;
+}
+#enviarLogin:active {
+    position:relative;
+    top:1px;
+}
+.enviarLogin{
+    color: #4e4e4e;
+    text-decoration: none;
+    margin-left: 15px;
+}
+.enlaces-login{
+    color: #4e4e4e;
+    text-decoration: none;
+    margin-left: 15px;
+}
+#contenedor-enlaces{
+    text-align: end;
+}
+body{
+    height: 100vh;
+    margin: 0;
+    background: #CE1B1B;
+    background: -moz-linear-gradient(-45deg, #CE1B1B 0%, #5f3cb0 100%);
+    background: -webkit-linear-gradient(-45deg, #CE1B1B 0%, #ffffff 100%);
+    background: linear-gradient(135deg, #c21b1b 0%, #4f2786 100%);
+    contain: content;
+}
+h1{
+    margin: 0;
+}
+
+/*movil*/
+@media screen and (max-width:740px){
+    #contenedor-login{
+    margin: auto;
+    width: 90%;
+    padding: 12px;
+    margin-top: 30px;
+    }
+}
+
+/*tablet*/
+@media screen and (min-width:740px){
+    #contenedor-login{
+    margin: auto;
+    width: 50%;
+    padding: 18px;
+    margin-top: 30px;
+    }
+}
+
+/*ordenador*/
+@media screen and (min-width: 990px){
+    #contenedor-login{
+    margin: auto;
+    width: 30%;
+    padding: 20px;
+    margin-top: 40px;
+    }
+}

@@ -1,14 +1,15 @@
+<?php include('conectar.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="../estilos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <title>info</title>
     <style>
-        #inputNombre{
+         #inputNombre{
             width: 390px;
             font-size: 15px;
             border: none;
@@ -28,7 +29,7 @@
             width: 400px;
         }
 
-        .dark article p, .dark li, .dark article b{
+        .dark article p, .dark li, .dark #contenedor_Comentarios{
             color: rgb(243, 240, 241);
         }
         .dark article h1, .dark article h2{
@@ -55,7 +56,6 @@
         #nombre_usuario{
             font-weight: bold;
         }
-
     </style>  
     
 
@@ -70,7 +70,7 @@
                 </label>
                     <ul class="opciones-ventanas">
                         <li>
-                            <a href="/index.html" class="enlaces-ventanas" >Inicio</a>
+                            <a href="../index.html" class="enlaces-ventanas" >Inicio</a>
                         </li>
                         <li>
                             <a href="https://forms.gle/D8NNqERVakWrsNkA9" class="enlaces-ventanas" target="_blank">Comentarios</a>
@@ -109,7 +109,7 @@
             </ul>
         </article>
         <article>
-            <form action="./php/comentario.php" method="POST" id="formulario">
+            <form action="comentario.php" method="POST" id="formulario">
                 <label for="inputNombre">Nombre</label> <br>
                 <input name="inputNombre" type="text" id="inputNombre" placeholder="introduzca..."> <br>
 
@@ -118,6 +118,22 @@
             
                 <input type="button" value="enviar" id="enviar">
             </form>
+
+            <div id="contenedor_Comentarios">
+                <?php 
+                    $resultado = mysqli_query($conexion, 'SELECT * FROM  comentarios');
+
+                    while($comentario = mysqli_fetch_object($resultado)){
+                    ?>
+                        <b id="nombre_usuario"> <?php echo($comentario->nombre); ?></b> (<?php echo($comentario->fecha);?>) dijo:
+                        <br>
+                        <p><?php echo($comentario->comentario);?></p>
+                        <div class="lineaSeparador"></div>
+                        <?php 
+                    } 
+                ?>
+            </div>
+
         </article>
      
         
@@ -147,7 +163,7 @@
           </div>
       </footer>
 
-      <script >
+        <script >
         /*---------------MODO OSCURO -------------------- */
         let botonDark=document.getElementById("boton-darkmode");
         let body=document.body;
@@ -164,32 +180,31 @@
         } else {
             body.classList.remove("dark")
         }
+
         var enviar = document.getElementById("enviar");
-            enviar.addEventListener("click",function(){
+            enviar.addEventListener("click", function(){
                 var nombre = document.getElementById("inputNombre").value;
                 var comentario = document.getElementById("comentario").value;
 
                 if(nombre == ""){
                     alert("debe introducir un nombre");
-                    
+                    throw new Error("No ah insertado un nombre");
                 }
                 if(comentario == ""){
                     alert("debe introducir un comentario");
+                    throw new Error("No ah insertado un comentario");
                 }
 
                 var formulario = document.getElementById("formulario");
                 formulario.submit();
                 alert("Se ah enviado tu comentario");
             });
-    </script>
+        </script>
     <!--
         Usuarios
         - nombre de usuario
         - nombres
         - contraseña
-        - correo
-        - pais
-        - foto, opcional()
 
         Recorrido
         - Niveles pasados

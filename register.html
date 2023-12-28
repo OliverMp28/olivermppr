@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #contenedor-login{
+            margin: auto;
+
+            border-radius: 30px;
+
+            box-shadow: 1px 1px 12px 0px rgba(13, 8, 8, 0.25);
+            background-color: rgb(255, 255, 255);
+        }
+        #titulo-login{
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 26px;
+            color: #000000;
+            font-weight: 700;
+            margin: 5px;
+            margin-bottom: 15px;
+        }
+        .lbl-login{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            letter-spacing: 0.6px;
+            color: #656565;
+            font-weight: 700;
+        }
+        .separador-login{
+            width: 100%;
+            border-top: 1.5px solid rgb(174, 174, 174);
+            height: 2px;
+            padding: 0;
+            margin: 4px  auto 10px auto;
+        }
+        .input-login{
+            border:0px; 
+            width: 100%;    
+        }
+        .input-login:focus {
+            outline: none;
+        }
+        .input-login::placeholder {
+            color: #bebebe;
+        }
+        #enviar-login {
+            width: 100%;
+            margin-top: 10px;
+            background-color:#2975ab;
+            border-radius:26px;
+            display:inline-block;
+            cursor:pointer;
+            color:#ffffff;
+            font-family:Arial;
+            font-size:21px;
+            font-weight:bold;
+            padding:8px 36px;
+            text-decoration:none;
+            border: 0px;
+        }
+        #enviar-login:hover {
+            background-color:#32659c;
+        }
+        #enviar-login:active {
+            position:relative;
+            top:1px;
+        }
+        .enlaces-login{
+            color: #4e4e4e;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        #contenedor-enlaces{
+            text-align: end;
+        }
+        body{
+            height: 100vh;
+            margin: 0;
+            background: #CE1B1B;
+            background: -moz-linear-gradient(-45deg, #CE1B1B 0%, #5f3cb0 100%);
+            background: -webkit-linear-gradient(-45deg, #CE1B1B 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #c21b1b 0%, #4f2786 100%);
+            contain: content;
+        }
+        h1{
+            margin: 0;
+        }
+
+        /*movil*/
+        @media screen and (max-width:740px){
+            #contenedor-login{
+            margin: auto;
+            width: 90%;
+            padding: 12px;
+            margin-top: 30px;
+            }
+        }
+
+        /*tablet*/
+        @media screen and (min-width:740px){
+            #contenedor-login{
+            margin: auto;
+            width: 50%;
+            padding: 18px;
+            margin-top: 30px;
+            }
+        }
+
+        /*ordenador*/
+        @media screen and (min-width: 990px){
+            #contenedor-login{
+            margin: auto;
+            width: 30%;
+            padding: 20px;
+            margin-top: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="contenedor-login">
+        <form action="">
+            <h1 id="titulo-login">BIENVENIDO</h1>
+            <label for="input-usuario" class="lbl-login">Usuario</label> <br>
+            <input name="input-usuario" type="text" id="input-usuario" class="input-login" placeholder=".........">
+            <div class="separador-login"></div>
+
+            <label for="input-nombre" class="lbl-login">Nombres </label> <br>
+            <input name="input-nombre" type="text" id="input-nombre" class="input-login" placeholder=".........">
+            <div class="separador-login"></div>
+
+            <label for="input-email" class="lbl-login">Introduzca su correo electronico </label> <br>
+            <input name="input-email" type="email" id="input-email" class="input-login" placeholder=".........">
+            <div class="separador-login"></div>
+
+            <label for="input-pais" class="lbl-login">Pais</label> <br>
+            <input name="input-pais" list="lista-paises" id="input-pais" class="input-login" placeholder=".........">
+            <datalist id="lista-paises">
+                <option value="Afganistán">
+                <option value="Albania">
+                <option value="Alemania">
+                <option value="Andorra">
+                <option value="Angola">
+                <option value="Antigua y Barbuda">
+                <option value="Arabia Saudita">
+                <option value="Argelia">
+                <option value="Argentina">
+                <option value="Armenia">
+                <option value="Australia">
+                <option value="Austria">
+                <option value="Azerbaiyán">
+                <option value="Bahamas">
+                <option value="Bahréin">
+                <option value="Bangladés">
+                <option value="Barbados">
+                <option value="Belice">
+                <option value="Benín">
+                <option value="Bielorrusia">
+                <option value="Bélgica">
+                <option value="Birmania (Myanmar)">
+                <option value="Bolivia">
+                <option value="Bosnia y Herzegovina">
+                <option value="Botsuana">
+                <option value="Brasil">
+                <option value="Brunéi">
+                <option value="Bulgaria">
+                <option value="Burkina Faso">
+                <option value="Burundi">
+                <option value="Burkina Faso">
+                <option value="Burundi">
+
+                <!-- Parte 2 -->
+                <option value="Bután">
+                <option value="Cabo Verde">
+                <option value="Camboya">
+                <option value="Camerún">
+                <option value="Canadá">
+                <option value="Catar">
+                <option value="Chad">
+                <option value="Chile">
+                <option value="China">
+                <option value="Chipre">
+                <option value="Colombia">
+                <option value="Comoras">
+                <option value="Corea del Norte">
+                <option value="Corea del Sur">
+                <option value="Costa de Marfil (Côte d'Ivoire)">
+                <option value="Costa Rica">
+                <option value="Croacia">
+                <option value="Cuba">
+
+                <!-- Parte 3 -->
+                <option value="Dinamarca">
+                <option value="Dominica">
+                <option value="Ecuador">
+                <option value="Egipto">
+                <option value="El Salvador">
+                <option value="Emiratos Árabes Unidos">
+                <option value="Eritrea">
+                <option value="Eslovaquia">
+                <option value="Eslovenia">
+                <option value="España">
+                <option value="Estados Unidos">
+                <option value="Estonia">
+
+                <!-- Parte 4 -->
+                <option value="Etiopía">
+                <option value="Fiyi">
+                <option value="Filipinas">
+                <option value="Finlandia">
+                <option value="Francia">
+                <option value="Gabón">
+                <option value="Gambia">
+                <option value="Georgia">
+                <option value="Ghana">
+                <option value="Granada">
+                <option value="Grecia">
+                <option value="Guatemala">
+                <option value="Guinea">
+                <option value="Guinea-Bisáu">
+                <option value="Guinea Ecuatorial">
+                <option value="Guyana">
+
+                <!-- Parte 5 -->
+                <option value="Haití">
+                <option value="Honduras">
+                <option value="Hungría">
+                <option value="India">
+                <option value="Indonesia">
+                <option value="Irak">
+                <option value="Irán">
+                <option value="Irlanda">
+                <option value="Islandia">
+                <option value="Islas Marshall">
+                <option value="Islas Salomón">
+                <option value="Israel">
+                <option value="Italia">
+
+                <!-- Parte 6 -->
+                <option value="Jamaica">
+                <option value="Japón">
+                <option value="Jordania">
+                <option value="Kazajistán">
+                <option value="Kenia">
+                <option value="Kirguistán">
+                <option value="Kiribati">
+                <option value="Kuwait">
+                <option value="Laos">
+                <option value="Lesoto">
+                <option value="Letonia">
+                <option value="Líbano">
+                <option value="Liberia">
+                <option value="Libia">
+                <option value="Liechtenstein">
+
+                    <!-- Parte 7 -->
+                <option value="Lituania">
+                <option value="Luxemburgo">
+                <option value="Macedonia del Norte">
+                <option value="Madagascar">
+                <option value="Malasia">
+                <option value="Malaui">
+                <option value="Maldivas">
+                <option value="Malí">
+                <option value="Malta">
+                <option value="Marruecos">
+                <option value="Mauricio">
+                <option value="Mauritania">
+                <option value="México">
+                <option value="Micronesia">
+                <option value="Moldavia">
+
+                <!-- Parte 8 -->
+                <option value="Mónaco">
+                <option value="Mongolia">
+                <option value="Montenegro">
+                <option value="Mozambique">
+                <option value="Namibia">
+                <option value="Nauru">
+                <option value="Nepal">
+                <option value="Nicaragua">
+                <option value="Níger">
+                <option value="Nigeria">
+                <option value="Noruega">
+                <option value="Nueva Zelanda">
+                <option value="Omán">
+                <option value="Países Bajos">
+                <option value="Pakistán">
+
+                <!-- Parte 9 -->
+                <option value="Palaos">
+                <option value="Palestina">
+                <option value="Panamá">
+                <option value="Papúa Nueva Guinea">
+                <option value="Paraguay">
+                <option value="Perú">
+                <option value="Polonia">
+                <option value="Portugal">
+                <option value="Reino Unido">
+                <option value="República Centroafricana">
+                <option value="República Checa">
+                <option value="República del Congo">
+                <option value="República Democrática del Congo">
+                <option value="República Dominicana">
+                <option value="Ruanda">
+                <option value="Rumania">
+
+                <!-- Parte 10 -->
+                <option value="Rusia">
+                <option value="Samoa">
+                <option value="San Cristóbal y Nieves">
+                <option value="San Marino">
+                <option value="Santa Lucía">
+                <option value="San Vicente y las Granadinas">
+                <option value="Senegal">
+                <option value="Serbia">
+                <option value="Seychelles">
+                <option value="Sierra Leona">
+                <option value="Singapur">
+                <option value="Siria">
+                <option value="Somalia">
+                <option value="Sri Lanka">
+                <option value="Suazilandia">
+                <option value="Sudáfrica">
+                <option value="Sudán">
+                <option value="Sudán del Sur">
+                <option value="Suecia">
+                <option value="Suiza">
+                <option value="Surinam">
+
+                <!-- Parte final -->
+                <option value="Tailandia">
+                <option value="Taiwán">
+                <option value="Tanzania">
+                <option value="Tayikistán">
+                <option value="Timor Oriental">
+                <option value="Togo">
+                <option value="Tonga">
+                <option value="Trinidad y Tobago">
+                <option value="Túnez">
+                <option value="Turkmenistán">
+                <option value="Turquía">
+                <option value="Tuvalu">
+                <option value="Ucrania">
+                <option value="Uganda">
+                <option value="Uruguay">
+                <option value="Uzbekistán">
+                <option value="Vanuatu">
+                <option value="Vaticano">
+                <option value="Venezuela">
+                <option value="Vietnam">
+                <option value="Yemen">
+                <option value="Yibuti">
+                <option value="Zambia">
+                <option value="Zimbabue">
+            </datalist>
+            <div class="separador-login"></div>
+
+            <label for="input-contraseña" class="lbl-login">Contraseña</label> <br>
+            <input name="input-contraseña" type="password" id="input-contraseña" class="input-login" placeholder=".........">
+            <div class="separador-login"></div>
+
+            <label for="input-contraseña2" class="lbl-login">Vuelva a introducir contraseña</label> <br>
+            <input name="input-contraseña2" type="password" id="input-contraseña2" class="input-login" placeholder=".........">
+            <div class="separador-login"></div>
+
+            <div id="contenedor-enlaces">
+                <a href="./login.html" class="enlaces-login">Iniciar sesion</a>
+            </div> <br>
+
+            <input type="submit" value="Registrar" id="enviar-login">
+            <!--
+                nombres
+                nombre de usuario
+                correo
+                pais
+                contraseña
+                vuelva a introducir contraseña                
+            -->
+        </form>
+    </div> 
+</body>
+</html>

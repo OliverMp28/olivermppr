@@ -97,7 +97,7 @@ const nombreCancion4= document.getElementById("nombre-cancion4");
 const nombreCancion5= document.getElementById("nombre-cancion5");
 const nombreCancion6= document.getElementById("nombre-cancion6");
 const nombreCancion7= document.getElementById("nombre-cancion7");
-const nombre=document.getElementById("nombre");
+const nombre=document.getElementById("nombreJuego");
 
 function accion1(){
     caja1.style.display ="block";

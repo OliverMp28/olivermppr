@@ -15,7 +15,7 @@ main{
 }
 
 /*movil*/
-@media screen and (max-width:767px){
+@media screen and (max-width:768px){
     .opciones{
         width: 95%;
         margin: 0 auto;
@@ -482,7 +482,7 @@ nav ul li a{
 /* -------------------  JUEGO --------------------*/
 
 /* movil*/
-@media screen and (max-width:767px){
+@media screen and (max-width:768px){
     #cabecera-juego{
         margin: 15px auto;
         width: 100%;
@@ -492,8 +492,6 @@ nav ul li a{
         height: 230px;
         margin: 0 auto;
         border-radius: 20px;
-
-        
     
         position: relative;
     
@@ -702,7 +700,7 @@ nav ul li a{
 }
 
 
-#nombre{
+#nombreJuego{
     margin: auto;
     text-align: center;
     background-size: cover;
@@ -951,7 +949,7 @@ nav ul li a{
     color: hsl(0, 0%, 100%);
    box-shadow:  rgb(112, 25, 61) 0px 7px 29px 0px; 
 }
-.dark #nombre{
+.dark #nombreJuego{
     color: #fefdff;
 }
 
@@ -977,7 +975,6 @@ nav ul li a{
     position: relative;
     transition: 0.2s;
 }
-
 #boton-darkmode::before{
     position: absolute;
     content: '';
@@ -993,6 +990,6 @@ nav ul li a{
 input:checked + #boton-darkmode::before{
     transform: translateX(40px);
 }
-input{
+#check-darkmode{
     display: none;
 }
