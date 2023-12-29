@@ -4,140 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        #contenedor-login{
-            margin: auto;
-
-            border-radius: 30px;
-
-            box-shadow: 1px 1px 12px 0px rgba(13, 8, 8, 0.25);
-            background-color: rgb(255, 255, 255);
-        }
-        #titulo-login{
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 26px;
-            color: #000000;
-            font-weight: 700;
-            margin: 5px;
-            margin-bottom: 15px;
-        }
-        .lbl-login{
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 15px;
-            letter-spacing: 0.6px;
-            color: #656565;
-            font-weight: 700;
-        }
-        .separador-login{
-            width: 100%;
-            border-top: 1.5px solid rgb(174, 174, 174);
-            height: 2px;
-            padding: 0;
-            margin: 4px  auto 10px auto;
-        }
-        .input-login{
-            border:0px; 
-            width: 100%;    
-        }
-        .input-login:focus {
-            outline: none;
-        }
-        .input-login::placeholder {
-            color: #bebebe;
-        }
-        #enviar-login {
-            width: 100%;
-            margin-top: 10px;
-            background-color:#2975ab;
-            border-radius:26px;
-            display:inline-block;
-            cursor:pointer;
-            color:#ffffff;
-            font-family:Arial;
-            font-size:21px;
-            font-weight:bold;
-            padding:8px 36px;
-            text-decoration:none;
-            border: 0px;
-        }
-        #enviar-login:hover {
-            background-color:#32659c;
-        }
-        #enviar-login:active {
-            position:relative;
-            top:1px;
-        }
-        .enlaces-login{
-            color: #4e4e4e;
-            text-decoration: none;
-            margin-left: 15px;
-        }
-        #contenedor-enlaces{
-            text-align: end;
-        }
-        body{
-            height: 100vh;
-            margin: 0;
-            background: #CE1B1B;
-            background: -moz-linear-gradient(-45deg, #CE1B1B 0%, #5f3cb0 100%);
-            background: -webkit-linear-gradient(-45deg, #CE1B1B 0%, #ffffff 100%);
-            background: linear-gradient(135deg, #c21b1b 0%, #4f2786 100%);
-            contain: content;
-        }
-        h1{
-            margin: 0;
-        }
-
-        /*movil*/
-        @media screen and (max-width:740px){
-            #contenedor-login{
-            margin: auto;
-            width: 90%;
-            padding: 12px;
-            margin-top: 30px;
-            }
-        }
-
-        /*tablet*/
-        @media screen and (min-width:740px){
-            #contenedor-login{
-            margin: auto;
-            width: 50%;
-            padding: 18px;
-            margin-top: 30px;
-            }
-        }
-
-        /*ordenador*/
-        @media screen and (min-width: 990px){
-            #contenedor-login{
-            margin: auto;
-            width: 30%;
-            padding: 20px;
-            margin-top: 40px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/register_login.css">
 </head>
 <body>
     <div id="contenedor-login">
         <form action="">
             <h1 id="titulo-login">BIENVENIDO</h1>
-            <label for="input-usuario" class="lbl-login">Usuario</label> <br>
-            <input name="input-usuario" type="text" id="input-usuario" class="input-login" placeholder=".........">
+            
+            <label for="inputUsuario" class="lbl-login">Nombre de Usuario</label> <br>
+            <input name="inputUsuario" type="text" id="inputUsuario" class="input-login" placeholder=".........">
             <div class="separador-login"></div>
 
-            <label for="input-nombre" class="lbl-login">Nombres </label> <br>
-            <input name="input-nombre" type="text" id="input-nombre" class="input-login" placeholder=".........">
+            <label for="inputNombre" class="lbl-login">Nombres </label> <br>
+            <input name="inputNombre" type="text" id="inputNombre" class="input-login" placeholder=".........">
             <div class="separador-login"></div>
 
-            <label for="input-email" class="lbl-login">Introduzca su correo electronico </label> <br>
-            <input name="input-email" type="email" id="input-email" class="input-login" placeholder=".........">
+            <label for="inputEmail" class="lbl-login">Introduzca su correo electronico </label> <br>
+            <input name="inputEmail" type="email" id="inputEmail" class="input-login" placeholder=".........">
             <div class="separador-login"></div>
 
-            <label for="input-pais" class="lbl-login">Pais</label> <br>
-            <input name="input-pais" list="lista-paises" id="input-pais" class="input-login" placeholder=".........">
+            <label for="inputPais" class="lbl-login">Pais</label> <br>
+            <input name="inputPais" list="lista-paises" id="inputPais" class="input-login" placeholder=".........">
             <datalist id="lista-paises">
                 <option value="Afganistán">
                 <option value="Albania">
@@ -359,27 +246,20 @@
             </datalist>
             <div class="separador-login"></div>
 
-            <label for="input-contraseña" class="lbl-login">Contraseña</label> <br>
-            <input name="input-contraseña" type="password" id="input-contraseña" class="input-login" placeholder=".........">
+            <label for="inputContraseña" class="lbl-login">Contraseña</label> <br>
+            <input name="inputContraseña" type="password" id="inputContraseña" class="input-login" placeholder=".........">
             <div class="separador-login"></div>
 
-            <label for="input-contraseña2" class="lbl-login">Vuelva a introducir contraseña</label> <br>
-            <input name="input-contraseña2" type="password" id="input-contraseña2" class="input-login" placeholder=".........">
+            <label for="inputContraseña2" class="lbl-login">Vuelva a introducir contraseña</label> <br>
+            <input name="inputContraseña2" type="password" id="inputContraseña2" class="input-login" placeholder=".........">
             <div class="separador-login"></div>
 
             <div id="contenedor-enlaces">
-                <a href="./login.html" class="enlaces-login">Iniciar sesion</a>
+                <a href="./login.php" class="enlaces-login">Iniciar sesion</a>
             </div> <br>
 
-            <input type="submit" value="Registrar" id="enviar-login">
-            <!--
-                nombres
-                nombre de usuario
-                correo
-                pais
-                contraseña
-                vuelva a introducir contraseña                
-            -->
+            <input type="submit" value="Registrar" id="enviarLogin" name="enviarLogin">
+   
         </form>
     </div> 
 </body>

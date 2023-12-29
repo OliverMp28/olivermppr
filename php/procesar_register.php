@@ -1,32 +1,42 @@
 <?php
 require_once 'conectar.php';
 
-$inputUsuario = $_POST['inputUsuario'];
-$inputNombre = $_POST['inputNombre'];
-$inputEmail = $_POST['inputEmail'];
-$inputPais = $_POST['inputPais'];
-$inputContraseña = $_POST['inputContraseña'];
-//$inputContraseña2 = $_POST['inputContraseña2'];
+if(!empty($_POST["enviarLogin"])) {
+    $inputUsuario = $_POST['inputUsuario'];
+    $inputNombre = $_POST['inputNombre'];
+    $inputEmail = $_POST['inputEmail'];
+   // $inputPais = $_POST['inputPais'];
+    $inputContraseña = $_POST['inputContraseña'];
+    $inputContraseña2 = $_POST['inputContraseña2'];
 
-$inputUsuario = mysqli_real_escape_string($conexion, $inputUsuario);
-$inputNombre = mysqli_real_escape_string($conexion, $inputNombre);
-$inputEmail = mysqli_real_escape_string($conexion, $inputEmail);
-$inputPais = mysqli_real_escape_string($conexion, $inputPais);
-$inputContraseña = mysqli_real_escape_string($conexion, $inputContraseña);
-//$inputContraseña2 = mysqli_real_escape_string($conexion, $inputContraseña2);
+    // Comprobar si los campos están vacíos
+    if (empty($inputUsuario) || empty($inputNombre) || empty($inputContraseña) || empty($inputEmail)) {
+        echo "<div>Por favor, rellena todos los campos.</div>";
+    }
+    // Comprobar si las contraseñas coinciden
+    elseif ($inputContraseña !== $inputContraseña2) {
+        echo "<div>Las contraseñas no coinciden.</div>";
+    }
+    else{
+        // Comprobar si el nombre de usuario ya existe
+        $stmt = $conexion->prepare('SELECT * FROM register WHERE usuario = ?');
+        $stmt->bind_param('s', $inputUsuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            echo "<div>El nombre de usuario ya existe.</div>";
+            return;
+        }
 
-$resultado = mysqli_query($conexion, 'INSERT INTO register (usuario, nombres, email, pais, contraseña) VALUES ("'.$inputUsuario.'", "'.$inputNombre.'","'.$inputEmail.'","'.$inputPais.'","'.$inputContraseña.'")');
-
-/*
-if($resultado)
-    echo('Comentario enviado con exito');
-
-else 
-    echo('Error intentando enviar el comentario');
-*/
-
-header('Location: ../index.html');
-
-mysqli_close($conexion)
+        $stmt = $conexion->prepare('INSERT INTO register (usuario, nombres, email, contraseña) VALUES (?, ?, ?, ?)');
+        $stmt->bind_param('ssss', $inputUsuario, $inputNombre,$inputEmail, $inputContraseña);
+    
+        if ($stmt->execute()) {
+            header('Location: ../index.html');
+        } else {
+            echo "<div>Hubo un error al registrar al usuario.</div>";
+        }
+    }
+}
 
 ?>
