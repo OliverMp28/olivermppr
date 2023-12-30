@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (empty($_SESSION["id"])){
+    header("Location: login.php");
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dino html</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="../estilos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
 </head>
@@ -28,7 +36,12 @@
                             <a href="./info.html" class="enlaces-ventanas">Info</a>
                         </li>
                         <li>
-                            <a href="./php/info.html" class="enlaces-ventanas">Cerrar Sesion</a>
+                            <a href="" class="enlaces-ventanas">
+                                <?php echo $_SESSION["usuario"] ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="./cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                     </ul>
             </nav> 
@@ -191,7 +204,7 @@
 
         <div id="tiempoDuracion">166</div> -->
         
-        <script src="interaccion.js"></script>
+        <script src="../interaccion.js"></script>
     </div>
     </main>
     

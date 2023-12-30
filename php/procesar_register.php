@@ -32,7 +32,7 @@ if(!empty($_POST["enviarLogin"])) {
         $stmt->bind_param('ssss', $inputUsuario, $inputNombre,$inputEmail, $inputContraseña);
     
         if ($stmt->execute()) {
-            header('Location: ../index.html');
+            header('Location: ./index.php');
         } else {
             echo "<div>Hubo un error al registrar al usuario.</div>";
         }
