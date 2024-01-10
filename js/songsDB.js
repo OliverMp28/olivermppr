@@ -1,0 +1,51 @@
+let allMusic = [
+    {
+        id: 1,
+        name: "Sugar Red",
+        artist: "...", 
+        img: "music-1",
+        src: "Sugar Red.mp3",
+    },
+    {
+        id: 2,
+        name: "Hope",
+        artist: "Stephane Lopez",
+        img: "music-2",
+        src: "HOPE.mp3",
+    },
+    {
+        id: 3,
+        name: "Running With the wolves",
+        artist: "Aurora",
+        img: "music-3",
+        src: "Running With the wolves - Aurora.mp3",
+    },
+    {
+        id: 4,
+        name: "Time",
+        artist: "Hans Zimmer",
+        img: "music-4",
+        src: "Time.mp3",
+    },
+    {
+        id: 5,
+        name: "Mi Fiesta",
+        artist: "Bandalos Chinos",
+        img: "music-5",
+        src: "Mi Fiesta.mp3",
+    },
+    {
+        id: 6,
+        name: "Dawn of Faith",
+        artist: "Eternal Eclipse",
+        img: "music-6", 
+        src: "Dawn of Faith - Eternal Eclipse.mp3",
+    },
+    {
+        id: 7,
+        name: "What's Up Danger",
+        artist: "Blackway & Black Caviar",
+        img: "noticed",
+        src: "What's Up Danger.mp3",
+    },
+    ]; 

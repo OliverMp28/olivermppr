@@ -100,18 +100,7 @@ const nombreCancion7= document.getElementById("nombre-cancion7");
 const nombre=document.getElementById("nombreJuego");
 
 function accion1(){
-    caja1.style.display ="block";
-    cajaLista.style.display = "none";
-    var cancion0 = document.getElementById("cancion0");
-    cancion0.src = "audios/Sugar Red.mp3";
-    /*nuevaCancion = cancion0.cloneNode(true);
-    audio1.appendChild(nuevaCancion);*/
-    play.style.display = "block";
-
-    AudioLoad();
-
-    //obtener nombre de cancion
-    nombre.innerHTML=nombreCancion1.innerHTML;
+    
 }
 
 function accion2(){

@@ -1,16 +1,18 @@
 <?php
 // guardar_mensaje.php
-
 require_once 'conectar.php';
+
+session_start();
+
 
 // Obtener el mensaje enviado desde el cliente
 
-$inputNombre = $_POST['inputNombre'];
 $comentario = $_POST['comentario'];
+$idUsuario = $_SESSION["id_usuario"];
+$visible = isset($_POST['visible']) ? true : false;
 
-$inputNombre = mysqli_real_escape_string($conexion, $inputNombre);
 $comentario = mysqli_real_escape_string($conexion, $comentario);
-$resultado = mysqli_query($conexion, 'INSERT INTO comentarios (nombre, comentario) VALUES ("'.$inputNombre.'", "'.$comentario.'")');
+$resultado = mysqli_query($conexion, 'INSERT INTO comentarios (id_usuario, comentario, visible) VALUES ("'.$idUsuario.'", "'.$comentario.'","'.$visible.'")');
 
 /*
 if($resultado)

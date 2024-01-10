@@ -110,27 +110,38 @@
         </article>
         <article>
             <form action="comentario.php" method="POST" id="formulario">
-                <label for="inputNombre">Nombre</label> <br>
-                <input name="inputNombre" type="text" id="inputNombre" placeholder="introduzca..."> <br>
 
                 <label for="comentario">comentario</label> <br>
                 <textarea name="comentario" id="comentario" cols="30" rows="5"></textarea>
+
+                <input type="checkbox" id="visible" name="visible" value="true" checked>
+                <label for="visible">Comentario visible al mundo</label> <br>
             
                 <input type="button" value="enviar" id="enviar">
             </form>
 
             <div id="contenedor_Comentarios">
                 <?php 
-                    $resultado = mysqli_query($conexion, 'SELECT * FROM  comentarios');
+                    // Preparar la consulta
+                    $stmt = $conexion->prepare("SELECT comentarios.comentario, comentarios.fecha, comentarios.visible, register.usuario FROM comentarios INNER JOIN register ON comentarios.id_usuario = register.id");
 
-                    while($comentario = mysqli_fetch_object($resultado)){
-                    ?>
-                        <b id="nombre_usuario"> <?php echo($comentario->nombre); ?></b> (<?php echo($comentario->fecha);?>) dijo:
-                        <br>
-                        <p><?php echo($comentario->comentario);?></p>
-                        <div class="lineaSeparador"></div>
-                        <?php 
-                    } 
+                    // Ejecutar la consulta
+                    $stmt->execute();
+
+                    // Vincular las variables a las columnas del resultado
+                    $stmt->bind_result($comentario, $fecha, $visible, $usuario);
+
+                    while ($stmt->fetch()) {
+                        if($visible == 1){
+                            ?>
+                            <b id="nombre_usuario"> <?php echo($usuario); ?></b> (<?php echo($fecha);?>) dijo:
+                            <br>
+                            <p><?php echo($comentario);?></p>
+                            <div class="lineaSeparador"></div>
+                            <?php 
+                        }                    
+                    }
+                    
                 ?>
             </div>
 
@@ -183,13 +194,8 @@
 
         var enviar = document.getElementById("enviar");
             enviar.addEventListener("click", function(){
-                var nombre = document.getElementById("inputNombre").value;
                 var comentario = document.getElementById("comentario").value;
 
-                if(nombre == ""){
-                    alert("debe introducir un nombre");
-                    throw new Error("No ah insertado un nombre");
-                }
                 if(comentario == ""){
                     alert("debe introducir un comentario");
                     throw new Error("No ah insertado un comentario");

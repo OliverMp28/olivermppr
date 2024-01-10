@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../css/register_login.css">
   
 </head>
 <body>
@@ -23,7 +24,7 @@
 
             <div id="contenedor-enlaces">
                 <a href="" class="enlaces-login">Olvide mi contraseña</a>
-                <a href="./register.html" class="enlaces-login">Registrar</a>
+                <a href="./register.php" class="enlaces-login">Registrar</a>
             </div>
 
             <input type="submit" value="Iniciar sesion" id="enviarLogin" name="enviarLogin">

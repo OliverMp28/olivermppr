@@ -10,7 +10,7 @@ if(!empty($_POST["enviarLogin"])) {
 
         $sql = mysqli_query($conexion, 'SELECT * FROM register WHERE usuario="'.$inputUsuario.'" AND contraseña="'.$inputContraseña.'" ');  
         if ($datos=$sql->fetch_object()) {
-            $_SESSION["id"] = $datos->id;
+            $_SESSION["id_usuario"] = $datos->id;
             $_SESSION["usuario"] = $datos->usuario;
             $_SESSION["nombre"] = $datos->nombres;
             $_SESSION["email"] = $datos->email;
