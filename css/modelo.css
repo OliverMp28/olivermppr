@@ -222,7 +222,7 @@ header{
     align-content: center;
     align-items: center;
 
-    background-image: url("img/fondo3.png");
+    background-image: url("../img/fondo3.png");
     background-size: cover;
 }
 
@@ -355,7 +355,7 @@ header{
 /*footer*/
 #pielogo {
     width: 98%;
-    background-image: url("img/fondo3.png");
+    background-image: url("../img/fondo3.png");
     padding: 1%;
   }
   #pielogo > div {

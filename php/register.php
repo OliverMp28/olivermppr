@@ -12,7 +12,7 @@
         <form action="" method="POST" id="formularioRegister">
             <h1 id="titulo-login">BIENVENIDO</h1>
             <?php 
-                include "./procesar_register.php"
+                include "../controladores_php/procesar_register.php"
             ?>
             
             <label for="inputUsuario" class="lbl-login">Nombre de Usuario</label> <br>

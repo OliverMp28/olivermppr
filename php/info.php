@@ -1,11 +1,17 @@
-<?php include('conectar.php'); ?>
+<?php include('../controladores_php/conectar.php'); ?>
+<?php
+session_start();
+if (empty($_SESSION["id_usuario"])){
+    header("Location: ./login.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../estilos.css">
+    <link rel="stylesheet" href="../css/modelo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <title>info</title>
     <style>
@@ -66,17 +72,25 @@
             <nav class="ventanas">
                 <input type="checkbox" id="check">
                 <label for="check" class="checkbtn">
-                <i class="fas fa-bars"></i>
+                <i class="fas fa-bars"></i> 
                 </label>
                     <ul class="opciones-ventanas">
                         <li>
-                            <a href="../index.html" class="enlaces-ventanas" >Inicio</a>
+                            <a href="./index.php" class="enlaces-ventanas" >Inicio</a>
                         </li>
                         <li>
                             <a href="https://forms.gle/D8NNqERVakWrsNkA9" class="enlaces-ventanas" target="_blank">Comentarios</a>
                         </li>
+                       <li>
+                            <a href="./info.php" class="enlaces-ventanas">Info</a>
+                        </li>
                         <li>
-                            <a href="/info.html" class="enlaces-ventanas">Info</a>
+                            <a href="" class="enlaces-ventanas">
+                                <?php echo $_SESSION["usuario"] ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../controladores/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                     </ul>
             </nav> 

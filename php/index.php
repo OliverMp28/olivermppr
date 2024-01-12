@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (empty($_SESSION["id_usuario"])){
-    header("Location: login.php");
+    header("Location: ./login.php");
 }
 ?>
 
@@ -13,7 +13,8 @@ if (empty($_SESSION["id_usuario"])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dino html</title>
-    <link rel="stylesheet" href="../estilos.css">
+    <link rel="stylesheet" href="../css/modelo.css">
+    <link rel="stylesheet" href="../css/juego.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
 </head>
@@ -27,13 +28,13 @@ if (empty($_SESSION["id_usuario"])){
                 </label>
                     <ul class="opciones-ventanas">
                         <li>
-                            <a href="/index.html" class="enlaces-ventanas" >Inicio</a>
+                            <a href="./index.php" class="enlaces-ventanas" >Inicio</a>
                         </li>
                         <li>
                             <a href="https://forms.gle/D8NNqERVakWrsNkA9" class="enlaces-ventanas" target="_blank">Comentarios</a>
                         </li>
                        <li>
-                            <a href="./info.html" class="enlaces-ventanas">Info</a>
+                            <a href="./info.php" class="enlaces-ventanas">Info</a>
                         </li>
                         <li>
                             <a href="" class="enlaces-ventanas">
@@ -41,7 +42,7 @@ if (empty($_SESSION["id_usuario"])){
                             </a>
                         </li>
                         <li>
-                            <a href="./cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
+                            <a href="../controladores/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                     </ul>
             </nav> 

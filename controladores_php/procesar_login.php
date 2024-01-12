@@ -1,5 +1,5 @@
 <?php
-require_once 'conectar.php';
+require_once './conectar.php';
 session_start();
 
 if(!empty($_POST["enviarLogin"])) {
@@ -15,7 +15,7 @@ if(!empty($_POST["enviarLogin"])) {
             $_SESSION["nombre"] = $datos->nombres;
             $_SESSION["email"] = $datos->email;
             $_SESSION["pais"] = $datos->pais;
-            header('Location: ./index.php');
+            header('Location: ../php/index.php');
         } else {
             echo "<div>Acceso denegado</div>";
         }

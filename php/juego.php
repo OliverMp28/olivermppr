@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (empty($_SESSION["id_usuario"])){
-    header("Location: login.php");
+    header("Location: ./login.php");
 }
 ?>
 
@@ -13,7 +13,8 @@ if (empty($_SESSION["id_usuario"])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dino html</title>
-    <link rel="stylesheet" href="../estilos.css">
+    <link rel="stylesheet" href="../css/modelo.css">
+    <link rel="stylesheet" href="../css/juego.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
 </head>
@@ -41,7 +42,7 @@ if (empty($_SESSION["id_usuario"])){
                             </a>
                         </li>
                         <li>
-                            <a href="./cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
+                            <a href="../controladores/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                     </ul>
             </nav> 
@@ -106,13 +107,13 @@ if (empty($_SESSION["id_usuario"])){
         <div id="comprobacion2"> </div> 
 
         <div id="tiempoDuracion">166</div> -->
-        <?php include '../controladores/leer_lista_canciones.php'; ?>
+        <?php include '../controladores_php/leer_lista_canciones.php'; ?>
         <script src="../js/songsDB.js"></script>
         <script src="../js/juego.js"></script>
         <script src="../js/darkmode.js"></script>
     </div>
 
-        <form action="../controladores/gestionar_progreso.php" method="POST" id="formularioProgreso">
+        <form action="../controladores_php/gestionar_progreso.php" method="POST" id="formularioProgreso">
             <input type="hidden" id="inputPorcentaje" name="inputPorcentaje">
             <input type="hidden" id="inputPts" name="inputPts">
             <input type="hidden" id="idCancionCargar" name="idCancionCargar">

@@ -1,6 +1,6 @@
 <?php
 // guardar_mensaje.php
-require_once 'conectar.php';
+require_once './conectar.php';
 
 session_start();
 
@@ -22,7 +22,7 @@ else
     echo('Error intentando enviar el comentario');
 */
 
-header('Location: info.php');
+header('Location: ../php/info.php');
 
 mysqli_close($conexion)
 /*

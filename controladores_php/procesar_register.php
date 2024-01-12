@@ -1,5 +1,5 @@
 <?php
-require_once 'conectar.php';
+require_once './conectar.php';
 
 if(!empty($_POST["enviarLogin"])) {
     $inputUsuario = $_POST['inputUsuario'];
@@ -32,7 +32,7 @@ if(!empty($_POST["enviarLogin"])) {
         $stmt->bind_param('ssss', $inputUsuario, $inputNombre,$inputEmail, $inputContraseña);
     
         if ($stmt->execute()) {
-            header('Location: ./index.php');
+            header('Location: ../php/index.php');
         } else {
             echo "<div>Hubo un error al registrar al usuario.</div>";
         }

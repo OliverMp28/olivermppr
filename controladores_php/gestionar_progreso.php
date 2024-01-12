@@ -1,5 +1,5 @@
 <?php 
-require_once '../php/conectar.php';
+require_once './conectar.php';
 
 /*
 $inputPorcentaje = $_POST["inputPorcentaje"];
