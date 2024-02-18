@@ -42,7 +42,7 @@ if (empty($_SESSION["id_usuario"])){
                             </a>
                         </li>
                         <li>
-                            <a href="../controladores/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
+                            <a href="../controladores_php/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                     </ul>
             </nav> 

@@ -4,31 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="../css/modelo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <title>info</title>
     <style>
-        #inputNombre{
-            width: 390px;
-            font-size: 15px;
-            border: none;
-            border-radius: 5px;
-            border-color: rgb(95, 168, 158);
-            padding: 5px;
-        }
         #enviar{
             padding: 10px;
             width: 100%;
+            border-radius: 10px;
+            border: solid 1px rgb(74, 6, 92);
         }
         #comentario{
             width: 100%;
             border: none;
         }
         form{
-            width: 400px;
+            width: 100%;
+            max-width: 500px;
         }
 
-        .dark article p, .dark li, .dark article b{
+        .dark article p, .dark li, .dark #contenedor_Comentarios{
             color: rgb(243, 240, 241);
         }
         .dark article h1, .dark article h2{
@@ -44,10 +39,11 @@
             padding: 0;
             margin: 20px auto 20px auto;
         }
-        #titulo-info{
+        .titulo-info{
             text-align: center;
             font-size: 40px;
             margin-bottom: 2%;
+            margin-top: 2%;
         }
         #contenedor_Comentarios{
             width: 400px;
@@ -55,7 +51,6 @@
         #nombre_usuario{
             font-weight: bold;
         }
-
     </style>  
     
 
@@ -66,17 +61,25 @@
             <nav class="ventanas">
                 <input type="checkbox" id="check">
                 <label for="check" class="checkbtn">
-                <i class="fas fa-bars"></i>
+                <i class="fas fa-bars"></i> 
                 </label>
                     <ul class="opciones-ventanas">
                         <li>
-                            <a href="/index.html" class="enlaces-ventanas" >Inicio</a>
+                            <a href="./index.php" class="enlaces-ventanas" >Inicio</a>
                         </li>
                         <li>
                             <a href="https://forms.gle/D8NNqERVakWrsNkA9" class="enlaces-ventanas" target="_blank">Comentarios</a>
                         </li>
+                       <li>
+                            <a href="./info.php" class="enlaces-ventanas">Info</a>
+                        </li>
                         <li>
-                            <a href="/info.html" class="enlaces-ventanas">Info</a>
+                            <a href="" class="enlaces-ventanas">
+                                <?php echo $_SESSION["usuario"] ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../controladores_php/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                     </ul>
             </nav> 
@@ -86,7 +89,6 @@
     </header>
 
     <main id="cuerpo">
-
         <div id="section-darkmode">
             <div class="contenedor-darkmode">
                 <input type="checkbox" id="check-darkmode" >
@@ -96,7 +98,7 @@
         
 
         <article>
-            <h1 id="titulo-info">Informacion de actualizacion</h1>
+            <h1 class="titulo-info">Informacion de actualizacion</h1>
             <h2 id="version">Version 3.0</h2>
             <p>Se han añadido mejoras en rendimiento y algunas pocas en diseño, asi como tambien se hizo alguna correcciones de bugs en la jugabilidad y diseño. <br> Las mejoras especificas son:</p>
             <ul id="lista-mejoras">
@@ -109,15 +111,43 @@
             </ul>
         </article>
         <article>
-            <form action="./php/comentario.php" method="POST" id="formulario">
-                <label for="inputNombre">Nombre</label> <br>
-                <input name="inputNombre" type="text" id="inputNombre" placeholder="introduzca..."> <br>
+            <h1 class="titulo-info">Comentarios</h1>
+            <form action="comentario.php" method="POST" id="formulario">
 
-                <label for="comentario">comentario</label> <br>
+                <label for="comentario">comentar</label> <br>
                 <textarea name="comentario" id="comentario" cols="30" rows="5"></textarea>
+
+                <input type="checkbox" id="visible" name="visible" value="true" checked>
+                <label for="visible">Comentario visible al mundo</label> <br>
             
                 <input type="button" value="enviar" id="enviar">
             </form>
+
+            <div id="contenedor_Comentarios">
+                <?php 
+                    // Preparar la consulta
+                    $stmt = $conexion->prepare("SELECT comentarios.comentario, comentarios.fecha, comentarios.visible, register.usuario FROM comentarios INNER JOIN register ON comentarios.id_usuario = register.id");
+
+                    // Ejecutar la consulta
+                    $stmt->execute();
+
+                    // Vincular las variables a las columnas del resultado
+                    $stmt->bind_result($comentario, $fecha, $visible, $usuario);
+
+                    while ($stmt->fetch()) {
+                        if($visible == 1){
+                            ?>
+                            <b id="nombre_usuario"> <?php echo($usuario); ?></b> (<?php echo($fecha);?>) dijo:
+                            <br>
+                            <p><?php echo($comentario);?></p>
+                            <div class="lineaSeparador"></div>
+                            <?php 
+                        }                    
+                    }
+                    
+                ?>
+            </div>
+
         </article>
      
         
@@ -147,7 +177,7 @@
           </div>
       </footer>
 
-      <script >
+        <script >
         /*---------------MODO OSCURO -------------------- */
         let botonDark=document.getElementById("boton-darkmode");
         let body=document.body;
@@ -164,32 +194,26 @@
         } else {
             body.classList.remove("dark")
         }
+
         var enviar = document.getElementById("enviar");
-            enviar.addEventListener("click",function(){
-                var nombre = document.getElementById("inputNombre").value;
+            enviar.addEventListener("click", function(){
                 var comentario = document.getElementById("comentario").value;
 
-                if(nombre == ""){
-                    alert("debe introducir un nombre");
-                    
-                }
                 if(comentario == ""){
                     alert("debe introducir un comentario");
+                    throw new Error("No ah insertado un comentario");
                 }
 
                 var formulario = document.getElementById("formulario");
                 formulario.submit();
                 alert("Se ah enviado tu comentario");
             });
-    </script>
+        </script>
     <!--
         Usuarios
         - nombre de usuario
         - nombres
         - contraseña
-        - correo
-        - pais
-        - foto, opcional()
 
         Recorrido
         - Niveles pasados

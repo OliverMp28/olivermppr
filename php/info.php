@@ -15,24 +15,19 @@ if (empty($_SESSION["id_usuario"])){
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <title>info</title>
     <style>
-         #inputNombre{
-            width: 390px;
-            font-size: 15px;
-            border: none;
-            border-radius: 5px;
-            border-color: rgb(95, 168, 158);
-            padding: 5px;
-        }
         #enviar{
             padding: 10px;
             width: 100%;
+            border-radius: 10px;
+            border: solid 1px rgb(74, 6, 92);
         }
         #comentario{
             width: 100%;
             border: none;
         }
         form{
-            width: 400px;
+            width: 100%;
+            max-width: 500px;
         }
 
         .dark article p, .dark li, .dark #contenedor_Comentarios{
@@ -51,10 +46,11 @@ if (empty($_SESSION["id_usuario"])){
             padding: 0;
             margin: 20px auto 20px auto;
         }
-        #titulo-info{
+        .titulo-info{
             text-align: center;
             font-size: 40px;
             margin-bottom: 2%;
+            margin-top: 2%;
         }
         #contenedor_Comentarios{
             width: 400px;
@@ -90,7 +86,7 @@ if (empty($_SESSION["id_usuario"])){
                             </a>
                         </li>
                         <li>
-                            <a href="../controladores/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
+                            <a href="../controladores_php/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                     </ul>
             </nav> 
@@ -100,7 +96,6 @@ if (empty($_SESSION["id_usuario"])){
     </header>
 
     <main id="cuerpo">
-
         <div id="section-darkmode">
             <div class="contenedor-darkmode">
                 <input type="checkbox" id="check-darkmode" >
@@ -110,7 +105,7 @@ if (empty($_SESSION["id_usuario"])){
         
 
         <article>
-            <h1 id="titulo-info">Informacion de actualizacion</h1>
+            <h1 class="titulo-info">Informacion de actualizacion</h1>
             <h2 id="version">Version 3.0</h2>
             <p>Se han añadido mejoras en rendimiento y algunas pocas en diseño, asi como tambien se hizo alguna correcciones de bugs en la jugabilidad y diseño. <br> Las mejoras especificas son:</p>
             <ul id="lista-mejoras">
@@ -123,9 +118,10 @@ if (empty($_SESSION["id_usuario"])){
             </ul>
         </article>
         <article>
+            <h1 class="titulo-info">Comentarios</h1>
             <form action="comentario.php" method="POST" id="formulario">
 
-                <label for="comentario">comentario</label> <br>
+                <label for="comentario">comentar</label> <br>
                 <textarea name="comentario" id="comentario" cols="30" rows="5"></textarea>
 
                 <input type="checkbox" id="visible" name="visible" value="true" checked>

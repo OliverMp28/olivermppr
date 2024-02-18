@@ -567,7 +567,7 @@ function GuardarProgreso(){
     formData.append('inputPts', score);
     formData.append('idCancionCargar', window.idCancionElegida);
 
-    fetch('../controladores/gestionar_progreso.php', {
+    fetch('../controladores_php/gestionar_progreso.php', {
         method: 'POST',
         body: formData
     })
