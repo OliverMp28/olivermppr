@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=s, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            border: solid 1px red;
+        }
+    </style>
+</head>
+<body>
+    <h1>hola</h1>
+    
+    <audio src="../audios/HOPE.mp3" id="audio" autoplay></audio>
+    
+    <canvas id="myCanvas"></canvas>
+    <button id="button"></button>
+
+    <script>
+        let audioContext;
+        let button = document.querySelector('button');
+
+        button.addEventListener('click', function() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                let analyser = audioContext.createAnalyser();
+                let audioElement = document.querySelector('audio'); // selecciona el elemento de audio en tu HTML
+                let source = audioContext.createMediaElementSource(audioElement);
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+
+                let frequencyData = new Uint8Array(analyser.fftSize);
+                analyser.getByteFrequencyData(frequencyData);
+                analyser.smoothingTimeConstant = 0.01;
+
+                let canvas = document.getElementById('myCanvas');
+                let ctx = canvas.getContext('2d');
+
+                function drawVisualisation(frequencyData) {
+                    // Limpiar el canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // Calcular el ancho de cada barra
+                    let barWidth = canvas.width / frequencyData.length;
+
+                    // Dibujar cada barra
+                    for (let i = 0; i < frequencyData.length; i++) {
+                        let value = frequencyData[i];
+                        let barHeight = Math.log(1 + value) * canvas.height;
+                        let x = i * barWidth;
+                        let y = canvas.height - barHeight;
+
+                        ctx.fillStyle = 'blue';
+                        ctx.fillRect(x, y, barWidth, barHeight);
+                    }
+                }
+
+                // Llamar a drawVisualisation en un bucle
+                function loop() {
+                    requestAnimationFrame(loop);
+
+                    // Obtener los datos de frecuencia
+                    let frequencyData = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(frequencyData);
+
+                    // Dibujar la visualización
+                    drawVisualisation(frequencyData);
+                }
+
+                loop();
+            } else {
+                audioContext.resume();
+            }
+        });
+    </script>
+</body>
+</html>
