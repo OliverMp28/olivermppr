@@ -2,7 +2,7 @@
 
 $idCancionCargar = $_GET['id_cancion_cargar'];  // 1
 
-require_once './conectar.php';
+require_once '../controladores_php/conectar.php';
 
 // Comprobar si el nombre de usuario ya existe
 $stmt = $conexion->prepare('SELECT * FROM canciones WHERE id = ?');

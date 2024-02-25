@@ -1,5 +1,5 @@
 <?php
-require_once './conectar.php';
+require_once '../controladores_php\conectar.php';
 
 if(!empty($_POST["enviarLogin"])) {
     $inputUsuario = $_POST['inputUsuario'];

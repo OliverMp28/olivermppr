@@ -1,6 +1,6 @@
 <?php
 // guardar_mensaje.php
-require_once './conectar.php';
+require_once '../controladores_php/conectar.php';
 
 session_start();
 

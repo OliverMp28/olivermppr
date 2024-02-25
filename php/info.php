@@ -119,7 +119,7 @@ if (empty($_SESSION["id_usuario"])){
         </article>
         <article>
             <h1 class="titulo-info">Comentarios</h1>
-            <form action="comentario.php" method="POST" id="formulario">
+            <form action="../controladores_php/comentario.php" method="POST" id="formulario">
 
                 <label for="comentario">comentar</label> <br>
                 <textarea name="comentario" id="comentario" cols="30" rows="5"></textarea>

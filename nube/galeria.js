@@ -4,13 +4,13 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
 import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCVlO67UqDK9sw61s61mTyJfVtF3Fa1mDE",
-    authDomain: "daino-33750.firebaseapp.com",
-    projectId: "daino-33750",
-    storageBucket: "daino-bd63c.appspot.com/img_perfiles",
-    messagingSenderId: "353993615833",
-    appId: "1:353993615833:web:b3e5faab0e50909a9791c8",
-    measurementId: "G-RN5G3BXM48"
+    apiKey: "AIzaSyB7ry6SyjJ5xp6K9SMSi2-vVQyk4fTDkbE",
+    authDomain: "daino-942be.firebaseapp.com",
+    projectId: "daino-942be",
+    storageBucket: "daino-942be.appspot.com",
+    messagingSenderId: "1007404947075",
+    appId: "1:1007404947075:web:b33838f3a97e4faa47adb6",
+    measurementId: "G-2ZH6Q7FRDN"
   };
 
 const app = initializeApp(firebaseConfig);
