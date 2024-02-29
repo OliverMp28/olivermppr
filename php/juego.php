@@ -108,7 +108,6 @@ if (empty($_SESSION["id_usuario"])){
 
         <div id="tiempoDuracion">166</div> -->
         <?php include '../controladores_php/leer_lista_canciones.php'; ?>
-        <script src="../js/songsDB.js"></script>
         <script src="../js/juego.js"></script>
         <script src="../js/darkmode.js"></script>
     </div>

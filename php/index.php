@@ -61,6 +61,7 @@ if (empty($_SESSION["id_usuario"])){
             <label for="check-darkmode" id="boton-darkmode"></label>
         </div>
     </div>
+    <div class="recuperar"></div>
 
     <div class="lista">
         <article class="contenedorCanciones" >
@@ -82,7 +83,7 @@ if (empty($_SESSION["id_usuario"])){
                         <img src="img/fondo.png" alt="" class="circulo">
                         <div class="titulo-cancion">
                             <p class="subtitulo-cancion1" id="nombre-cancion2">Hope</p>
-                            <p class="subtitulo-cancion2"> subtitulo </p>
+                            <p class="subtitulo-cancion2"> subtitulo <b>1:19</b> </p>
                         </div>
                         <p class="minuto">1:19</p>
                     </div>

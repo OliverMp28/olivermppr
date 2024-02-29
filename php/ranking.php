@@ -13,13 +13,10 @@ if (empty($_SESSION["id_usuario"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dino html</title>
     <link rel="stylesheet" href="../css/modelo.css">
-    <link rel="stylesheet" href="../css/juego.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        #cuerpo{
-            display: grid;
-        }
+       
         #section_ranking{
             margin-bottom: 20px !important;
         }        
@@ -445,6 +442,7 @@ if (empty($_SESSION["id_usuario"])){
             <label for="check-darkmode" id="boton-darkmode"></label>
         </div>
     </div>
+    <div class="recuperar"></div>
     <section id="section_ranking">
         <?php 
             // Preparar la consulta

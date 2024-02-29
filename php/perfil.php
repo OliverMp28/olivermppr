@@ -1,3 +1,10 @@
+<?php include('../controladores_php/conectar.php'); ?>
+<?php
+session_start();
+if (empty($_SESSION["id_usuario"])){
+    header("Location: ./login.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,8 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dino html</title>
-    <link rel="stylesheet" href="./css/modelo.css">
-    <link rel="stylesheet" href="./css/juego.css">
+    <link rel="stylesheet" href="../css/modelo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -42,8 +48,7 @@
             /* Ajusta el padding según tus necesidades */
             padding: 20px;
             /* Bordes redondeados solo en la parte inferior */
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
+            border-radius: 20px;
             /* Colores para los modos claro y oscuro */
             background-color: rgba(231, 139, 11, 0.33);
             color: rgb(31, 29, 29);
@@ -53,14 +58,15 @@
             display: flex;
             justify-content: space-between;
         }
+
         .dark #seccion_perfil{
             background-color: rgba(222, 114, 78, 0.33);
         }
+
         #informacion{
             width: 50%;
             margin-left: 10px;
-            margin-top: 10px;
-            
+            margin-top: 30px;
         }
         #informacion p{
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -68,10 +74,11 @@
         }
         #nombre_usuario{
             font-size: 50px !important;
+            margin-bottom: 15px;
         }
         #adicional{
-            width: 40%;
-            margin-top: 65px !important;
+            width: 48%;
+            margin-top: 100px !important;
             float: right;
             margin-top: 0;
         }
@@ -85,7 +92,22 @@
         }
         /*movil*/
         @media screen and (max-width:768px){
-            
+            #seccion_perfil {
+                padding: 10px;
+                width: 90%;
+            }
+            #informacion{
+                margin-left: 0px;
+            }
+            #informacion p{
+                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                font-size: 17px;
+            }
+            #adicional p{
+                text-align: right;
+                
+                font-size: 17px;
+            }
         }
     </style>
 
@@ -121,7 +143,7 @@
 
             <h1>Perfil</h1>
             <div id="contenedor_foto_perfil">
-                <img id="foto" src="./img/foto_dino2.2.png" alt="">
+                <img id="foto" src="../img/foto_dino2.2.png" alt="">
             </div> 
 
 
@@ -138,19 +160,78 @@
         </div>
     </div>
     <div class="recuperar"></div>
+
     <section id="seccion_perfil">
-        <div id="informacion">
-            <p id="nombre_usuario">usuario</p>
-            <p>nombre</p>
-            <p>correo</p>
-        </div>
-        <div id="adicional">
-            <p>n canciones</p>
-            <p>1º puesto en el ranking</p>
-        </div>
+        
+
+        <?php 
+            $id_usuario = $_SESSION["id_usuario"];
+            
+            $stmt1 = $conexion->prepare("SELECT usuario, nombres, email 
+            FROM register WHERE id = ?");
+            $stmt1->bind_param("i", $id_usuario); 
+            $stmt1->execute();
+            $stmt1->bind_result($usuario, $nombres, $email);
+            $resultados1 = [];
+            if ($stmt1->fetch()) {
+                $resultados1 = ['usuario' => $usuario, 'nombres' => $nombres, 'email' => $email];
+            }
+            $stmt1->close();
+
+          /*  $stmt2 = $conexion->prepare("SELECT n_canciones, pts_total FROM ranking WHERE id_usuario = ?");
+            $stmt2->bind_param("i", $id_usuario);
+            $stmt2->execute();
+            // Vincular las variables a las columnas del resultado
+            $stmt2->bind_result($n_canciones, $pts_total);*/
+
+            $stmt2 = $conexion->prepare("SELECT n_canciones, pts_total, (SELECT COUNT(*) FROM ranking r 
+            WHERE r.pts_total > ranking.pts_total) + 1 
+            AS orden 
+            FROM ranking WHERE id_usuario = ?");
+            $stmt2->bind_param("i", $id_usuario);
+            $stmt2->execute();
+            // Vincular las variables a las columnas del resultado
+            $stmt2->bind_result($n_canciones, $pts_total, $orden);
+
+
+            while ($stmt2->fetch()) {
+                ?>
+                    <div id="informacion">
+                        <p id="nombre_usuario"><?php echo($resultados1['usuario']); ?></p>
+                        <p><?php echo($resultados1['nombres']); ?></p>
+                        <p><?php echo($resultados1['email']); ?></p>
+                    </div>
+                    <div id="adicional">
+                        <p> Puesto <?php echo($orden); ?> en el ranking</p> 
+                        <p><?php echo($pts_total); ?> puntos totales</p>
+                        <p><?php echo($n_canciones); ?> niveles jugados</p>
+                    </div>
+
+                <?php
+            }
+
+          
+            $stmt2->close();
+
+            $conexion->close();
+            /* 
+
+            while ($stmt2->fetch()) {
+                if($visible == 1){
+                     ?>
+                     <b id="nombre_usuario"> <?php echo($usuario); ?></b> (<?php echo($fecha);?>) dijo:
+                    <br>
+                    <p><?php echo($comentario);?></p>
+                    <div class="lineaSeparador"></div>
+                    <?php 
+                }                    
+            }*/
+                    
+        ?>
     </section>
+
     <div class="recuperar"></div>
-    <script src="./js/darkmode.js"></script>
+    <script src="../js/darkmode.js"></script>
 
     </main>
 
@@ -177,16 +258,6 @@
           <div class="recuperar"></div>
         </div>
       </footer>
-
-
-      <!--
-        -problema, ya no usare un archivo js como db para las canciones, ahora lo pasare a sql para usarlo despues al guardar el progreso del avance de los usuarios
-        -
---> 
-    <!--
-        -la base de datos de haber una tablla que guarde la id del usuario y la id de la cancion
-        -
---> 
 
 
 </body>
