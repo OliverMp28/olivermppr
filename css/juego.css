@@ -161,8 +161,9 @@
     
         position: relative;
     
-        background: linear-gradient(#aa8c8c, rgb(124, 147, 187));
+        background: linear-gradient(#7a585800, rgba(243, 217, 252, 0.537));
         overflow: hidden;
+        transition: background-color 2s;
     }
 
     .dino{
@@ -253,10 +254,7 @@
 
 
 .mediodia {
-    transition: all 3s;
-
-    background: linear-gradient(#a6a6ad, rgb(178, 184, 193));
-
+    background: linear-gradient(#a6a6ad, rgb(178, 184, 193) transition 2s);
 }
 
 .tarde {

@@ -84,14 +84,20 @@ repetir.addEventListener("click", Reiniciar);
 
 function Reiniciar(){
     for(let i = 0; i<=obstaculos.length; i++){
-        obstaculos[i].style.display="none";
+        for(let i = obstaculos.length - 1; i >= 0; i--){
+            contenedor.removeChild(obstaculos[i]);
+            obstaculos.splice(i,1);
+        }
+        console.log(obstaculos);
         gameOver.style.display = "none";
         tryAgain.style.display = "none";
+        youWin.style.display = "none";
         x=false;
         audio1.currentTime=0;
         audio1.play();
         JuegoPlay();
         score = 0; 
+        gameVel = 1;
     }
 }
 
@@ -222,6 +228,16 @@ function MoverSuelo() {
     suelo.style.left = -(sueloX % contenedor.clientWidth) + "px";
 }
 
+function incrementarVelocidad(velocidadObjetivo) { //esta funcion aumenta la velocidad gradualmente para que el cambio no sea de golpe
+    if (gameVel < velocidadObjetivo) {
+        gameVel += 0.01; // ajusta este valor para cambiar la rapidez del incremento
+        setTimeout(() => incrementarVelocidad(velocidadObjetivo), 20); // ajusta este valor para cambiar la frecuencia del incremento
+    }else{
+        gameVel = velocidadObjetivo;
+    }
+}
+
+
 //movil
 if(screen.width < 767){
     gameVel = 0.7;
@@ -261,25 +277,29 @@ if(screen.width < 767){
         
         if(score < 5){
             gameVel = 0.7;
-            contenedor.classList.remove("mediodia");
+            /* contenedor.classList.remove("mediodia");
             contenedor.classList.remove("tarde");
-            contenedor.classList.remove("noche"); 
+            contenedor.classList.remove("noche"); */
+            contenedor.style.background = "linear-gradient(#aa8c8c, rgb(124, 147, 187))";
         }
         else if(score >= 5 && score < 15){
             gameVel = 1.2;
-            contenedor.classList.remove("tarde");
+            /* contenedor.classList.remove("tarde");
             contenedor.classList.remove("noche");
-            contenedor.classList.add("mediodia");
+            contenedor.classList.add("mediodia");*/
+            contenedor.style.background = "linear-gradient(#a6a6ad, rgb(178, 184, 193))";
         }else if(score >= 15 && score < 25) {
             gameVel = 1.4;
-            contenedor.classList.remove("mediodia");
+            /* contenedor.classList.remove("mediodia");
             contenedor.classList.remove("noche");
-            contenedor.classList.add("tarde");
+            contenedor.classList.add("tarde");*/
+            contenedor.style.background = "linear-gradient(#c06253, rgb(122, 143, 176))";
         } else if(score >= 25) {
             gameVel = 2.1;
-            contenedor.classList.remove("mediodia");
+            /* contenedor.classList.remove("mediodia");
             contenedor.classList.remove("tarde");
-            contenedor.classList.add("noche");
+            contenedor.classList.add("noche");*/
+            contenedor.style.background = "linear-gradient(#4d455f, rgb(158, 159, 193))";
         }
         suelo.style.animationDuration = (3/gameVel)+"s";
     } 
@@ -334,28 +354,37 @@ else if (screen.width > 767){
         score++;
         textoScore.innerText = score;
         if(score < 5){
-            gameVel = 1;
-            contenedor.classList.remove("mediodia");
+            incrementarVelocidad(1);
+           /* contenedor.classList.remove("mediodia");
             contenedor.classList.remove("tarde");
-            contenedor.classList.remove("noche"); 
+            contenedor.classList.remove("noche"); */
+            contenedor.style.transition = "background-color 2s";
+            contenedor.style.backgroundColor = "#aa8c8c";
         }
         else if(score >= 5 && score < 15){
-            gameVel = 1.5;
-            contenedor.classList.remove("tarde");
+            incrementarVelocidad(1.5);
+           /* contenedor.classList.remove("tarde");
             contenedor.classList.remove("noche");
-            contenedor.classList.add("mediodia");
+            contenedor.classList.add("mediodia");*/
+            contenedor.style.transition = "background-color 2s";
+            contenedor.style.backgroundColor = "#a6a6ad";
         }else if(score >= 15 && score < 25) {
-            gameVel = 2;
-            contenedor.classList.remove("mediodia");
+            incrementarVelocidad(2);
+           /* contenedor.classList.remove("mediodia");
             contenedor.classList.remove("noche");
-            contenedor.classList.add("tarde");
+            contenedor.classList.add("tarde");*/
+            contenedor.style.transition = "background-color 2s";
+            contenedor.style.backgroundColor = "#c06253";
         } else if(score >= 25) {
-            gameVel = 3;
-            contenedor.classList.remove("mediodia");
+            incrementarVelocidad(3);
+           /* contenedor.classList.remove("mediodia");
             contenedor.classList.remove("tarde");
-            contenedor.classList.add("noche");
+            contenedor.classList.add("noche");*/
+            contenedor.style.transition = "background-color 2s";
+            contenedor.style.backgroundColor = "#4d455f";
         }
         suelo.style.animationDuration = (3/gameVel)+"s";
+        console.log(gameVel);
     } 
 
     function DetectarColision() {
@@ -472,13 +501,17 @@ function AudioOff(){
 }
 
 function AudioFinalOn(){
-        audioFinal.load();
+    audioFinal.load();
+    audioFinal.oncanplaythrough = function() {
         audioFinal.play();
+    }
 }
 
 function AudioPipipi(){
     audioPi.load();
-    audioPi.play();
+    audioPi.oncanplaythrough = function() {
+        audioPi.play();
+    }
 }
 
 function Terminar(){
@@ -539,7 +572,6 @@ var porcentaje = 0;
         var porcentajeFinal;
         porcentaje = (tiempoActual/duracion)*100;
         var porcentajeHallado = porcentaje.toString();
-        porcentajeFinal = (100-porcentaje)+porcentaje;
 
         if(audio1.ended){// cuando finaliza ó está en pausa.... detenemos el setInterval            
             document.getElementById('tiempox').innerHTML =  "100%";

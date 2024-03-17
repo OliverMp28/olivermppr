@@ -2,6 +2,8 @@
 session_start();
 if (empty($_SESSION["id_usuario"])){
     header("Location: ./login.php");
+}else{
+    include('../controladores_php/conectar.php');
 }
 ?>
 
@@ -12,7 +14,7 @@ if (empty($_SESSION["id_usuario"])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dino html</title>
+    <title>Daino</title>
     <link rel="stylesheet" href="../css/modelo.css">
     <link rel="stylesheet" href="../css/juego.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
@@ -20,36 +22,7 @@ if (empty($_SESSION["id_usuario"])){
 </head>
 <body>
     <header>
-        <div>
-            <nav class="ventanas">
-                <input type="checkbox" id="check">
-                <label for="check" class="checkbtn">
-                <i class="fas fa-bars"></i> 
-                </label>
-                    <ul class="opciones-ventanas">
-                        <li>
-                            <a href="./index.php" class="enlaces-ventanas" >Inicio</a>
-                        </li>
-                        <li>
-                            <a href="https://forms.gle/D8NNqERVakWrsNkA9" class="enlaces-ventanas" target="_blank">Comentarios</a>
-                        </li>
-                       <li>
-                            <a href="./info.php" class="enlaces-ventanas">Info</a>
-                        </li>
-                        <li>
-                            <a href="" class="enlaces-ventanas">
-                                <?php echo $_SESSION["usuario"] ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../controladores_php/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
-                        </li>
-                    </ul>
-            </nav> 
-
-            <h1>Dino HTML</h1>
-            
-        </div>
+    <?php include('./cabecera.php'); ?>
     </header>
     
 
@@ -63,7 +36,48 @@ if (empty($_SESSION["id_usuario"])){
     </div>
     <div class="recuperar"></div>
 
-    <div class="lista">
+    <div>
+    <?php 
+        $id_usuario = $_SESSION["id_usuario"];
+        
+            $stmt = $conexion->prepare("SELECT c.id, c.nombre, c.autor, c.img, c.src, SUBSTRING_INDEX(c.duracion, ':', -2) as duracion, IFNULL(p.porcentaje, 0) as porcentaje FROM canciones c LEFT JOIN progreso p ON c.id = p.id_cancion AND p.id_usuario = ? ORDER BY c.duracion ASC");
+
+            $stmt->bind_param('i', $id_usuario); 
+            
+            $stmt->execute();
+            
+            $stmt->bind_result($id, $nombre, $autor, $img, $src, $duracion, $porcentaje);
+            
+
+            ?>
+                <ul class="opciones"> 
+                <?php
+                while ($stmt->fetch()) {
+                    ?>
+                    <li>
+                        <div class="botones"  onclick="window.location.href='./juego.php?id_cancion_cargar=<?php echo($id); ?>';">
+                            <img src="../img/<?php echo($img); ?>" alt="" class="circulo">
+                            <div class="titulo-cancion">
+                                <p class="subtitulo-cancion1"><?php echo($nombre); ?></p>
+                                <p class="subtitulo-cancion2"> <?php echo($autor); ?> </p>
+                            </div>
+                            <p class="porcentaje"><?php echo($porcentaje); ?>% </p>
+                            <p class="minuto"><?php echo($duracion); ?></p>
+                        </div>
+                    </li>
+                    <?php  
+                }
+                ?>
+                </ul>
+                <div class="recuperar"></div>
+            <?php                            
+            $stmt->close();
+            $conexion->close();
+        ?>
+    </div>
+
+    <!--
+     <div class="lista">
         <article class="contenedorCanciones" >
             <h2>Facil</h2>
             <ul class="opciones"> 
@@ -75,7 +89,6 @@ if (empty($_SESSION["id_usuario"])){
                             <p class="subtitulo-cancion2"> subtitulo </p>
                         </div>
                         <p class="minuto">0:40</p>
-                    <!--  <a href="song1.html" class="canciones">Sugar red - 0:40</a> -->
                     </div>
                 </li>
                 <li> 
@@ -87,9 +100,6 @@ if (empty($_SESSION["id_usuario"])){
                         </div>
                         <p class="minuto">1:19</p>
                     </div>
-                    <!--<button onclick="accion2()"  class="botones">
-                            Hope 1:19</button>--> 
-                 <!-- <a href="song7.html" class="canciones">Hope - 1:19</a> -->  
                 </li>
 
             </ul>
@@ -107,7 +117,6 @@ if (empty($_SESSION["id_usuario"])){
 
                         <p class="minuto">2:43</p>
                     </div>
-                <!--    <a href="/song2.html" class="canciones">Running With the wolves - 2:43</a> -->
                 </li>
                 <li>
                     <div id="boton4" class="botones"   onclick="window.location.href='./juego.php?id_cancion_cargar=4';">
@@ -118,7 +127,6 @@ if (empty($_SESSION["id_usuario"])){
                         </div>
                         <p class="minuto">2:46</p>
                     </div>
-                <!--  <a href="song4.html" class="canciones">Time - 2:46</a> --> 
                 </li>
             </ul>
         </article>
@@ -134,7 +142,6 @@ if (empty($_SESSION["id_usuario"])){
                         </div>
                         <p class="minuto">3:13</p>
                     </div>
-                    <!--<a href="song5.html" class="canciones">Mi Fiesta - 3:13</a>  --> 
                 </li>
                 <li>
                     <div id="boton6" class="botones"   onclick="window.location.href='./juego.php?id_cancion_cargar=6';">
@@ -145,7 +152,6 @@ if (empty($_SESSION["id_usuario"])){
                         </div>
                         <p class="minuto">3:16</p>
                     </div>
-                    <!-- <a href="song3.html" class="canciones">Dawn of Faith - 3:16</a> --> 
                 </li>
                 <li>
                     <div id="boton7" class="botones"   onclick="window.location.href='./juego.php?id_cancion_cargar=7';">
@@ -156,12 +162,12 @@ if (empty($_SESSION["id_usuario"])){
                         </div>
                         <p class="minuto">3:35</p>
                     </div>
-               <!-- <a href="song6.html" class="canciones">What's Up Danger - 3:35</a> -->  
                 </li>
             </ul>
         </article>         
-    </div>
+    </div> -->
 
+    <!--
     <div id="juegazo">
         <div id="cabecera-juego">
             <a href="" id="volver">Volver</a>
@@ -189,16 +195,14 @@ if (empty($_SESSION["id_usuario"])){
         </div>
 
         <div id="tiempox"> </div>
-    <!--<div id="comprobacion1"> </div>
-        <div id="comprobacion2"> </div> 
+        <div id="comprobacion2"> </div>         
+    </div> -->
 
-        <div id="tiempoDuracion">166</div> -->
-        
-        <script src="../js/darkmode.js"></script>
-    <!--    <script src="../interaccion.js"></script> -->
-    </div>
-    </main>
     
+    <script src="../js/darkmode.js"></script>
+    </main>
+
+   
     <footer id="pielogo">
         <div>
           <section class="seccionpie">

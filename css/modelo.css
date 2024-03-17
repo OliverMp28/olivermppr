@@ -26,6 +26,7 @@ main{
         background-color: #aa5d5d;
         padding: 15px;
         border-radius: 20px;
+        margin-bottom: 30px;
     }
     header div h1{
         width: 55%;
@@ -86,6 +87,7 @@ main{
         background-color: #aa5d5d;
         padding: 20px;
         border-radius: 20px;
+        margin-bottom: 30px;
     }
     
     header div h1{
@@ -161,6 +163,7 @@ main{
         background-color: #aa5d5d;
         padding: 20px;
         border-radius: 20px;
+        margin-bottom: 40px;
     }
     
     /* .opciones li{
@@ -343,11 +346,22 @@ header{
     font-size: 0.9rem;
 }
 .minuto{
-    width: 45px;
+    width: 50px;
     float: right;
     line-height: 62px; /* esto lo uso para centrar el texto verticalmente, al cual le paso la medida del contenedor en pixeles*/
-    margin-right: 10px;
+    margin-right: 12px;
     font-size: 1.1rem;
+}
+.porcentaje{
+    text-align: center;
+    width: 60px;
+    float: right;
+    line-height: 60px; /* esto lo uso para centrar el texto verticalmente, al cual le paso la medida del contenedor en pixeles*/
+    /*margin-right: 10px;*/
+    font-size: 1.1rem;
+
+    border: #838383 1px solid;
+    border-radius: 100%;
 }
 
 
