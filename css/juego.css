@@ -15,8 +15,9 @@
     
         position: relative;
     
-        background: linear-gradient(#aa8c8c, rgb(124, 147, 187));
+        background: linear-gradient(#7a585800, rgba(243, 217, 252, 0.537));
         overflow: hidden;
+        transition: background-color 2s;
     }
 
     .dino{
@@ -89,8 +90,9 @@
     
         position: relative;
     
-        background: linear-gradient(#aa8c8c, rgb(124, 147, 187));
+        background: linear-gradient(#7a585800, rgba(243, 217, 252, 0.537));
         overflow: hidden;
+        transition: background-color 2s;
     }
 
     .dino{
@@ -154,7 +156,7 @@
         width: 60%;
     }
     .contenedor{
-        width: 60%;
+        width: 1000px;
         height: 300px;
         margin: 0 auto;
         border-radius: 20px;
@@ -220,6 +222,21 @@
     }
 }
 
+#juegazo {
+ /*   position: relative !important;*/
+}
+  
+#miLienzo {
+    position: absolute !important;
+    z-index: 10 !important; /* El lienzo estará detrás del juego */
+}
+  
+.contenedor {
+   /* position: absolute !important;*/
+    z-index: 12 !important; /* El juego estará delante del lienzo */
+}
+  
+
 
 #nombreJuego{
     margin: auto;
@@ -228,8 +245,13 @@
     font-size: 20px;
     width: 50%;
     padding: 10px;
+    position: relative;
+    color: #e6fff7;
+
+    z-index: 12 !important;
 }
 #volver{
+    position: relative;
     width: 70px;
     text-align: center;
     text-decoration: none;
@@ -244,6 +266,7 @@
     font-style: normal;
     font-family:   sans-serif;
 
+    z-index: 12;
 }
 #volver:hover {
     letter-spacing: 3px;
@@ -411,13 +434,15 @@
 #tiempox{
     background: #902176;
     width: 10%;
-    z-index: 10;
+    height: 20px;
+    z-index: 12 !important;
     margin: auto;
     padding: 10px;
     border-radius: 5px;
     text-align: center;
     color: #ffffff;
     font-size: 20px;
+    position: relative;
 }
 
 #tiempoDuracion{
@@ -428,4 +453,26 @@
     display: block;
     padding: 2%;
     padding-bottom: 10vh;
+}
+
+#juegoYFondo{
+    position: relative !important;
+}
+
+#miLienzo{
+    width: 100%; /* Ajusta el ancho según sea necesario */
+    height: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+#defaultCanvas0{
+    height: 100% !important;
+    margin: auto;
+    display: inline;
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.3) inset; /* Ajusta el valor de desenfoque y el color según sea necesario */
+    overflow: hidden; /* Asegura que el sombreado no se desborde del lienzo */
+
 }

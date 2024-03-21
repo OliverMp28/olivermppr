@@ -47,6 +47,9 @@ if (empty($_SESSION["id_usuario"])){
     </audio>
 
 
+    <div id="juegoYFondo">
+    <div id="miLienzo"></div>
+        <div class="recuperar"></div>
     <div id="juegazo">
         <div id="cabecera-juego">
             <a href="./index.php" id="volver">Volver</a>
@@ -78,16 +81,27 @@ if (empty($_SESSION["id_usuario"])){
         <div id="comprobacion2"> </div> 
 
         <div id="tiempoDuracion">166</div> -->
+
+        <script src="../p5/p5.min.js"></script>
+        <script src="../p5/addons/p5.sound.js"></script>
+        
         <?php include '../controladores_php/leer_lista_canciones.php'; ?>
         <script src="../js/juego.js"></script>
         <script src="../js/darkmode.js"></script>
+
+   
     </div>
+
+    </div> 
 
         <form action="../controladores_php/gestionar_progreso.php" method="POST" id="formularioProgreso">
             <input type="hidden" id="inputPorcentaje" name="inputPorcentaje">
             <input type="hidden" id="inputPts" name="inputPts">
             <input type="hidden" id="idCancionCargar" name="idCancionCargar">
         </form>
+        
+        <!-- <script src="../addons/p5.sound.js"></script> 
+        <script src="../js/sketch.js"></script>-->
     </main>
     
     <footer id="pielogo">

@@ -12,6 +12,7 @@ main{
     background-color: rgb(230, 231, 242);
     width: 100%;
     margin: auto;
+    z-index: 1;
 }
 
 /*movil*/
