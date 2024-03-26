@@ -14,7 +14,7 @@ $conexion = mysqli_connect($host, $username, $password, $dbname);
 
 //echo("conectado");
 // Verificar si hay algún error de conexión
-if (mysqli_connect_errno()) {
+/*if (mysqli_connect_errno()) {
     die('Error al conectar con la base de datos: ' . mysqli_connect_error());
-}
+}*/
 ?>

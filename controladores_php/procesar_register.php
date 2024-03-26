@@ -1,5 +1,6 @@
 <?php
-require_once '../controladores_php\conectar.php';
+require_once('../controladores_php/conectar.php');
+
 
 if(!empty($_POST["enviarLogin"])) {
     $inputUsuario = $_POST['inputUsuario'];
@@ -32,11 +33,11 @@ if(!empty($_POST["enviarLogin"])) {
         $stmt->bind_param('ssss', $inputUsuario, $inputNombre,$inputEmail, $inputContraseña);
     
         if ($stmt->execute()) {
-            header('Location: ../php/index.php');
+            //header('Location: ../php/index.php');
+            echo '<script>window.location.href = "../php/index.php";</script>';
         } else {
             echo "<div>Hubo un error al registrar al usuario.</div>";
         }
     }
 }
-
 ?>

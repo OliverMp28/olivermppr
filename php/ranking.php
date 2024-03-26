@@ -1,6 +1,7 @@
-<?php include('../controladores_php/conectar.php'); ?>
 <?php
 session_start();
+include('../controladores_php/conectar.php'); 
+
 if (empty($_SESSION["id_usuario"])){
     header("Location: ./login.php");
 }

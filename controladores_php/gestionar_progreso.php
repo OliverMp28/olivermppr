@@ -1,4 +1,5 @@
-<?php 
+<?php
+session_start();
 require_once '../controladores_php/conectar.php';
 
 /*
@@ -12,8 +13,6 @@ $stmt = $conexion->prepare('INSERT INTO progreso (id_usuario, id_cancion, porcen
 $stmt->bind_param('ssss', , 2, 3, 4);
 $stmt->execute();
 */
-
-session_start();
 
 
 if (isset($_POST['inputPts']) && isset($_POST['inputPorcentaje'])) {

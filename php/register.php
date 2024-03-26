@@ -10,8 +10,7 @@
 <body>
     <div id="contenedor-login">
         <form action="" method="POST" id="formularioRegister">
-            <h1 id="titulo-login">BIENVENIDO</h1>
-            <?php 
+            <h1 id="titulo-login">BIENVENIDO</h1><?php 
                 include "../controladores_php/procesar_register.php"
             ?>
             

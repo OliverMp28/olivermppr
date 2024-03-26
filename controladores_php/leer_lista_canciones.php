@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 $idCancionCargar = $_GET['id_cancion_cargar'];  // 1
 
 require_once '../controladores_php/conectar.php';

@@ -1,6 +1,6 @@
 <?php
-require_once '../controladores_php\conectar.php';
-session_start();
+require_once('/storage/ssd1/210/21990210/public_html/controladores_php/conectar.php');
+
 
 if(!empty($_POST["enviarLogin"])) {
     if (!empty($_POST["inputUsuario"]) and !empty($_POST["inputContraseña"])) {
@@ -10,12 +10,13 @@ if(!empty($_POST["enviarLogin"])) {
 
         $sql = mysqli_query($conexion, 'SELECT * FROM register WHERE usuario="'.$inputUsuario.'" AND contraseña="'.$inputContraseña.'" ');  
         if ($datos=$sql->fetch_object()) {
+            
             $_SESSION["id_usuario"] = $datos->id;
             $_SESSION["usuario"] = $datos->usuario;
             $_SESSION["nombre"] = $datos->nombres;
             $_SESSION["email"] = $datos->email;
             $_SESSION["pais"] = $datos->pais;
-            header('Location: ../php/index.php');
+            echo '<script>window.location.href = "../php/index.php";</script>';
         } else {
             echo "<div>Acceso denegado</div>";
         }

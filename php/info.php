@@ -1,6 +1,7 @@
-<?php include('../controladores_php/conectar.php'); ?>
-<?php
+<?php 
 session_start();
+include('../controladores_php/conectar.php'); 
+
 if (empty($_SESSION["id_usuario"])){
     header("Location: ./login.php");
 }
@@ -188,21 +189,5 @@ if (empty($_SESSION["id_usuario"])){
                 alert("Se ah enviado tu comentario");
             });
         </script>
-    <!--
-        Usuarios
-        - nombre de usuario
-        - nombres
-        - contraseña
-
-        Recorrido
-        - Niveles pasados
-        - ranking (obtiene el ultimo porcentaje cuando el usuario gane o pierda
-                    y va acumulandolo como si fueran puntos y de esa manera
-                     los va ordenando en el ranking)
-
-        Comentarios
-        - nombre de usuario
-        - comentario
-    -->
 </body>
 </html>

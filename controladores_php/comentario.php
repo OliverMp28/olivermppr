@@ -1,8 +1,9 @@
 <?php
+session_start();
 // guardar_mensaje.php
 require_once '../controladores_php/conectar.php';
 
-session_start();
+
 
 
 // Obtener el mensaje enviado desde el cliente
