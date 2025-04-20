@@ -2,16 +2,16 @@ var song;
 var fft;
 var particles = []; //para ocntener a los objetos particula que creemos
 
+// function preload(){
+//   song = loadSound('../audios/Sugar Red.mp3');
+//  // song.play();
+// }
 function preload(){
-  song = loadSound('../audios/Sugar Red.mp3');
- // song.play();
-}
-/*function preload(){
   var audioElement = document.getElementById('audio');
   var audioSource = audioElement.getElementsByTagName('source')[0];
   var audioSrc = audioSource.src;
   song = loadSound(audioSrc);
-} */
+} 
 
 function setup() {
   let lienzo = createCanvas(windowWidth, windowHeight);

@@ -396,6 +396,7 @@
 #play {
     padding: 17px 40px;
     border-radius: 50px;
+    margin: auto;
     border: 0;
     background-color: white;
     box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
@@ -405,7 +406,14 @@
     transition: all .5s ease;
     font-style: normal;
     text-decoration: none;
-    }
+    display: none;
+}
+
+#mensaje-carga{
+    color: #fefdff;
+    font-size: 30px;
+    line-height: 51px;
+}
 
 #play:hover {
     letter-spacing: 3px;

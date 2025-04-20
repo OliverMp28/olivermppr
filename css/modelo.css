@@ -306,6 +306,10 @@ header{
    box-shadow:  rgb(112, 25, 61) 0px 7px 29px 0px; 
 }
 
+/* Cursor para lista de canciones */
+.opciones li {
+    cursor: pointer;
+}
 
 .contenedorCanciones{
     width: 90%;
@@ -463,7 +467,7 @@ nav ul li a{
         left: -100%;
         text-align: center;
         transition: all .0.2s;
-        z-index: 5;
+        z-index: 15;
     }
     nav .opciones-ventanas li{
         display: block;

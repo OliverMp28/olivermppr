@@ -1,5 +1,5 @@
 <?php
-require_once('/storage/ssd1/210/21990210/public_html/controladores_php/conectar.php');
+require_once('../controladores_php/conectar.php');
 
 
 if(!empty($_POST["enviarLogin"])) {

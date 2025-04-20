@@ -62,6 +62,7 @@ var x = false;
 var obstaculo;
 
 var botonPlay = document.getElementById("play");
+var mensajeCarga = document.getElementById("mensaje-carga");
 var audio1;
 audio1 = document.getElementById("audio");
 var audioFinal = document.getElementById("final");
@@ -494,14 +495,40 @@ function AudioLoad(){
     audio1.volume = 0;
  
     nombreCancion.innerHTML = window.nombreCancionElegida;
+
+     // Muestra el mensaje de carga por defecto
+   /*  mensajeCarga.style.display = "block";
+
+     // Cuando la canción se ha cargado completamente
+     cancion0.oncanplaythrough = function() {
+         mensajeCarga.style.display = "none"; // Oculta el mensaje de carga
+         botonPlay.style.display = "block"; // Muestra el botón de "Play"
+     };
+
+         // Escucha el evento timeupdate para comprobar continuamente si la canción se está reproduciendo
+    cancion0.addEventListener("timeupdate", function() {
+        if (!song.isPlaying() && cancion0.currentTime > 0) {
+            mensajeCarga.style.display = "none"; // Oculta el mensaje de carga
+            botonPlay.style.display = "block"; // Muestra el botón de "Play"
+        }
+    }); */
+ 
     audio1.load();
 }
 
-//esto es del p5
+//esto es del p5, esta predeterminadoa  ejecucion
 function preload(){
     var audioSrc = cancion0.src
-    song = loadSound(audioSrc);
+    song = loadSound(audioSrc, soundLoaded);
   }
+
+function soundLoaded() {
+    console.log("El audio se ha cargado completamente y está listo para reproducirse");
+
+     mensajeCarga.style.display = "none";
+
+     botonPlay.style.display = "block"; // Muestra el botón de "Play"
+}
   
 function AudioOn(){
        audio1.play();
@@ -638,9 +665,7 @@ function GuardarProgreso(){
 
 
 
-
-
-
+//-------------- Gestionando parte del P5 -----------------
 
 
 /*function preload(){

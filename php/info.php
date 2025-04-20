@@ -59,6 +59,21 @@ if (empty($_SESSION["id_usuario"])){
         #nombre_usuario{
             font-weight: bold;
         }
+        #lista-mejoras li {
+            list-style: none;
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        #lista-mejoras li::before {
+            content: '•';
+            font-weight: bold;
+            display: inline-block;
+            position: absolute;
+            left: 0;
+        }
     </style>  
     
 
@@ -106,7 +121,7 @@ if (empty($_SESSION["id_usuario"])){
             <div id="contenedor_Comentarios">
                 <?php 
                     // Preparar la consulta
-                    $stmt = $conexion->prepare("SELECT comentarios.comentario, comentarios.fecha, comentarios.visible, register.usuario FROM comentarios INNER JOIN register ON comentarios.id_usuario = register.id");
+                    $stmt = $conexion->prepare("SELECT comentarios.comentario, comentarios.fecha, comentarios.visible, register.usuario FROM comentarios INNER JOIN register ON comentarios.id_usuario = register.id ORDER BY comentarios.fecha DESC");
 
                     // Ejecutar la consulta
                     $stmt->execute();

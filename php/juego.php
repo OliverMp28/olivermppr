@@ -48,7 +48,7 @@ if (empty($_SESSION["id_usuario"])){
 
 
     <div id="juegoYFondo">
-    <div id="miLienzo"></div>
+   <div id="miLienzo"></div>
         <div class="recuperar"></div>
     <div id="juegazo">
         <div id="cabecera-juego">
@@ -73,7 +73,10 @@ if (empty($_SESSION["id_usuario"])){
                 </button>
             </div>
 
-            <div class="contenedor-boton"> <button id="play"> Play!! </button></div>
+            <div class="contenedor-boton"> 
+                <div id="mensaje-carga" style="display: block;">Cargando...</div>
+                <button id="play"> Play!! </button>
+            </div>
         </div>
 
         <div id="tiempox"> </div>

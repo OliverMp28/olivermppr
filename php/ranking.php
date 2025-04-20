@@ -417,7 +417,6 @@ if (empty($_SESSION["id_usuario"])){
     <div class="recuperar"></div>
     <section id="section_ranking">
         <?php 
-            // Preparar la consulta
                 $sql = "SELECT register.usuario, ranking.pts_total 
                 FROM ranking 
                 INNER JOIN register ON ranking.id_usuario = register.id 
@@ -425,15 +424,12 @@ if (empty($_SESSION["id_usuario"])){
 
                 $stmt = $conexion->prepare($sql);
 
-            // Ejecutar la consulta
                 $stmt->execute();
 
-            // Vincular las variables a las columnas del resultado
                 $stmt->bind_result($usuario, $pts_total);
 
                 $orden = 0;
 
-                //con esta condicion gestiono los usuarios del podio
                 if($orden <= 3){
                     ?><ul id="lista_podio"><?php
 
@@ -453,7 +449,6 @@ if (empty($_SESSION["id_usuario"])){
                                 </li>
                             <?php
                             if($orden == 3){
-                                $orden++;
                                 break;
                             }
                     }   
@@ -461,7 +456,7 @@ if (empty($_SESSION["id_usuario"])){
                     ?></ul><?php
                 }
                 //con esta condicion gestiono los usuarios del resto del ranking
-                if($orden >= 4){
+                if($orden >= 3){
                     ?><ul id="lista_ranking"><?php
 
                     while ($stmt->fetch()) {
