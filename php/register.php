@@ -9,9 +9,18 @@
 </head>
 <body>
     <div id="contenedor-login">
-        <form action="" method="POST" id="formularioRegister">
-            <h1 id="titulo-login">BIENVENIDO</h1><?php 
-                include "../controladores_php/procesar_register.php"
+        <form action="../controladores_php/procesar_register.php" method="POST" id="formularioRegister">
+            <h1 id="titulo-login">BIENVENIDO</h1>
+            <?php 
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            if (isset($_SESSION['error_message'])):
+            ?>
+                <div class="alert alert-danger" style="color: #D8000C; background-color: #FFD2D2; margin-bottom: 15px; padding: 10px; border-radius: 5px;"><?php echo $_SESSION['error_message']; ?></div>
+            <?php 
+                unset($_SESSION['error_message']);
+            endif;
             ?>
             
             <label for="inputUsuario" class="lbl-login">Nombre de Usuario</label> <br>

@@ -16,11 +16,24 @@ if (isset($_SESSION['id_usuario'])) {
   
 </head>
 <body><div id="contenedor-login">
-        <form action="" method="POST">
+        <form action="../controladores_php/procesar_login.php" method="POST">
             <h1 id="titulo-login">BIENVENIDO.</h1>
             <?php 
-                include "../controladores_php/procesar_login.php"
-            ?> <br>
+            if (isset($_SESSION['error_message'])):
+            ?>
+                <div class="alert alert-danger" style="color: #D8000C; background-color: #FFD2D2; margin-bottom: 15px; padding: 10px; border-radius: 5px;"><?php echo $_SESSION['error_message']; ?></div>
+            <?php 
+                unset($_SESSION['error_message']);
+            endif;
+
+            if (isset($_SESSION['success_message'])):
+            ?>
+                <div class="alert alert-success" style="color: #4F8A10; background-color: #DFF2BF; margin-bottom: 15px; padding: 10px; border-radius: 5px;"><?php echo $_SESSION['success_message']; ?></div>
+            <?php 
+                unset($_SESSION['success_message']);
+            endif;
+            ?>
+
             <label for="inputUsuario" class="lbl-login">Usuario</label> <br>
             <input name="inputUsuario" type="text" id="inputUsuario" class="input-login" placeholder="nombre de usuario">
             <div class="separador-login"></div>

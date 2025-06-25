@@ -11,12 +11,21 @@ if(!empty($_POST["enviarLogin"])) {
     $inputContraseña2 = $_POST['inputContraseña2'];
 
     // Comprobar si los campos están vacíos
+    //iniciar sesión si no está iniciada
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
     if (empty($inputUsuario) || empty($inputNombre) || empty($inputContraseña) || empty($inputEmail)) {
-        echo "<div>Por favor, rellena todos los campos.</div>";
+        $_SESSION['error_message'] = "Por favor, rellena todos los campos.";
+        header('Location: ../php/register.php');
+        exit();
     }
     // Comprobar si las contraseñas coinciden
     elseif ($inputContraseña !== $inputContraseña2) {
-        echo "<div>Las contraseñas no coinciden.</div>";
+        $_SESSION['error_message'] = "Las contraseñas no coinciden.";
+        header('Location: ../php/register.php');
+        exit();
     }
     else{
         // Comprobar si el nombre de usuario ya existe
@@ -25,18 +34,25 @@ if(!empty($_POST["enviarLogin"])) {
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
-            echo "<div>El nombre de usuario ya existe.</div>";
-            return;
+            $_SESSION['error_message'] = "El nombre de usuario ya existe.";
+            header('Location: ../php/register.php');
+            exit();
         }
 
+        // Hashear la contraseña antes de guardarla
+        $hashedContraseña = password_hash($inputContraseña, PASSWORD_DEFAULT);
+
         $stmt = $conexion->prepare('INSERT INTO register (usuario, nombres, email, contraseña) VALUES (?, ?, ?, ?)');
-        $stmt->bind_param('ssss', $inputUsuario, $inputNombre,$inputEmail, $inputContraseña);
+        $stmt->bind_param('ssss', $inputUsuario, $inputNombre, $inputEmail, $hashedContraseña);
     
         if ($stmt->execute()) {
-            //header('Location: ../php/index.php');
-            echo '<script>window.location.href = "../php/index.php";</script>';
+            $_SESSION['success_message'] = "¡Registro completado! Ahora puedes iniciar sesión.";
+            header('Location: ../php/login.php');
+            exit();
         } else {
-            echo "<div>Hubo un error al registrar al usuario.</div>";
+            $_SESSION['error_message'] = "Hubo un error al registrar al usuario.";
+            header('Location: ../php/register.php');
+            exit();
         }
     }
 }

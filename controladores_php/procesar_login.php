@@ -4,26 +4,48 @@ require_once('../controladores_php/conectar.php');
 
 if(!empty($_POST["enviarLogin"])) {
     if (!empty($_POST["inputUsuario"]) and !empty($_POST["inputContraseña"])) {
-        # code...
+                // Iniciar sesión si no está iniciada
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $inputUsuario = $_POST["inputUsuario"];
         $inputContraseña = $_POST["inputContraseña"];
 
-        $sql = mysqli_query($conexion, 'SELECT * FROM register WHERE usuario="'.$inputUsuario.'" AND contraseña="'.$inputContraseña.'" ');  
-        if ($datos=$sql->fetch_object()) {
-            
+        //buscar al usuario por su nombre de usuario
+        $stmt = $conexion->prepare('SELECT * FROM register WHERE usuario = ?');
+        $stmt->bind_param('s', $inputUsuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($datos = $result->fetch_object()) {
+            // verificar la contraseña hasheada
+            if (password_verify($inputContraseña, $datos->contraseña)) {
             $_SESSION["id_usuario"] = $datos->id;
             $_SESSION["usuario"] = $datos->usuario;
             $_SESSION["nombre"] = $datos->nombres;
             $_SESSION["email"] = $datos->email;
             $_SESSION["pais"] = $datos->pais;
+            //regenerar ID de sesión para prevenir fijación de sesión
+            session_regenerate_id(true);
             echo '<script>window.location.href = "../php/index.php";</script>';
+            } else {
+                // Contraseña incorrecta
+                $_SESSION['error_message'] = "Usuario o contraseña incorrectos.";
+                header('Location: ../php/login.php');
+                exit();
+            }
         } else {
-            echo "<div>Acceso denegado</div>";
+                        // Usuario no encontrado
+            $_SESSION['error_message'] = "Usuario o contraseña incorrectos.";
+            header('Location: ../php/login.php');
+            exit();
         }
     
-    
     } else {
-        echo "Campos vacios";
+                $_SESSION['error_message'] = "Por favor, rellena todos los campos.";
+        header('Location: ../php/login.php');
+        exit();
     }
 }
 

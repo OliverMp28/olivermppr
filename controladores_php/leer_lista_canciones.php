@@ -1,5 +1,13 @@
 <?php
-$idCancionCargar = $_GET['id_cancion_cargar'];  // 1
+//validar que el id_cancion sea un entero
+$idCancionCargar = filter_input(INPUT_GET, 'id_cancion_cargar', FILTER_VALIDATE_INT);
+
+if ($idCancionCargar === false || $idCancionCargar === null) {
+    //si no es un entero válido, devolver un error o un valor por defecto
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'ID de canción no válido']);
+    exit;
+}
 
 require_once '../controladores_php/conectar.php';
 

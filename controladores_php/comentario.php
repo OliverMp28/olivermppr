@@ -12,8 +12,12 @@ $comentario = $_POST['comentario'];
 $idUsuario = $_SESSION["id_usuario"];
 $visible = isset($_POST['visible']) ? true : false;
 
-$comentario = mysqli_real_escape_string($conexion, $comentario);
-$resultado = mysqli_query($conexion, 'INSERT INTO comentarios (id_usuario, comentario, visible) VALUES ("'.$idUsuario.'", "'.$comentario.'","'.$visible.'")');
+// Usar consultas preparadas para prevenir inyección SQL
+$stmt = $conexion->prepare('INSERT INTO comentarios (id_usuario, comentario, visible) VALUES (?, ?, ?)');
+// Convertir booleano a entero (0 o 1) para la base de datos
+$visible_int = $visible ? 1 : 0;
+$stmt->bind_param('isi', $idUsuario, $comentario, $visible_int);
+$resultado = $stmt->execute();
 
 /*
 if($resultado)

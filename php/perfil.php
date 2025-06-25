@@ -15,102 +15,7 @@ if (empty($_SESSION["id_usuario"])){
     <title>Dino html</title>
     <link rel="stylesheet" href="../css/modelo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-
-    <style>
-        header {
-            position: relative;
-            /* Ajusta el padding inferior según tus necesidades */
-            padding-bottom: 100px;
-        }
-        #contenedor_foto_perfil{
-            position: absolute;
-            /* Ajusta el top y left según tus necesidades */
-            top: calc(100% - 100px);
-            left: 50%;
-            transform: translateX(-50%);
-            margin: auto;
-            width: 200px;
-            height: 200px;
-            border: 1px solid rgba(255, 0, 0, 0.297);
-            border-radius: 100%;
-            align-items: center;
-        }
-        #foto{
-            width: 100%;
-            height: 100%;
-            border-radius: 100%;
-        }
-        #seccion_perfil {
-            position: static;
-            margin: auto;
-            margin-bottom: 20px;
-       
-            width: 70%;
-            /* Ajusta el padding según tus necesidades */
-            padding: 20px;
-            /* Bordes redondeados solo en la parte inferior */
-            border-radius: 20px;
-            /* Colores para los modos claro y oscuro */
-            background-color: rgba(231, 139, 11, 0.33);
-            color: rgb(31, 29, 29);
-            /* Sombra para resaltar el contenedor */
-            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
-
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .dark #seccion_perfil{
-            background-color: rgba(222, 114, 78, 0.33);
-        }
-
-        #informacion{
-            width: 50%;
-            margin-left: 10px;
-            margin-top: 30px;
-        }
-        #informacion p{
-            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-            font-size: 20px;
-        }
-        #nombre_usuario{
-            font-size: 50px !important;
-            margin-bottom: 15px;
-        }
-        #adicional{
-            width: 48%;
-            margin-top: 100px !important;
-            float: right;
-            margin-top: 0;
-        }
-        #adicional p{
-            text-align: right;
-            
-            font-size: 20px;
-        }
-        .dark #seccion_perfil p{
-            color: aliceblue;
-        }
-        /*movil*/
-        @media screen and (max-width:768px){
-            #seccion_perfil {
-                padding: 10px;
-                width: 90%;
-            }
-            #informacion{
-                margin-left: 0px;
-            }
-            #informacion p{
-                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-                font-size: 17px;
-            }
-            #adicional p{
-                text-align: right;
-                
-                font-size: 17px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/perfil.css">
 
 </head>
 <body>
@@ -213,18 +118,6 @@ if (empty($_SESSION["id_usuario"])){
             $stmt2->close();
 
             $conexion->close();
-            /* 
-
-            while ($stmt2->fetch()) {
-                if($visible == 1){
-                     ?>
-                     <b id="nombre_usuario"> <?php echo($usuario); ?></b> (<?php echo($fecha);?>) dijo:
-                    <br>
-                    <p><?php echo($comentario);?></p>
-                    <div class="lineaSeparador"></div>
-                    <?php 
-                }                    
-            }*/
                     
         ?>
     </section>
