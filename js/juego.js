@@ -530,6 +530,101 @@ function soundLoaded() {
      botonPlay.style.display = "block"; // Muestra el botón de "Play"
 }
   
+function setup() {
+    let lienzo = createCanvas(windowWidth, windowHeight);
+    lienzo.parent('miLienzo');
+    angleMode(DEGREES); //cambiar el modo de angulo de radianes a grados
+    fft = new p5.FFT(0.3);
+  }
+  
+  function draw() {
+    background(0);
+    stroke(255); //esto es el color de la onda
+    strokeWeight(3); //esto es para gestionar el grosor
+    noFill(); //esto es para eliminar el color de relleno de la onda
+  
+    translate(width / 2, height / 2); //esto es para centar
+  
+    fft.analyze(); //llamo a este metodo para que funcione getEnergy
+    amp = fft.getEnergy(20, 200); //con esto obtengo la energia de frecuencia, y le doy un rango
+  
+    var wave = fft.waveform();
+  
+  
+    for (var t = -1; t <= 1; t += 2){
+      beginShape();
+      for(var i = 0; i <= 180; i += 0.5){
+        var index = floor(map(i, 0, 180, 0, wave.length - 1));
+  
+        var r = map(wave[index], -1, 1, 75, 175);
+  
+        var x = r * sin(i) * t;
+        var y = r * cos(i);
+        vertex(x ,y);
+      }
+      endShape(); //esto al igual que el beginShape es para conectar la onda de sonido 
+      //por una linea, asi no de ven como puntos sino mas bien como una sola linea que se mueve con la cancion
+    }
+  
+    if (song.isPlaying()) {
+      var p = new Particle(); //creamos el objeto de particula
+      particles.push(p);
+  
+      for(var i = particles.length - 1; i >= 0; i--){//aca mostramos las particulas llamando al metodo show() de la clase Particles
+        if (!particles[i].edges()){
+          particles[i].update(amp > 230);
+          particles[i].show();
+          //console.log(amp);
+        } else{
+          particles.splice(i, 1);
+        }
+      }
+    }
+  }
+  
+  function mouseClicked(){
+    if(song.isPlaying()){
+    //  song.pause();
+   //   noLoop();
+    } else{
+     // song.play();
+     // loop();
+    }
+  }
+  
+  class Particle { //creamos la clase particula, para crear objetos de tipo particula
+    constructor(){
+      this.pos = p5.Vector.random2D().mult(125) //esto es para posicionar las particulas en el perimetro del circulo
+      this.vel = createVector(0,0); //crea la velocidad en 0
+      this.acc = this.pos.copy().mult(random(0.0001, 0.00001)) // esta es la aceleracion
+  
+      this.w = random(3, 5); //el ancho aleatorio
+  
+      this.color = [random(10, 255), random(10, 255), random(10, 255),];
+    }
+    update(cond) {//para actualizar la posicion de las particulas
+      this.vel.add(this.acc); //la aceleracion se agrega a la velocidad
+      this.pos.add(this.vel); //la velocidad se agrega a la posicion
+      if (cond){
+        this.pos.add(this.vel);
+        this.pos.add(this.vel);
+        this.pos.add(this.vel);
+      }
+    }
+    edges(){
+      if(this.pos.x < -width / 2 || this.pos.x > width / 2 || this.pos.y < -height / 2 || this.pos.y > height / 2){
+        return true;
+      } else{
+        return false;
+      }
+    }
+    show(){ //este metodo mostrara la particula en el lienzo
+      noStroke();
+      fill(this.color); //fill=0llenar, llena con un color el bojeto que estamos creando
+      ellipse(this.pos.x, this.pos.y, this.w)
+    }
+  }
+  
 function AudioOn(){
        audio1.play();
        song.play();
@@ -639,132 +734,152 @@ var porcentaje = 0;
 }*/
 
 function GuardarProgreso(){
-    var formData = new FormData(document.getElementById('formularioProgreso'));
-    formData.append('inputPorcentaje', Math.round(porcentaje));
-    formData.append('inputPts', score);
-    formData.append('idCancionCargar', window.idCancionElegida);
+    //verificar si el usuario está logueado
+    if (typeof window.usuarioLogueado !== 'undefined' && window.usuarioLogueado) {
+        //usuario logueado: guardar progreso normalmente
+        var formData = new FormData(document.getElementById('formularioProgreso'));
+        formData.append('inputPorcentaje', Math.round(porcentaje));
+        formData.append('inputPts', score);
+        formData.append('idCancionCargar', window.idCancionElegida);
 
-    fetch('../controladores_php/gestionar_progreso.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        // Aquí puedes manejar la respuesta del servidor
-        console.log(data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+        fetch('../controladores_php/gestionar_progreso.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            //aqui puedes manejar la respuesta del servidor
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    } else {
+        //usuario no logueado: guardar progreso localmente
+        console.log('Usuario no logueado - guardando progreso localmente');
+        
+        const progresoLocal = {
+            id_cancion: window.idCancionElegida,
+            nombre_cancion: window.nombreCancionElegida,
+            porcentaje: Math.round(porcentaje),
+            puntos: score,
+            fecha: new Date().toISOString()
+        };
+        
+        //guardar en localStorage
+        guardarProgresoLocal(progresoLocal);
+        
+        //crear y mostrar mensaje de incentivo al registro
+        setTimeout(() => {
+            const porcentajeAlcanzado = Math.round(porcentaje);
+            const puntosObtenidos = score;
+            const progresoTotal = obtenerProgresoLocalTotal();
+            
+            if (confirm(`¡Genial! Alcanzaste ${porcentajeAlcanzado}% con ${puntosObtenidos} puntos.\n\n` +
+                       `Progreso local guardado: ${progresoTotal.niveles} niveles jugados, ${progresoTotal.puntos_totales} puntos totales.\n\n` +
+                       `Para guardar tu progreso permanentemente y aparecer en el ranking, necesitas registrarte.\n\n` +
+                       `¿Quieres registrarte ahora?`)) {
+                window.location.href = './register.php';
+            }
+        }, 1000); // Esperar 1 segundo para que el usuario vea el resultado
+    }
 }
 
-
-
-
-
-
-
-
-//-------------- Gestionando parte del P5 -----------------
-
-
-/*function preload(){
-  song = loadSound('../audios/Sugar Red.mp3');
- // song.play();
-}*/
-
-
-function setup() {
-  let lienzo = createCanvas(windowWidth, windowHeight);
-  lienzo.parent('miLienzo');
-  angleMode(DEGREES); //cambiar el modo de angulo de radianes a grados
-  fft = new p5.FFT(0.3);
+// Funciones para gestionar progreso local en localStorage
+function guardarProgresoLocal(progreso) {
+    try {
+        // Obtener progreso existente
+        let progresoGuardado = JSON.parse(localStorage.getItem('dino_progreso_local') || '[]');
+        
+        // Buscar si ya existe progreso para esta canción
+        const indiceExistente = progresoGuardado.findIndex(item => item.id_cancion === progreso.id_cancion);
+        
+        if (indiceExistente !== -1) {
+            // Actualizar solo si el nuevo porcentaje es mayor
+            if (progreso.porcentaje > progresoGuardado[indiceExistente].porcentaje) {
+                progresoGuardado[indiceExistente] = progreso;
+                console.log(`Progreso actualizado para ${progreso.nombre_cancion}: ${progreso.porcentaje}%`);
+            }
+        } else {
+            //agregar nuevo progreso
+            progresoGuardado.push(progreso);
+            console.log(`Nuevo progreso guardado para ${progreso.nombre_cancion}: ${progreso.porcentaje}%`);
+        }
+        
+        //guardar en localStorage
+        localStorage.setItem('dino_progreso_local', JSON.stringify(progresoGuardado));
+        
+    } catch (error) {
+        console.error('Error guardando progreso local:', error);
+    }
 }
 
-function draw() {
-  background(0);
-  stroke(255); //esto es el color de la onda
-  strokeWeight(3); //esto es para gestionar el grosor
-  noFill(); //esto es para eliminar el color de relleno de la onda
-
-  translate(width / 2, height / 2); //esto es para centar
-
-  fft.analyze(); //llamo a este metodo para que funcione getEnergy
-  amp = fft.getEnergy(20, 200); //con esto obtengo la energia de frecuencia, y le doy un rango
-
-  var wave = fft.waveform();
-
-
-  for (var t = -1; t <= 1; t += 2){
-    beginShape();
-    for(var i = 0; i <= 180; i += 0.5){
-      var index = floor(map(i, 0, 180, 0, wave.length - 1));
-
-      var r = map(wave[index], -1, 1, 75, 175);
-
-      var x = r * sin(i) * t;
-      var y = r * cos(i);
-      vertex(x ,y);
+function obtenerProgresoLocal() {
+    try {
+        return JSON.parse(localStorage.getItem('dino_progreso_local') || '[]');
+    } catch (error) {
+        console.error('Error obteniendo progreso local:', error);
+        return [];
     }
-    endShape(); //esto al igual que el beginShape es para conectar la onda de sonido 
-    //por una linea, asi no de ven como puntos sino mas bien como una sola linea que se mueve con la cancion
-  }
-
-  if (song.isPlaying()) {
-    var p = new Particle(); //creamos el objeto de particula
-    particles.push(p);
-
-    for(var i = particles.length - 1; i >= 0; i--){//aca mostramos las particulas llamando al metodo show() de la clase Particles
-      if (!particles[i].edges()){
-        particles[i].update(amp > 230);
-        particles[i].show();
-        //console.log(amp);
-      } else{
-        particles.splice(i, 1);
-      }
-    }
-  }
 }
 
-function mouseClicked(){
-  if(song.isPlaying()){
-  //  song.pause();
- //   noLoop();
-  } else{
-   // song.play();
-   // loop();
-  }
+function obtenerProgresoLocalTotal() {
+    const progreso = obtenerProgresoLocal();
+    return {
+        niveles: progreso.length,
+        puntos_totales: progreso.reduce((total, item) => total + item.puntos, 0),
+        porcentaje_promedio: progreso.length > 0 ? 
+            Math.round(progreso.reduce((total, item) => total + item.porcentaje, 0) / progreso.length) : 0
+    };
 }
 
-class Particle { //creamos la clase particula, para crear objetos de tipo particula
-  constructor(){
-    this.pos = p5.Vector.random2D().mult(125) //esto es para posicionar las particulas en el perimetro del circulo
-    this.vel = createVector(0,0); //crea la velocidad en 0
-    this.acc = this.pos.copy().mult(random(0.0001, 0.00001)) // esta es la aceleracion
+function obtenerProgresoCancionLocal(idCancion) {
+    const progreso = obtenerProgresoLocal();
+    const progresoCancion = progreso.find(item => item.id_cancion == idCancion);
+    return progresoCancion ? progresoCancion.porcentaje : 0;
+}
 
-    this.w = random(3, 5); //el ancho aleatorio
+function limpiarProgresoLocal() {
+    localStorage.removeItem('dino_progreso_local');
+    console.log('Progreso local eliminado');
+}
 
-    this.color = [random(10, 255), random(10, 255), random(10, 255),];
-  }
-  update(cond) {//para actualizar la posicion de las particulas
-    this.vel.add(this.acc); //la aceleracion se agrega a la velocidad
-    this.pos.add(this.vel); //la velocidad se agrega a la posicion
-    if (cond){
-      this.pos.add(this.vel);
-      this.pos.add(this.vel);
-      this.pos.add(this.vel);
+/**
+ * Migra el progreso guardado en localStorage al servidor.
+ * Solo se ejecuta si hay un usuario logueado y progreso local.
+ */
+function migrarProgresoAServidor() {
+    const progresoLocal = obtenerProgresoLocal();
+    
+    // Verificar si hay progreso local y si el usuario está logueado
+    if (progresoLocal.length > 0 && typeof window.usuarioLogueado !== 'undefined' && window.usuarioLogueado) {
+        console.log('Iniciando migración de progreso local...');
+
+        fetch('../controladores_php/migrar_progreso_local.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(progresoLocal)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Migración exitosa:', data.message);
+                // Opcional: mostrar un mensaje al usuario
+                alert('¡Tu progreso guardado localmente ha sido sincronizado con tu cuenta!');
+                // Limpiar localStorage solo si la migración fue exitosa
+                limpiarProgresoLocal();
+                // Recargar la página para mostrar el progreso actualizado
+                window.location.reload();
+            } else if (data.status === 'no_data') {
+                console.log('No había datos locales para migrar.');
+            } else {
+                console.error('Error en la migración:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error en la petición de migración:', error);
+        });
     }
-  }
-  edges(){
-    if(this.pos.x < -width / 2 || this.pos.x > width / 2 || this.pos.y < -height / 2 || this.pos.y > height / 2){
-      return true;
-    } else{
-      return false;
-    }
-  }
-  show(){ //este metodo mostrara la particula en el lienzo
-    noStroke();
-    fill(this.color); //fill=0llenar, llena con un color el bojeto que estamos creando
-    ellipse(this.pos.x, this.pos.y, this.w)
-  }
 }

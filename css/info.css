@@ -1,0 +1,696 @@
+/* Estilos para la pag de información y novedades */
+
+/* Contenedor principal */
+.info-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s;
+
+}
+
+.dark .info-container {
+    background-color: #2c2f33;
+    color: #f1f1f1;
+}
+
+.info-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.info-header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.dark .info-header h1 {
+    color: #e0e0e0;
+}
+
+.dark .info-header h1 {
+    color: #e0e0e0;
+}
+
+/* Acordeón para las versiones */
+.accordion-item {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 1rem;
+}
+
+.dark .accordion-item {
+    border-bottom-color: #4f545c;
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 0.5rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.accordion-header:hover {
+    background-color: #f8f9fa;
+}
+
+.dark .accordion-header:hover {
+    background-color: #3a3d40;
+}
+
+.version-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.accordion-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.dark .accordion-header h2 {
+    color: #cccccc;
+}
+
+.badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.new-badge {
+    background-color: #aa5d5d;
+    color: white;
+}
+
+.version-date {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+.dark .version-date {
+    color: #aaa;
+}
+
+.version-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dark .accordion-header h2 {
+    color: #cccccc;
+}
+
+.accordion-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+    margin-left: 1rem; /* Espacio para que no se pegue al texto de fecha */
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+    padding: 0 1rem;
+}
+
+.accordion-content.active {
+    padding: 1rem;
+}
+
+.accordion-content p,
+.accordion-content ul {
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+}
+
+.accordion-content ul {
+    list-style-position: inside;
+    padding-left: 1rem;
+}
+
+.accordion-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Sección de comentarios */
+.comments-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.dark .comments-section {
+    border-top-color: #4f545c;
+}
+
+.comments-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.dark .comments-section h2 {
+    color: #e0e0e0;
+}
+
+/* Formulario de comentarios */
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.dark .comment-form textarea {
+    background-color: #3a3d40;
+    border-color: #555;
+    color: #f1f1f1;
+}
+
+.comment-form .form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-form button {
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    background: #aa5d5d;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.comment-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(170, 93, 93, 0.3);
+    background-color: #c46a6a;
+}
+
+/* Mensaje para registrarse */
+.login-prompt {
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(170, 93, 93, 0.1);
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.dark .login-prompt {
+    background-color: rgba(118, 75, 162, 0.2);
+}
+
+.login-prompt h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.dark .login-prompt h3 {
+    color: #e0e0e0;
+}
+
+.login-prompt p {
+    margin: 0 0 1.5rem 0;
+}
+
+.login-prompt .prompt-buttons a {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    margin: 0.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.login-prompt .prompt-buttons .btn-primary {
+    background: #aa5d5d;
+    color: white;
+}
+
+.login-prompt .prompt-buttons .btn-secondary {
+    background-color: transparent;
+    border: 2px solid #aa5d5d;
+    color: #aa5d5d;
+}
+
+.dark .login-prompt .prompt-buttons .btn-secondary {
+    border-color: #c46a6a;
+    color: #e48f8f;
+}
+
+/* Lista de comentarios */
+.comment-list .comment {
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dark .comment-list .comment {
+    border-bottom-color: #3a3d40;
+}
+
+.comment-list .comment:last-child {
+    border-bottom: none;
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.comment-meta .username {
+    font-weight: bold;
+    color: #333;
+}
+
+.dark .comment-meta .username {
+    color: #e0e0e0;
+}
+
+.comment-meta .date {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.dark .comment-meta .date {
+    color: #aaa;
+}
+
+.comment-body {
+    line-height: 1.5;
+}
+
+/* Contenedor Principal del Historial de Versiones */
+.version-history {
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem; /* Espacio entre tarjetas de versión */
+}
+
+/* Tarjeta de Versión Principal */
+.version-card {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.version-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.dark .version-card {
+    background-color: #2c2f33;
+    border-color: #3a3f44;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.dark .version-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.version-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.dark .version-card-header {
+    border-bottom-color: #3a3f44;
+}
+
+.version-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.version-card-header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    color: #212529;
+}
+
+.dark .version-card-header h2 {
+    color: #e9ecef;
+}
+
+.version-date {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.dark .version-date {
+    color: #adb5bd;
+}
+
+.version-card-body {
+    padding: 1.5rem;
+}
+
+.version-summary {
+    margin-bottom: 1.5rem;
+    color: #6c757d;
+    line-height: 1.6;
+}
+
+.dark .version-summary {
+    color: #aebac1;
+}
+
+.version-description {
+    font-size: 1.05rem;
+    color: #495057;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.dark .version-description {
+    color: #ced4da;
+}
+
+/* Lista de Cambios General */
+.version-changelog {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.version-changelog li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    color: #495057;
+}
+
+.dark .version-changelog li {
+    color: #dee2e6;
+}
+
+/* Etiquetas de Changelog Simplificados */
+.changelog-tag {
+    display: inline-block;
+    padding: 0.25em 0.7em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 1em; /* Forma de píldora */
+    border: none; /* Sin bordes */
+}
+
+/* Colores Suaves - Light Mode */
+.tag-feature { background-color: #e6f7ff; color: #0050b3; } /* Novedad/Mejora */
+.tag-security { background-color: #fff1f0; color: #cf1322; } /* Seguridad */
+.tag-fix { background-color: #fffbe6; color: #d46b08; } /* Corrección */
+.tag-ui { background-color: #f9f0ff; color: #531dab; } /* UI/UX */
+
+/* Colores Suaves - Dark Mode */
+.dark .tag-feature { background-color: #1d2c3c; color: #85c1e9; }
+.dark .tag-security { background-color: #3c2128; color: #e99aa4; }
+.dark .tag-fix { background-color: #3c3421; color: #e9c485; }
+.dark .tag-ui { background-color: #2f213c; color: #c3a5e9; }
+
+/* Timeline de Sub-versiones */
+.sub-version-timeline {
+    position: relative;
+    margin-top: 1.5rem;
+}
+
+.sub-version-timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem; /* Posicionamiento de la línea vertical */
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e9ecef;
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+.dark .sub-version-timeline::before {
+    background-color: #4f545c;
+}
+
+.sub-version {
+    position: relative;
+    padding-left: 2.5rem; /* Espacio para el texto, dejando aire a la línea */
+    padding-bottom: 1.5rem;
+}
+
+.sub-version:last-child {
+    padding-bottom: 0;
+}
+
+.sub-version::after {
+    content: '';
+    position: absolute;
+    left: 1rem; /* Alineado con la línea */
+    top: 0.5rem; /* Posición vertical del punto */
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #adb5bd;
+    border: 2px solid #ffffff;
+    transform: translateX(-50%); /* Centrado sobre la línea */
+    z-index: 1;
+}
+
+.dark .sub-version::after {
+    background-color: #c46a6a; /* Color rojizo para tema oscuro */
+    border-color: #1e1e1e;
+}
+
+.sub-version-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sub-version-header h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #343a40;
+    margin: 0;
+}
+
+.dark .sub-version-header h4 {
+    color: #e9ecef;
+}
+
+.sub-version-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.new-badge {
+    background-color: #6c757d;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.recent-badge {
+    background-color: #aa5d5d;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Sistema de Pestañas (Tabs) */
+.tab-container {
+    width: 100%;
+}
+
+.tab-nav {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+    position: -webkit-sticky; /* Para compatibilidad con Safari */
+    position: sticky;
+    top: 0;
+    background-color: #ffffff; /* Fondo para que el contenido no se transparente al hacer scroll */
+    z-index: 100;
+    transition: box-shadow 0.3s ease;
+}
+
+.dark .tab-nav {
+    border-bottom-color: #4f545c;
+    background-color: #23272A; /* Fondo oscuro para modo noche */
+}
+
+.tab-link {
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6c757d;
+    position: relative;
+    transition: color 0.3s ease;
+    border-bottom: 3px solid transparent;
+    transform: translateY(2px);
+}
+
+.dark .tab-link {
+    color: #aebac1;
+}
+
+.tab-link:hover {
+    color: #007bff;
+}
+
+.dark .tab-link:hover {
+    color: #58a6ff;
+}
+
+.tab-link.active {
+    color: #0056b3;
+    border-bottom-color: #007bff;
+    font-weight: 600;
+}
+
+.dark .tab-link.active {
+    color: #ffffff;
+    border-bottom-color: #58a6ff;
+}
+
+.tab-content {
+    display: none; /* Ocultar por defecto */
+    animation: fadeIn 0.5s;
+}
+
+.tab-content.active {
+    display: block; /* Mostrar solo el activo */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ocultar el h2 de comentarios ya que la pestaña lo describe */
+#comments .comments-container h2 {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /*mejoras responsive para móvil */
+    .tab-link {
+        padding: 0.8rem 0.5rem; /*reducir padding para que quepa mejor */
+        font-size: 0.9rem;
+        flex-grow: 1; /* para que las pestañas ocupen el mismo espacio */
+        text-align: center;
+    }
+
+    .version-card-header,
+    .sub-version-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .version-title h2 {
+        font-size: 1.3rem;
+    }
+
+    .version-changelog li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem; /*reducir espacio para apilado vertical */
+        font-size: 0.95rem;
+        line-height: 1.5; /*ajustar altura de línea para el nuevo layout */
+    }
+
+    .changelog-tag {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+    .info-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .info-header h1 {
+        font-size: 2.2rem;
+    }
+
+    .accordion-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .version-meta {
+        align-self: flex-end;
+    }
+
+    .accordion-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .version-title {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .comment-form textarea {
+        width: 100%; /* Asegura que no se desborde */
+        box-sizing: border-box; /* Incluye padding y border en el ancho total */
+    }
+}

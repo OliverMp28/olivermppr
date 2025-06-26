@@ -2,9 +2,8 @@
 session_start();
 include('../controladores_php/conectar.php'); 
 
-if (empty($_SESSION["id_usuario"])){
-    header("Location: ./login.php");
-}
+$usuario_logueado = !empty($_SESSION["id_usuario"]);
+// Ya no redirigimos automáticamente, manejamos ambos casos
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -12,7 +11,7 @@ if (empty($_SESSION["id_usuario"])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dino html</title>
+    <title>Perfil - Daino</title>
     <link rel="stylesheet" href="../css/modelo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/perfil.css">
@@ -20,32 +19,9 @@ if (empty($_SESSION["id_usuario"])){
 </head>
 <body>
     <header>
-        <div>
-            <nav class="ventanas">
-                <input type="checkbox" id="check">
-                <label for="check" class="checkbtn">
-                <i class="fas fa-bars"></i> 
-                </label>
-                    <ul class="opciones-ventanas">
-                        <li>
-                            <a href="./index.php" class="enlaces-ventanas" >Inicio</a>
-                        </li>
-                        <li>
-                            <a href="./ranking.php" class="enlaces-ventanas">Ranking</a>
-                        </li>
-                       <li>
-                            <a href="./info.php" class="enlaces-ventanas">Info</a>
-                        </li>
-                        <li>
-                            <a href="./perfil.php" class="enlaces-ventanas">Perfil</a>
-                        </li>
-                        <li>
-                            <a href="../controladores_php/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
-                        </li>
-                    </ul>
-            </nav> 
+        <?php include('cabecera.php'); ?>
 
-            <h1>Perfil</h1>
+            <!-- <h1>Perfil</h1> -->
             <div id="contenedor_foto_perfil">
                 <img id="foto" src="../img/foto_dino2.2.png" alt="">
             </div> 
@@ -65,7 +41,51 @@ if (empty($_SESSION["id_usuario"])){
     </div>
     <div class="recuperar"></div>
 
-    <section id="seccion_perfil">
+    <?php if (!$usuario_logueado): ?>
+        <!-- Página de aviso para usuarios no logueados -->
+        <section id="seccion_perfil">
+            <div style="text-align: center; padding: 40px 20px; background: #aa5d5d; color: white; border-radius: 12px; margin: 20px; box-shadow: 0 4px 15px rgba(170, 93, 93, 0.3);">
+                <h1 style="font-size: 2.2em; margin-bottom: 20px; font-weight: 300;">Tu Perfil Personal</h1>
+                <h2 style="color: #f4f4f4; margin-bottom: 20px; font-weight: 400;">Crea tu perfil de jugador</h2>
+                <p style="font-size: 1.1em; line-height: 1.6; margin-bottom: 30px; opacity: 0.9;">
+                    Tu perfil personal es donde puedes ver todas tus estadísticas de juego.<br>
+                    <strong>Regístrate para tener tu propio perfil personalizado.</strong>
+                </p>
+                
+                <div style="background: rgba(0,0,0,0.15); padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #f4f4f4;">
+                    <h3 style="color: #f4f4f4; margin-bottom: 15px; font-weight: 400;">En tu perfil verás:</h3>
+                    <ul style="list-style: none; padding: 0; font-size: 1em; text-align: left; max-width: 400px; margin: 0 auto;">
+                        <li style="margin: 8px 0; padding: 5px 0;">Tu posición actual en el ranking</li>
+                        <li style="margin: 8px 0; padding: 5px 0;">• Total de puntos acumulados</li>
+                        <li style="margin: 8px 0; padding: 5px 0;">• Número de niveles completados</li>
+                        <li style="margin: 8px 0; padding: 5px 0;">• Estadísticas detalladas de progreso</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 6px; margin: 20px 0;">
+                    <p style="font-size: 0.95em; margin: 0; opacity: 0.9;">
+                        <strong>💡 Tip:</strong> Mientras juegas sin registro, puedes ver tu progreso temporal, 
+                        pero solo registrándote podrás guardarlo permanentemente.
+                    </p>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <a href="./register.php" style="background: #f4f4f4; color: #aa5d5d; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; transition: all 0.3s;">
+                        Crear Mi Perfil
+                    </a>
+                    <a href="./login.php" style="background: transparent; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; border: 2px solid white; transition: all 0.3s;">
+                        Iniciar Sesión
+                    </a>
+                </div>
+<!--                 
+                <p style="margin-top: 25px; font-size: 0.9em; opacity: 0.8;">
+                    ¿Ya tienes perfil? <a href="./login.php" style="color: #f4f4f4; text-decoration: underline;">Inicia sesión aquí</a>
+                </p> -->
+            </div>
+        </section>
+    <?php else: ?>
+        <!-- Perfil normal para usuarios logueados -->   
+        <section id="seccion_perfil">
         
 
         <?php 
@@ -120,7 +140,8 @@ if (empty($_SESSION["id_usuario"])){
             $conexion->close();
                     
         ?>
-    </section>
+        </section>
+    <?php endif; ?>
 
     <div class="recuperar"></div>
     <script src="../js/darkmode.js"></script>
@@ -128,28 +149,7 @@ if (empty($_SESSION["id_usuario"])){
     </main>
 
     
-    <footer id="pielogo">
-        <div>
-          <section class="seccionpie">
-            <h1>Sitio Web</h1>
-            <p><a href="./index.php">Inicio</a></p>
-            <p><a href="https://forms.gle/D8NNqERVakWrsNkA9" target="_blank"> -> Comentarios <- <br> <span></span></a></p>
-         <!--  <p><a href="/Contacto.html">  Contacto </a></p> --> 
-          </section>
-    
-          <section class="seccionpie">
-            <h1>Version</h1>
-            <p><a href="contacto.html">3.0</a></p>
-          </section>
-    
-          <section class="seccionpie">
-            <address>Granada, España</address>
-            <small>&copy; Derechos Reservados 2023</small>
-          </section>
-    
-          <div class="recuperar"></div>
-        </div>
-      </footer>
+    <?php include 'footer.php'; ?>
 
 
 </body>

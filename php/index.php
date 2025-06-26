@@ -200,30 +200,21 @@ if (empty($_SESSION["id_usuario"])){
 
     
     <script src="../js/darkmode.js"></script>
+
+    <!-- Script para migrar progreso local -->
+    <script src="../js/juego.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Definir la variable global para que juego.js sepa que el usuario está logueado
+            window.usuarioLogueado = <?php echo isset($_SESSION['id_usuario']) ? 'true' : 'false'; ?>;
+            
+            // Intentar migrar el progreso local al servidor
+            migrarProgresoAServidor();
+        });
+    </script>
     </main>
 
    
-    <footer id="pielogo">
-        <div>
-          <section class="seccionpie">
-            <h1>Sitio Web</h1>
-            <p><a href="./index.php">Inicio</a></p>
-            <p><a href="https://forms.gle/D8NNqERVakWrsNkA9" target="_blank"> -> Comentarios <- <br> <span></span></a></p>
-         <!--  <p><a href="/Contacto.html">  Contacto </a></p> --> 
-          </section>
-    
-          <section class="seccionpie">
-            <h1>Version</h1>
-            <p><a href="contacto.html">3.0</a></p>
-          </section>
-    
-          <section class="seccionpie">
-            <address>Granada, España</address>
-            <small>&copy; Derechos Reservados 2023</small>
-          </section>
-    
-          <div class="recuperar"></div>
-        </div>
-      </footer>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

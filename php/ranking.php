@@ -2,9 +2,8 @@
 session_start();
 include('../controladores_php/conectar.php'); 
 
-if (empty($_SESSION["id_usuario"])){
-    header("Location: ./login.php");
-}
+$usuario_logueado = !empty($_SESSION["id_usuario"]);
+// Ya no redirigimos automáticamente, manejamos ambos casos
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -12,7 +11,7 @@ if (empty($_SESSION["id_usuario"])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dino html</title>
+    <title>Ranking - Daino</title>
     <link rel="stylesheet" href="../css/modelo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
@@ -415,7 +414,52 @@ if (empty($_SESSION["id_usuario"])){
         </div>
     </div>
     <div class="recuperar"></div>
-    <section id="section_ranking">
+    
+    <?php if (!$usuario_logueado): ?>
+        <!--página de aviso para usuarios no logueados -->
+        <section id="section_ranking">
+            <div style="text-align: center; padding: 40px 20px; background: #aa5d5d; color: white; border-radius: 12px; margin: 20px; box-shadow: 0 4px 15px rgba(170, 93, 93, 0.3);">
+                <h1 style="font-size: 2.2em; margin-bottom: 20px; font-weight: 300;">🏆 Ranking de Jugadores</h1>
+                <h2 style="color: #f4f4f4; margin-bottom: 20px; font-weight: 400;">¡Compite con otras personas!</h2>
+                <p style="font-size: 1.1em; line-height: 1.6; margin-bottom: 30px; opacity: 0.9;">
+                    El ranking muestra a los mejores jugadores y sus puntuaciones.<br>
+                    <strong>Regístrate para aparecer en el ranking.</strong>
+                </p>
+                
+                <div style="background: rgba(0,0,0,0.15); padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #f4f4f4;">
+                    <h3 style="color: #f4f4f4; margin-bottom: 15px; font-weight: 400;">En el ranking verás:</h3>
+                    <ul style="list-style: none; padding: 0; font-size: 1em; text-align: left; max-width: 400px; margin: 0 auto;">
+                        <li style="margin: 8px 0; padding: 5px 0;">• Los 3 mejores jugadores en el podio</li>
+                        <li style="margin: 8px 0; padding: 5px 0;">• Puntuaciones totales de cada jugador</li>
+                        <li style="margin: 8px 0; padding: 5px 0;">• Tu posición cuando te registres</li>
+                    </ul>
+                </div>
+                
+                <!-- <div style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 6px; margin: 20px 0;">
+                    <p style="font-size: 0.95em; margin: 0; opacity: 0.9;">
+                        <strong>💡 Tip:</strong> Solo los usuarios registrados aparecen en el ranking. 
+                        ¡Juega, mejora tus puntuaciones y sube posiciones!
+                    </p>
+                </div> -->
+                
+                <div style="margin-top: 30px;">
+                    <a href="./register.php" style="background: #f4f4f4; color: #aa5d5d; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; transition: all 0.3s;">
+                        Crear Cuenta
+                    </a>
+                    <a href="./login.php" style="background: transparent; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; border: 2px solid white; transition: all 0.3s;">
+                        Iniciar Sesión
+                    </a>
+                </div>
+                
+                <p style="margin-top: 25px; font-size: 0.9em; opacity: 0.8;">
+                    ¿Ya tienes cuenta? <a href="./login.php" style="color: #f4f4f4; text-decoration: underline;">Inicia sesión aquí</a>
+                </p>
+            </div>
+            <div class="recuperar"></div>
+        </section>
+    <?php else: ?>
+        <!-- Ranking normal para usuarios logueados -->
+        <section id="section_ranking">
         <?php 
                 $sql = "SELECT register.usuario, ranking.pts_total 
                 FROM ranking 
@@ -482,33 +526,14 @@ if (empty($_SESSION["id_usuario"])){
 
         ?>
         <div class="recuperar"></div>
-    </section>
+        </section>
+    <?php endif; ?>
     <script src="../js/darkmode.js"></script>
+    <div class="recuperar"></div>
     </main>
 
     
-    <footer id="pielogo">
-        <div>
-          <section class="seccionpie">
-            <h1>Sitio Web</h1>
-            <p><a href="./index.php">Inicio</a></p>
-            <p><a href="https://forms.gle/D8NNqERVakWrsNkA9" target="_blank"> -> Comentarios <- <br> <span></span></a></p>
-         <!--  <p><a href="/Contacto.html">  Contacto </a></p> --> 
-          </section>
-    
-          <section class="seccionpie">
-            <h1>Version</h1>
-            <p><a href="contacto.html">3.0</a></p>
-          </section>
-    
-          <section class="seccionpie">
-            <address>Granada, España</address>
-            <small>&copy; Derechos Reservados 2023</small>
-          </section>
-    
-          <div class="recuperar"></div>
-        </div>
-      </footer>
+    <?php include 'footer.php'; ?>
       
 </body>
 </html>

@@ -1,8 +1,7 @@
 <?php
 session_start();
-if (empty($_SESSION["id_usuario"])){
-    header("Location: ./login.php");
-}
+$usuario_logueado = !empty($_SESSION["id_usuario"]);
+// Ya no redirigimos al login, solo detectamos si hay sesión
 ?>
 
 
@@ -52,7 +51,7 @@ if (empty($_SESSION["id_usuario"])){
         <div class="recuperar"></div>
     <div id="juegazo">
         <div id="cabecera-juego">
-            <a href="./index.php" id="volver">Volver</a>
+            <a href="<?php echo $usuario_logueado ? './index.php' : './index_publico.php'; ?>" id="volver">Volver</a>
             <p id="nombreJuego">j</p>
 
         </div>
@@ -89,6 +88,10 @@ if (empty($_SESSION["id_usuario"])){
         <script src="../p5/addons/p5.sound.js"></script>
         
         <?php include '../controladores_php/leer_lista_canciones.php'; ?>
+        <script>
+            // Variable global para JavaScript que indica si el usuario está logueado
+            window.usuarioLogueado = <?php echo $usuario_logueado ? 'true' : 'false'; ?>;
+        </script>
         <script src="../js/juego.js"></script>
         <script src="../js/darkmode.js"></script>
 
@@ -107,28 +110,7 @@ if (empty($_SESSION["id_usuario"])){
         <script src="../js/sketch.js"></script>-->
     </main>
     
-    <footer id="pielogo">
-        <div>
-          <section class="seccionpie">
-            <h1>Sitio Web</h1>
-            <p><a href="./index.php">Inicio</a></p>
-            <p><a href="https://forms.gle/D8NNqERVakWrsNkA9" target="_blank"> -> Comentarios <- <br> <span></span></a></p>
-         <!--  <p><a href="/Contacto.html">  Contacto </a></p> --> 
-          </section>
-    
-          <section class="seccionpie">
-            <h1>Version</h1>
-            <p><a href="contacto.html">3.0</a></p>
-          </section>
-    
-          <section class="seccionpie">
-            <address>Granada, España</address>
-            <small>&copy; Derechos Reservados 2023</small>
-          </section>
-    
-          <div class="recuperar"></div>
-        </div>
-      </footer>
+    <?php include 'footer.php'; ?>
 
 
       <!--

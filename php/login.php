@@ -48,5 +48,8 @@ if (isset($_SESSION['id_usuario'])) {
             </div>
 
             <input type="submit" value="Iniciar sesion" id="enviarLogin" name="enviarLogin">
-        </form></div></body>
+        </form>
+    </div>
+    <!-- <?php include 'footer.php'; ?> -->
+</body>
 </html>
