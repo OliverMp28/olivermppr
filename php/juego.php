@@ -1,7 +1,6 @@
-<?php
-session_start();
-$usuario_logueado = !empty($_SESSION["id_usuario"]);
-// Ya no redirigimos al login, solo detectamos si hay sesión
+<?php 
+// Verificar si el usuario está logueado
+$usuario_logueado = isset($_SESSION['id_usuario']);
 ?>
 
 
@@ -11,15 +10,16 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daino</title>
-    <link rel="stylesheet" href="../css/modelo.css">
-    <link rel="stylesheet" href="../css/juego.css">
+    <title>Juego - Daino</title>
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/img/foto_dino2.2.png">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/modelo.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/juego.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
 </head>
 <body>
     <header>
-        <?php include('./cabecera.php'); ?>
+        <?php include(ROOT_PATH . '/php/cabecera.php'); ?>
     </header>
     
 
@@ -38,11 +38,11 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
     </audio>
 
     <audio  id="final">
-        <source src="../audios/quebendición.mp3"  type="audio/mpeg">
+        <source src="<?php echo BASE_URL; ?>/audios/quebendicion.mp3"  type="audio/mpeg">
     </audio>
 
     <audio id="pipipi">
-        <source src="../audios/pipipi.mp3" type="audio/mpeg">
+        <source src="<?php echo BASE_URL; ?>/audios/pipipi.mp3" type="audio/mpeg">
     </audio>
 
 
@@ -51,7 +51,7 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
         <div class="recuperar"></div>
     <div id="juegazo">
         <div id="cabecera-juego">
-            <a href="<?php echo $usuario_logueado ? './index.php' : './index_publico.php'; ?>" id="volver">Volver</a>
+            <a href="<?php echo BASE_URL; ?>/" id="volver">Volver</a>
             <p id="nombreJuego">j</p>
 
         </div>
@@ -84,23 +84,24 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
 
         <div id="tiempoDuracion">166</div> -->
 
-        <script src="../p5/p5.min.js"></script>
-        <script src="../p5/addons/p5.sound.js"></script>
+        <script src="<?php echo BASE_URL; ?>/p5/p5.min.js"></script>
+        <script src="<?php echo BASE_URL; ?>/p5/addons/p5.sound.js"></script>
         
-        <?php include '../controladores_php/leer_lista_canciones.php'; ?>
+        <?php include(ROOT_PATH.'/controladores_php/leer_lista_canciones.php'); ?>
         <script>
             // Variable global para JavaScript que indica si el usuario está logueado
-            window.usuarioLogueado = <?php echo $usuario_logueado ? 'true' : 'false'; ?>;
+                        window.usuarioLogueado = <?php echo $usuario_logueado ? 'true' : 'false'; ?>;
+            window.BASE_URL = '<?php echo BASE_URL; ?>';
         </script>
-        <script src="../js/juego.js"></script>
-        <script src="../js/darkmode.js"></script>
+        <script src="<?php echo BASE_URL; ?>/js/juego.js"></script>
+        <script src="<?php echo BASE_URL; ?>/js/darkmode.js"></script>
 
    
     </div>
 
     </div> 
 
-        <form action="../controladores_php/gestionar_progreso.php" method="POST" id="formularioProgreso">
+        <form action="<?php echo BASE_URL; ?>/api/progreso" method="POST" id="formularioProgreso">
             <input type="hidden" id="inputPorcentaje" name="inputPorcentaje">
             <input type="hidden" id="inputPts" name="inputPts">
             <input type="hidden" id="idCancionCargar" name="idCancionCargar">

@@ -1,7 +1,9 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 // guardar_mensaje.php
-require_once '../controladores_php/conectar.php';
+// require_once 'controladores_php/conectar.php'; //se quita por que el enrutador ya se encarga d eponerlo
 
 
 
@@ -27,7 +29,7 @@ else
     echo('Error intentando enviar el comentario');
 */
 
-header('Location: ../php/info.php');
+header('Location: ' . BASE_URL . '/info');
 
 mysqli_close($conexion)
 /*

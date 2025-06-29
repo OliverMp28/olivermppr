@@ -19,6 +19,6 @@
           <address>Granada, España</address>
           <small>&copy; Derechos Reservados <?php echo date("Y"); ?></small>
         </section>
-        <div class="recuperar"></div>
+        <!-- <div class="recuperar"></div> -->
     </div>
 </footer>

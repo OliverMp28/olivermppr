@@ -463,6 +463,8 @@ function GameOver() {
     Estrellarse();
     gameOver.style.display = "block";
     tryAgain.style.display = "block";
+    // Deshabilitar el botón temporalmente para evitar el bug de 'race condition'
+    tryAgain.style.pointerEvents = 'none';
     Terminar();
     AudioPipipi();
 }
@@ -491,7 +493,7 @@ function IsCollision(a, b, paddingTop, paddingRight, paddingBottom, paddingLeft)
 function AudioLoad(){
     var cancion0 = document.getElementById("cancion0");
     var ruta = window.srcCancionElegida;
-    cancion0.src = `../audios/${ruta}`;
+    cancion0.src = ruta;
     audio1.volume = 0;
  
     nombreCancion.innerHTML = window.nombreCancionElegida;
@@ -655,9 +657,24 @@ function AudioPipipi(){
 }
 
 function Terminar(){
-    x=true;
+    // 1. Establecer el estado del juego como terminado.
+    // La variable 'x' es crucial para que la lógica de focus/blur en 'detectar()' sepa que el juego ha finalizado.
+    x = true;
+    parado = true; // Asegura que el bucle del juego se detenga.
+
+    // 2. Detener explícitamente las fuentes de audio ANTES de cualquier diálogo.
+    // Esto soluciona el bug del audio que sonaba de fondo.
+    if (audio1) {
+        audio1.pause();
+    }
+    if (typeof song !== 'undefined' && song.isPlaying()) {
+        song.pause();
+    }
+
+    // 3. Ahora que el juego y el audio están detenidos, guardar el progreso.
     GuardarProgreso();
-    return x;
+    
+    return x; // Mantener el valor de retorno original.
 }
 
 audio1.addEventListener("ended", function(){
@@ -742,7 +759,9 @@ function GuardarProgreso(){
         formData.append('inputPts', score);
         formData.append('idCancionCargar', window.idCancionElegida);
 
-        fetch('../controladores_php/gestionar_progreso.php', {
+
+        let urlPeticion = BASE_URL + '/api/progreso'
+        fetch(urlPeticion, {
             method: 'POST',
             body: formData
         })
@@ -753,6 +772,10 @@ function GuardarProgreso(){
         })
         .catch((error) => {
             console.error('Error:', error);
+        })
+        .finally(() => {
+            // Habilitar el botón para usuarios logueados despues de la petición
+            tryAgain.style.pointerEvents = 'auto';
         });
     } else {
         //usuario no logueado: guardar progreso localmente
@@ -769,19 +792,42 @@ function GuardarProgreso(){
         //guardar en localStorage
         guardarProgresoLocal(progresoLocal);
         
-        //crear y mostrar mensaje de incentivo al registro
-        setTimeout(() => {
-            const porcentajeAlcanzado = Math.round(porcentaje);
-            const puntosObtenidos = score;
-            const progresoTotal = obtenerProgresoLocalTotal();
-            
-            if (confirm(`¡Genial! Alcanzaste ${porcentajeAlcanzado}% con ${puntosObtenidos} puntos.\n\n` +
-                       `Progreso local guardado: ${progresoTotal.niveles} niveles jugados, ${progresoTotal.puntos_totales} puntos totales.\n\n` +
-                       `Para guardar tu progreso permanentemente y aparecer en el ranking, necesitas registrarte.\n\n` +
-                       `¿Quieres registrarte ahora?`)) {
-                window.location.href = './register.php';
-            }
-        }, 1000); // Esperar 1 segundo para que el usuario vea el resultado
+        // --- Lógica para mostrar el mensaje de forma menos intrusiva ---
+        // Obtener el contador de juegos jugados desde localStorage
+        let juegosJugados = localStorage.getItem('juegosJugadosSinRegistro') || 0;
+        // console.log('Juegos jugados sin registro:', juegosJugados);
+        juegosJugados = parseInt(juegosJugados) + 1;
+
+        // Guardar el nuevo contador
+        localStorage.setItem('juegosJugadosSinRegistro', juegosJugados);
+        // Decidir si mostrar el mensaje: en el 1er juego, y luego cada 6 juegos.
+        const debeMostrarMensaje = (juegosJugados === 1 || (juegosJugados > 1 && juegosJugados % 7 === 0));
+
+        // console.log('Debería mostrar mensaje:', debeMostrarMensaje);
+
+        if (debeMostrarMensaje) {
+            //crear y mostrar mensaje de incentivo al registro
+            setTimeout(() => {
+                const porcentajeAlcanzado = Math.round(porcentaje);
+                const puntosObtenidos = score;
+                const progresoTotal = obtenerProgresoLocalTotal();
+                
+                let mensaje = `¡Genial! Has jugado ${juegosJugados} ${juegosJugados === 1 ? 'vez' : 'veces'}.\n` +
+                              `En esta partida: ${puntosObtenidos} puntos con ${porcentajeAlcanzado}%\n\n` +
+                              `Progreso total sin registrar: ${progresoTotal.niveles} niveles, ${progresoTotal.puntos_totales} puntos.\n\n` +
+                              `¿Sabías que puedes guardar tu progreso para siempre y competir en el ranking? ¡Solo necesitas una cuenta!\n\n` +
+                              `¿Quieres registrarte ahora?`;
+
+                if (confirm(mensaje)) {
+                    window.location.href = BASE_URL + '/registro';
+                }
+                // Habilitar el botón después de que el usuario interactúe con el diálogo
+                tryAgain.style.pointerEvents = 'auto';
+            }, 1000); // Esperar 1 segundo para que el usuario vea el resultado
+        } else {
+            // Si no se muestra el mensaje, habilitar el botón inmediatamente
+            tryAgain.style.pointerEvents = 'auto';
+        }
     }
 }
 
@@ -855,7 +901,7 @@ function migrarProgresoAServidor() {
     if (progresoLocal.length > 0 && typeof window.usuarioLogueado !== 'undefined' && window.usuarioLogueado) {
         console.log('Iniciando migración de progreso local...');
 
-        fetch('../controladores_php/migrar_progreso_local.php', {
+                fetch(`${window.BASE_URL}/api/migrar-progreso`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

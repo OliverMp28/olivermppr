@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 // Verificar si el usuario ya ha iniciado sesión
 if (isset($_SESSION['id_usuario'])) {
     // Si ya ha iniciado sesión, redirigir a la página de inicio
@@ -11,7 +9,8 @@ if (isset($_SESSION['id_usuario'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daino - Iniciar Sesion</title>
+    <title>Login - Daino</title>
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/img/foto_dino2.2.png">
     <style>
         .back-button {
             display: block;
@@ -30,11 +29,12 @@ if (isset($_SESSION['id_usuario'])) {
             background-color: rgba(0, 0, 0, 0.5);
         }
     </style>
-    <link rel="stylesheet" href="../css/register_login.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/modelo.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/register_login.css">
   
 </head>
 <body><div id="contenedor-login">
-        <form action="../controladores_php/procesar_login.php" method="POST">
+        <form action="<?php echo BASE_URL; ?>/login" method="POST">
             <h1 id="titulo-login">BIENVENIDO.</h1>
             <?php 
             if (isset($_SESSION['error_message'])):
@@ -62,12 +62,12 @@ if (isset($_SESSION['id_usuario'])) {
 
             <div id="contenedor-enlaces">
               <!--  <a href="" class="enlaces-login">Olvide mi contraseña</a> -->
-                <a href="./register.php" class="enlaces-login">Registrar</a>
+                <a href="<?php echo BASE_URL; ?>/registro" class="enlaces-login">Registrarse</a>
             </div>
 
             <input type="submit" value="Iniciar sesion" id="enviarLogin" name="enviarLogin">
         </form>
-        <a href="./index_publico.php" class="back-button">Volver al inicio</a>
+        <a href="<?php echo BASE_URL; ?>/" class="back-button">Volver al inicio</a>
     </div>
     <!-- <?php include 'footer.php'; ?> -->
 </body>

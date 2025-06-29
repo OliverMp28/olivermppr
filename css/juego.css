@@ -442,7 +442,7 @@
 #tiempox{
     background: #902176;
     width: 10%;
-    height: 20px;
+    /* height: 20px; */
     z-index: 12 !important;
     margin: auto;
     padding: 10px;

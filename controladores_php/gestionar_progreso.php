@@ -1,73 +1,97 @@
 <?php
-session_start();
-require_once '../controladores_php/conectar.php';
+// Iniciar sesión de forma segura, ya que este script se llama vía AJAX.
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-/*
-$inputPorcentaje = $_POST["inputPorcentaje"];
-$inputPts = $_POST["inputPts"];
+// Incluir la conexión a la base de datos.
+// La ruta es relativa al script que hace el 'include' (el router en la raíz).
+require_once 'controladores_php/conectar.php';
 
-session_start();
-$idUsuario = $_SESSION["id_usuario"];
-
-$stmt = $conexion->prepare('INSERT INTO progreso (id_usuario, id_cancion, porcentaje, pts) VALUES (?, ?, ?, ?)');
-$stmt->bind_param('ssss', , 2, 3, 4);
-$stmt->execute();
-*/
-
-
-if (isset($_POST['inputPts']) && isset($_POST['inputPorcentaje'])) {
+// Verificar que se recibieron los datos necesarios por POST
+if (isset($_POST['inputPts'], $_POST['inputPorcentaje'], $_POST['idCancionCargar'])) {
+    
     $inputPts = $_POST['inputPts'];
     $inputPorcentaje = $_POST['inputPorcentaje'];
     $idCancionCargar = $_POST['idCancionCargar'];
-    $idUsuario = $_SESSION["id_usuario"]; //esto lo saco de la session
 
-    $stmt = $conexion->prepare('SELECT * FROM progreso WHERE id_usuario = ? AND id_cancion = ?');
-    $stmt->bind_param('ii', $idUsuario, $idCancionCargar);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Caso 1: El usuario está logueado
+    if (isset($_SESSION["id_usuario"])) {
+        $idUsuario = $_SESSION["id_usuario"];
 
-    if ($result->num_rows > 0) {
-        // Si ya existe una fila, hacer un UPDATE si el nuevo porcentaje es mayor
-        $row = $result->fetch_assoc();
-        if ($inputPorcentaje > $row['porcentaje']) {
-            $stmt = $conexion->prepare('UPDATE progreso SET porcentaje = ?, pts = ? WHERE id_usuario = ? AND id_cancion = ?');
-            $stmt->bind_param('iiii', $inputPorcentaje, $inputPts, $idUsuario, $idCancionCargar);
-            $stmt->execute();
+        // --- Actualizar o Insertar en la tabla 'progreso' ---
+        $stmt = $conexion->prepare('SELECT porcentaje FROM progreso WHERE id_usuario = ? AND id_cancion = ?');
+        $stmt->bind_param('ii', $idUsuario, $idCancionCargar);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Ya existe un registro, actualizar si el nuevo puntaje es mayor
+            $row = $result->fetch_assoc();
+            if ($inputPorcentaje > $row['porcentaje']) {
+                $updateStmt = $conexion->prepare('UPDATE progreso SET porcentaje = ?, pts = ? WHERE id_usuario = ? AND id_cancion = ?');
+                $updateStmt->bind_param('diii', $inputPorcentaje, $inputPts, $idUsuario, $idCancionCargar);
+                $updateStmt->execute();
+            }
+        } else {
+            // No existe registro, insertar uno nuevo
+            $insertStmt = $conexion->prepare('INSERT INTO progreso (id_usuario, id_cancion, porcentaje, pts) VALUES (?, ?, ?, ?)');
+            $insertStmt->bind_param('iidi', $idUsuario, $idCancionCargar, $inputPorcentaje, $inputPts);
+            $insertStmt->execute();
         }
+
+        // --- Actualizar o Insertar en la tabla 'ranking' ---
+        // Recalcular totales para el ranking
+        $rankStmt = $conexion->prepare('SELECT SUM(pts) AS puntos_totales, AVG(porcentaje) AS promedio_porcentaje, COUNT(*) AS n_canciones FROM progreso WHERE id_usuario = ?');
+        $rankStmt->bind_param('i', $idUsuario);
+        $rankStmt->execute();
+        $rankResult = $rankStmt->get_result()->fetch_assoc();
+        
+        $puntosTotales = $rankResult['puntos_totales'] ?? 0;
+        $promedioPorcentaje = $rankResult['promedio_porcentaje'] ?? 0;
+        $nCanciones = $rankResult['n_canciones'] ?? 0;
+
+        // Comprobar si ya existe una fila para el usuario en la tabla ranking
+        $checkRankStmt = $conexion->prepare('SELECT id FROM ranking WHERE id_usuario = ?');
+        $checkRankStmt->bind_param('i', $idUsuario);
+        $checkRankStmt->execute();
+        $checkRankResult = $checkRankStmt->get_result();
+
+        if ($checkRankResult->num_rows > 0) {
+            // Ya existe, actualizar
+            $updateRankStmt = $conexion->prepare('UPDATE ranking SET pts_total = ?, porcentaje_total = ?, n_canciones = ? WHERE id_usuario = ?');
+            $updateRankStmt->bind_param('idii', $puntosTotales, $promedioPorcentaje, $nCanciones, $idUsuario);
+            $updateRankStmt->execute();
+        } else {
+            // No existe, insertar
+            $insertRankStmt = $conexion->prepare('INSERT INTO ranking (id_usuario, porcentaje_total, pts_total, n_canciones) VALUES (?, ?, ?, ?)');
+            $insertRankStmt->bind_param('idii', $idUsuario, $promedioPorcentaje, $puntosTotales, $nCanciones);
+            $insertRankStmt->execute();
+        }
+        
+        echo json_encode(['status' => 'success', 'message' => 'Progreso guardado en la base de datos.']);
+
     } else {
-        // Si no existe una fila, hacer un INSERT
-        $stmt = $conexion->prepare('INSERT INTO progreso (id_usuario, id_cancion, porcentaje, pts) VALUES (?, ?, ?, ?)');
-        $stmt->bind_param('iiii', $idUsuario, $idCancionCargar, $inputPorcentaje, $inputPts);
-        $stmt->execute();
+        // Caso 2: El usuario no está logueado, guardar en la sesión
+        if (!isset($_SESSION['local_progress'])) {
+            $_SESSION['local_progress'] = [];
+        }
+
+        // Obtener progreso local actual para la canción, si existe
+        $current_local_progress = $_SESSION['local_progress'][$idCancionCargar] ?? ['porcentaje' => 0];
+
+        // Actualizar solo si el nuevo porcentaje es mayor
+        if ($inputPorcentaje > $current_local_progress['porcentaje']) {
+            $_SESSION['local_progress'][$idCancionCargar] = [
+                'porcentaje' => $inputPorcentaje,
+                'pts' => $inputPts
+            ];
+        }
+        echo json_encode(['status' => 'success', 'message' => 'Progreso guardado localmente.']);
     }
-
-    // Calcular los nuevos puntos totales, el promedio de porcentaje y el número de canciones
-    $stmt = $conexion->prepare('SELECT SUM(pts) AS puntos_totales, AVG(porcentaje) AS promedio_porcentaje, COUNT(*) AS n_canciones FROM progreso WHERE id_usuario = ?');
-    $stmt->bind_param('i', $idUsuario);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    $puntosTotales = $row['puntos_totales'];
-    $promedioPorcentaje = $row['promedio_porcentaje'];
-    $nCanciones = $row['n_canciones'];
-
-    // Comprobar si ya existe una fila para el usuario en la tabla ranking
-    $stmt = $conexion->prepare('SELECT * FROM ranking WHERE id_usuario = ?');
-    $stmt->bind_param('i', $idUsuario);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // Si ya existe una fila, hacer un UPDATE
-        $stmt = $conexion->prepare('UPDATE ranking SET pts_total = ?, porcentaje_total = ?, n_canciones = ? WHERE id_usuario = ?');
-        $stmt->bind_param('iiii', $puntosTotales, $promedioPorcentaje, $nCanciones, $idUsuario);
-        $stmt->execute();
-    } else {
-        // Si no existe una fila, hacer un INSERT
-        $stmt = $conexion->prepare('INSERT INTO ranking (id_usuario, porcentaje_total, pts_total, n_canciones) VALUES (?, ?, ?, ?)');
-        $stmt->bind_param('iiii', $idUsuario, $promedioPorcentaje, $puntosTotales, $nCanciones);
-        $stmt->execute();
-    }
-} 
-
+} else {
+    // Datos POST no recibidos
+    http_response_code(400); // Bad Request
+    echo json_encode(['status' => 'error', 'message' => 'Datos incompletos.']);
+}
 ?>

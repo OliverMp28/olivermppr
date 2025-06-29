@@ -1,4 +1,13 @@
 <?php
+
+// Definir BASE_URL si no está definida, para que los controladores puedan usarla en redirecciones.
+if (!defined('BASE_URL')) {
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+    $host = $_SERVER['HTTP_HOST'];
+    // Asumimos que la carpeta del proyecto es 'dino_HTML' si el script está en 'controladores_php'
+    $base_dir = rtrim(str_replace('controladores_php', '', str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']))), '/');
+    define('BASE_URL', $protocol . '://' . $host . $base_dir);
+}
 // conexion.php
 
 //CREATE USER 'usr_dino'@'localhost' IDENTIFIED BY 'dino';

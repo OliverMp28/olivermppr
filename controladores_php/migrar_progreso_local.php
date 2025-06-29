@@ -1,6 +1,8 @@
 <?php
-session_start();
-require_once '../controladores_php/conectar.php';
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+require_once 'controladores_php/conectar.php';
 
 header('Content-Type: application/json');
 

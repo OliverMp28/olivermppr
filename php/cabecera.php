@@ -10,20 +10,20 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
                 </label>
                     <ul class="opciones-ventanas">
                         <li>
-                            <a href="<?php echo $usuario_logueado ? './index.php' : './index_publico.php'; ?>" class="enlaces-ventanas" >Inicio</a>
+                            <a href="<?php echo BASE_URL; ?>/" class="enlaces-ventanas" >Inicio</a>
                         </li>
                         <li>
-                            <a href="./ranking.php" class="enlaces-ventanas">Ranking</a>
+                            <a href="<?php echo BASE_URL; ?>/ranking" class="enlaces-ventanas">Ranking</a>
                         </li>
                        <li>
-                            <a href="./info.php" class="enlaces-ventanas">Info</a>
+                            <a href="<?php echo BASE_URL; ?>/info" class="enlaces-ventanas">Info</a>
                         </li>
                         <li>
-                            <a href="./perfil.php" class="enlaces-ventanas">Perfil</a>
+                            <a href="<?php echo BASE_URL; ?>/perfil" class="enlaces-ventanas">Perfil</a>
                         </li>
                         <?php if ($usuario_logueado): ?>
                         <li>
-                            <a href="../controladores_php/cerrar_login.php" class="enlaces-ventanas">Cerrar Sesion</a>
+                            <a href="<?php echo BASE_URL; ?>/logout" class="enlaces-ventanas">Cerrar Sesion</a>
                         </li>
                         <?php endif; ?>
 

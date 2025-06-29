@@ -1,10 +1,6 @@
 <?php
-session_start();
-if (empty($_SESSION["id_usuario"])){
-    header("Location: ./login.php");
-}else{
-    include('../controladores_php/conectar.php');
-}
+// La sesion se inicia en el router principal (index.php), no aquí.
+
 ?>
 
 
@@ -15,14 +11,15 @@ if (empty($_SESSION["id_usuario"])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daino</title>
-    <link rel="stylesheet" href="../css/modelo.css">
-    <link rel="stylesheet" href="../css/juego.css">
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/img/foto_dino2.2.png">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/modelo.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/juego.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
 </head>
 <body>
     <header>
-    <?php include('./cabecera.php'); ?>
+    <?php include './php/cabecera.php'; ?>
     </header>
     
 
@@ -52,11 +49,13 @@ if (empty($_SESSION["id_usuario"])){
             ?>
                 <ul class="opciones"> 
                 <?php
-                while ($stmt->fetch()) {
-                    ?>
+                    $imgUrl = '';
+                    while ($stmt->fetch()) {
+                        $imgUrl = BASE_URL . "/img/". htmlspecialchars($img);
+                ?>
                     <li>
-                        <div class="botones"  onclick="window.location.href='./juego.php?id_cancion_cargar=<?php echo($id); ?>';">
-                            <img src="../img/<?php echo($img); ?>" alt="" class="circulo">
+                        <div class="botones"  onclick="window.location.href='./juego?id_cancion_cargar=<?php echo($id); ?>';">
+                            <img src="<?php echo $imgUrl; ?>" alt="" class="circulo">
                             <div class="titulo-cancion">
                                 <p class="subtitulo-cancion1"><?php echo($nombre); ?></p>
                                 <p class="subtitulo-cancion2"> <?php echo($autor); ?> </p>
@@ -199,10 +198,10 @@ if (empty($_SESSION["id_usuario"])){
     </div> -->
 
     
-    <script src="../js/darkmode.js"></script>
+    <script src="<?php echo BASE_URL; ?>/js/darkmode.js"></script>
 
     <!-- Script para migrar progreso local -->
-    <script src="../js/juego.js"></script>
+    <script src="<?php echo BASE_URL; ?>/js/juego.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Definir la variable global para que juego.js sepa que el usuario está logueado

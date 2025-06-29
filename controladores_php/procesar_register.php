@@ -1,5 +1,5 @@
 <?php
-require_once('../controladores_php/conectar.php');
+// require_once('../controladores_php/conectar.php');
 
 
 if(!empty($_POST["enviarLogin"])) {
@@ -18,13 +18,13 @@ if(!empty($_POST["enviarLogin"])) {
 
     if (empty($inputUsuario) || empty($inputNombre) || empty($inputContraseña) || empty($inputEmail)) {
         $_SESSION['error_message'] = "Por favor, rellena todos los campos.";
-        header('Location: ../php/register.php');
+        header('Location: ' . BASE_URL . '/registro');
         exit();
     }
     // Comprobar si las contraseñas coinciden
     elseif ($inputContraseña !== $inputContraseña2) {
         $_SESSION['error_message'] = "Las contraseñas no coinciden.";
-        header('Location: ../php/register.php');
+        header('Location: ' . BASE_URL . '/registro');
         exit();
     }
     else{
@@ -35,7 +35,7 @@ if(!empty($_POST["enviarLogin"])) {
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             $_SESSION['error_message'] = "El nombre de usuario ya existe.";
-            header('Location: ../php/register.php');
+            header('Location: ' . BASE_URL . '/registro');
             exit();
         }
 
@@ -47,11 +47,11 @@ if(!empty($_POST["enviarLogin"])) {
     
         if ($stmt->execute()) {
             $_SESSION['success_message'] = "¡Registro completado! Ahora puedes iniciar sesión.";
-            header('Location: ../php/login.php');
+            header('Location: ' . BASE_URL . '/login');
             exit();
         } else {
             $_SESSION['error_message'] = "Hubo un error al registrar al usuario.";
-            header('Location: ../php/register.php');
+            header('Location: ' . BASE_URL . '/registro');
             exit();
         }
     }

@@ -1,0 +1,17 @@
+# Activar el motor de reescritura de URLs
+RewriteEngine On
+
+# La directiva RewriteBase puede causar problemas al migrar de local a producción.
+# la eliminamos para que las rutas de reescritura sean relativas al directorio actual,
+# lo que es más portable. Si sigues teniendo problemas, puedes probar a descomentar
+# la siguiente línea y ajustarla al directorio de tu proyecto en producción (ej. / si está en la raíz).
+# RewriteBase /
+
+# evitar que la regla se aplique a archivos o directorios que ya existen físicamente.
+# Esto asegura que las peticiones a /css/estilos.css o /js/juego.js sigan funcionando.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# para todas las demás peticiones, redirigir internamente a index.php
+# La [L] indica que esta es la última regla que se debe procesar.
+RewriteRule . index.php [L]

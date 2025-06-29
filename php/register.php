@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daino - Registrarse</title>
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/img/foto_dino2.2.png">
     <style>
         .back-button {
             display: block;
@@ -22,12 +23,13 @@
             background-color: rgba(0, 0, 0, 0.5);
         }
     </style>
-    <link rel="stylesheet" href="../css/register_login.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/modelo.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/register_login.css">
 
 </head>
 <body>
     <div id="contenedor-login">
-        <form action="../controladores_php/procesar_register.php" method="POST" id="formularioRegister">
+        <form action="<?php echo BASE_URL; ?>/registro" method="POST" id="formularioRegister">
             <h1 id="titulo-login">BIENVENIDO</h1>
             <?php 
             if (session_status() == PHP_SESSION_NONE) {
@@ -62,12 +64,14 @@
             <div class="separador-login"></div>
 
             <div id="contenedor-enlaces">
-                <a href="./login.php" class="enlaces-login">Iniciar sesion</a>
+                <a href="<?php echo BASE_URL; ?>/login" class="enlaces-login">Iniciar sesion</a>
             </div> <br>
 
             <input type="submit" value="Registrar" id="enviarLogin" name="enviarLogin">
         </form>
-        <a href="./index_publico.php" class="back-button">Volver al inicio</a>
+        <a href="<?php echo BASE_URL; ?>/" class="back-button">Volver al inicio</a>
+        <!-- Script de validación eliminado temporalmente porque el archivo /js/validar_register.js no existe -->
+        <script src="<?php echo BASE_URL; ?>/js/darkmode.js"></script>
 
     </div> 
     <!-- <?php include 'footer.php'; ?> -->

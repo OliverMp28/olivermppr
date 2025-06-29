@@ -1,6 +1,6 @@
 <?php
 //no se requiere sesión para esta página
-include('../controladores_php/conectar.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -10,13 +10,14 @@ include('../controladores_php/conectar.php');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daino - Juega sin registro</title>
-    <link rel="stylesheet" href="../css/modelo.css">
-    <link rel="stylesheet" href="../css/juego.css">
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/img/foto_dino2.2.png">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/modelo.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/juego.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header>
-    <?php include('./cabecera.php'); ?>
+    <?php include(ROOT_PATH . '/php/cabecera.php'); ?>
     </header>
     
     <main id="cuerpo">
@@ -31,12 +32,15 @@ include('../controladores_php/conectar.php');
     <!-- mensaje informativo para usuarios no registrados -->
     <div style="background: #aa5d5d; color: white; padding: 15px; margin: 20px; border-radius: 10px; text-align: center;">
         <h3>¡Juega gratis sin registro!</h3>
-        <p>Puedes probar todos los niveles inmediatamente. Tu progreso se guarda localmente. Para guardarlo permanentemente y aparecer en el ranking, <a href="./register.php" style="color: #f4f4f4; font-weight: bold;">regístrate aquí</a> o <a href="./login.php" style="color: #f4f4f4; font-weight: bold;">inicia sesión</a>.</p>
+        <p>Puedes probar todos los niveles inmediatamente. Tu progreso se guarda localmente. Para guardarlo permanentemente y aparecer en el ranking, <a href="./registro" style="color: #f4f4f4; font-weight: bold;">regístrate aquí</a> o <a href="./login" style="color: #f4f4f4; font-weight: bold;">inicia sesión</a>.</p>
         <div id="progreso-local-resumen" style="margin-top: 10px; font-size: 0.9em; opacity: 0.9;"></div>
     </div>
 
     <div>
         <?php 
+        // Incluir la conexión a la base de datos
+        require_once(ROOT_PATH . '/controladores_php/conectar.php');
+
         // Consulta para obtener todas las canciones sin filtrar por usuario
         $stmt = $conexion->prepare("SELECT id, nombre, autor, img, src, SUBSTRING_INDEX(duracion, ':', -2) as duracion FROM canciones ORDER BY duracion ASC");
         $stmt->execute();
@@ -47,8 +51,8 @@ include('../controladores_php/conectar.php');
             while ($stmt->fetch()) {
                 ?>
                 <li>
-                    <div class="botones" onclick="window.location.href='./juego.php?id_cancion_cargar=<?php echo($id); ?>';">
-                        <img src="../img/<?php echo($img); ?>" alt="" class="circulo">
+                    <div class="botones" onclick="window.location.href='./juego?id_cancion_cargar=<?php echo($id); ?>';">
+                        <img src="<?php echo BASE_URL . '/img/' . htmlspecialchars($img); ?>" alt="" class="circulo">
                         <div class="titulo-cancion">
                             <p class="subtitulo-cancion1"><?php echo($nombre); ?></p>
                             <p class="subtitulo-cancion2"> <?php echo($autor); ?> </p>
@@ -72,7 +76,7 @@ include('../controladores_php/conectar.php');
   
     </main>
 
-    <script src="../js/darkmode.js"></script>
+    <script src="<?php echo BASE_URL; ?>/js/darkmode.js"></script>
     
     <!-- Script para cargar progreso local en usuarios no logueados -->
     <script>
@@ -119,6 +123,6 @@ include('../controladores_php/conectar.php');
         });
     </script>
 
-    <?php include 'footer.php'; ?>
+    <?php include(ROOT_PATH . '/php/footer.php'); ?>
 </body>
 </html>

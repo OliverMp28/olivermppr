@@ -161,10 +161,10 @@ CREATE TABLE `register` (
 --
 
 INSERT INTO `register` (`id`, `usuario`, `nombres`, `email`, `pais`, `contraseña`) VALUES
-(18, 'prueba', 'hola', 'eee@gmail.com', 'Albania', '1234'),
-(20, 'prueba2', 'pn prueba2', '', '', '1234'),
-(25, 'prueba4', 'hola', 'eee@gmail.com', '', '1234'),
-(26, 'prueba5', 'hola', 'galvezerwin28@gmail.com', '', '1234');
+(18, 'prueba', 'hola', 'eee@gmail.com', 'Albania', '$2y$10$VsuslTpXps6yDImb1/WXzec7Nf5Ku3OwohoeUPyidI73taxvG1Qwu'),
+(20, 'prueba2', 'pn prueba2', '', '', '$2y$10$VsuslTpXps6yDImb1/WXzec7Nf5Ku3OwohoeUPyidI73taxvG1Qwu'),
+(25, 'prueba4', 'hola', 'eee@gmail.com', '', '$2y$10$VsuslTpXps6yDImb1/WXzec7Nf5Ku3OwohoeUPyidI73taxvG1Qwu'),
+(26, 'prueba5', 'hola', 'galvezerwin28@gmail.com', '', '$2y$10$VsuslTpXps6yDImb1/WXzec7Nf5Ku3OwohoeUPyidI73taxvG1Qwu');
 
 --
 -- Índices para tablas volcadas

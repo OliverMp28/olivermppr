@@ -1,9 +1,6 @@
-<?php
-session_start();
-include('../controladores_php/conectar.php'); 
-
-$usuario_logueado = !empty($_SESSION["id_usuario"]);
-// Ya no redirigimos automáticamente, manejamos ambos casos
+<?php 
+// Verificar si el usuario está logueado
+$usuario_logueado = isset($_SESSION['id_usuario']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -12,18 +9,19 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - Daino</title>
-    <link rel="stylesheet" href="../css/modelo.css">
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/img/foto_dino2.2.png">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/modelo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/perfil.css">
 
 </head>
 <body>
     <header>
-        <?php include('cabecera.php'); ?>
+        <?php include(ROOT_PATH . '/php/cabecera.php'); ?>
 
             <!-- <h1>Perfil</h1> -->
             <div id="contenedor_foto_perfil">
-                <img id="foto" src="../img/foto_dino2.2.png" alt="">
+                <img id="foto" src="<?php echo BASE_URL; ?>/img/foto_dino2.2.png" alt="">
             </div> 
 
 
@@ -48,8 +46,8 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
                 <h1 style="font-size: 2.2em; margin-bottom: 20px; font-weight: 300;">Tu Perfil Personal</h1>
                 <h2 style="color: #f4f4f4; margin-bottom: 20px; font-weight: 400;">Crea tu perfil de jugador</h2>
                 <p style="font-size: 1.1em; line-height: 1.6; margin-bottom: 30px; opacity: 0.9;">
-                    Tu perfil personal es donde puedes ver todas tus estadísticas de juego.<br>
-                    <strong>Regístrate para tener tu propio perfil personalizado.</strong>
+                    Tu perfil personal es donde puedes ver todas tus estadísticas.<br>
+                    <strong>Regístrate para tener tu propio perfil.</strong>
                 </p>
                 
                 <div style="background: rgba(0,0,0,0.15); padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #f4f4f4;">
@@ -64,16 +62,16 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
                 
                 <div style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 6px; margin: 20px 0;">
                     <p style="font-size: 0.95em; margin: 0; opacity: 0.9;">
-                        <strong>💡 Tip:</strong> Mientras juegas sin registro, puedes ver tu progreso temporal, 
+                        <strong>💡:</strong> Mientras juegas sin registro, puedes ver tu progreso temporal, 
                         pero solo registrándote podrás guardarlo permanentemente.
                     </p>
                 </div>
                 
                 <div style="margin-top: 30px;">
-                    <a href="./register.php" style="background: #f4f4f4; color: #aa5d5d; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; transition: all 0.3s;">
+                    <a href="./registro" style="background: #f4f4f4; color: #aa5d5d; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; transition: all 0.3s;">
                         Crear Mi Perfil
                     </a>
-                    <a href="./login.php" style="background: transparent; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; border: 2px solid white; transition: all 0.3s;">
+                    <a href="./login" style="background: transparent; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; border: 2px solid white; transition: all 0.3s;">
                         Iniciar Sesión
                     </a>
                 </div>
@@ -144,7 +142,8 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
     <?php endif; ?>
 
     <div class="recuperar"></div>
-    <script src="../js/darkmode.js"></script>
+    <script src="<?php echo BASE_URL; ?>/js/darkmode.js"></script>
+
 
     </main>
 

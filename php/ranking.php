@@ -1,9 +1,5 @@
 <?php
-session_start();
-include('../controladores_php/conectar.php'); 
-
-$usuario_logueado = !empty($_SESSION["id_usuario"]);
-// Ya no redirigimos automáticamente, manejamos ambos casos
+$usuario_logueado = isset($_SESSION['id_usuario']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -12,7 +8,9 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ranking - Daino</title>
-    <link rel="stylesheet" href="../css/modelo.css">
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/img/foto_dino2.2.png">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/modelo.css">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -146,12 +144,16 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
         .forma{
             border-radius: 50% 50% 65% 35% / 36% 46% 54% 64% ;
             background-color: rgb(165, 35, 59);
-            padding: 20px;
+            padding: 10px; /* Reducido para dar más espacio al número */
 
             margin: auto;
-            margin-top: 10px;
-
-            justify-content: center;
+            width: 60px;
+            height: 60px;
+            
+            /* Corrección para centrar el número y evitar desbordamiento */
+            display: grid;
+            place-items: center; /* Centra el contenido horizontal y verticalmente */
+            box-sizing: border-box; /* Asegura que el padding no aumente el tamaño total */
         }
 
 
@@ -267,8 +269,8 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
                 margin-bottom: 4%;
             }
             .forma{
-                height: 30px;
-                width: 40px;
+                /* height: 30px;
+                width: 40px; */
             }
             #lista_podio .usuario_ranking{
                 font-size: 18px;
@@ -317,8 +319,8 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
                 margin-bottom: 5%;
             }
             .forma{
-                height: 40px;
-                width: 50px;
+                /* height: 40px;
+                width: 50px; */
             }
             #lista_podio .usuario_ranking{
                 font-size: 22px;
@@ -402,8 +404,16 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
 </head>
 <body>
     <header>
-        <?php include('./cabecera.php'); ?>
+        <?php include(ROOT_PATH . '/php/cabecera.php'); ?>
     </header>
+    
+    <!-- <p>
+        <h1>
+            RUTAS
+        </h1>
+        Base url: <span> <?php echo BASE_URL; ?> </span>
+        ROOT_PATH : <span> <?php echo ROOT_PATH; ?> </span>
+    </p> -->
     
 
     <main id="cuerpo">
@@ -443,16 +453,16 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
                 </div> -->
                 
                 <div style="margin-top: 30px;">
-                    <a href="./register.php" style="background: #f4f4f4; color: #aa5d5d; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; transition: all 0.3s;">
+                    <a href="./registro" style="background: #f4f4f4; color: #aa5d5d; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; transition: all 0.3s;">
                         Crear Cuenta
                     </a>
-                    <a href="./login.php" style="background: transparent; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; border: 2px solid white; transition: all 0.3s;">
+                    <a href="./login" style="background: transparent; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 1.1em; margin: 8px; display: inline-block; border: 2px solid white; transition: all 0.3s;">
                         Iniciar Sesión
                     </a>
                 </div>
                 
                 <p style="margin-top: 25px; font-size: 0.9em; opacity: 0.8;">
-                    ¿Ya tienes cuenta? <a href="./login.php" style="color: #f4f4f4; text-decoration: underline;">Inicia sesión aquí</a>
+                    ¿Ya tienes cuenta? <a href="./login" style="color: #f4f4f4; text-decoration: underline;">Inicia sesión aquí</a>
                 </p>
             </div>
             <div class="recuperar"></div>
@@ -528,7 +538,7 @@ $usuario_logueado = !empty($_SESSION["id_usuario"]);
         <div class="recuperar"></div>
         </section>
     <?php endif; ?>
-    <script src="../js/darkmode.js"></script>
+    <script src="<?php echo BASE_URL; ?>/js/darkmode.js"></script>
     <div class="recuperar"></div>
     </main>
 

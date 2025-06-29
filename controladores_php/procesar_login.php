@@ -1,83 +1,74 @@
 <?php
-require_once('../controladores_php/conectar.php');
-
-
-if(!empty($_POST["enviarLogin"])) {
-    if (!empty($_POST["inputUsuario"]) and !empty($_POST["inputContraseña"])) {
-                // Iniciar sesión si no está iniciada
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $inputUsuario = $_POST["inputUsuario"];
-        $inputContraseña = $_POST["inputContraseña"];
-
-        //buscar al usuario por su nombre de usuario
-        $stmt = $conexion->prepare('SELECT * FROM register WHERE usuario = ?');
-        $stmt->bind_param('s', $inputUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($datos = $result->fetch_object()) {
-            // verificar la contraseña hasheada
-            if (password_verify($inputContraseña, $datos->contraseña)) {
-            $_SESSION["id_usuario"] = $datos->id;
-            $_SESSION["usuario"] = $datos->usuario;
-            $_SESSION["nombre"] = $datos->nombres;
-            $_SESSION["email"] = $datos->email;
-            $_SESSION["pais"] = $datos->pais;
-            //regenerar ID de sesión para prevenir fijación de sesión
-            session_regenerate_id(true);
-            echo '<script>window.location.href = "../php/index.php";</script>';
-            } else {
-                // Contraseña incorrecta
-                $_SESSION['error_message'] = "Usuario o contraseña incorrectos.";
-                header('Location: ../php/login.php');
-                exit();
-            }
-        } else {
-                        // Usuario no encontrado
-            $_SESSION['error_message'] = "Usuario o contraseña incorrectos.";
-            header('Location: ../php/login.php');
-            exit();
-        }
-    
-    } else {
-                $_SESSION['error_message'] = "Por favor, rellena todos los campos.";
-        header('Location: ../php/login.php');
-        exit();
-    }
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
 
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', realpath(__DIR__ . '/..'));
+}
 
-/*
-$inputUsuario = $_POST['inputUsuario'];
-$inputNombre = $_POST['inputNombre'];
-$inputEmail = $_POST['inputEmail'];
-$inputPais = $_POST['inputPais'];
-$inputContraseña = $_POST['inputContraseña'];
-$inputContraseña2 = $_POST['inputContraseña2'];
+require_once(ROOT_PATH . '/controladores_php/conectar.php');
 
-$inputUsuario = mysqli_real_escape_string($conexion, $inputUsuario);
-$inputNombre = mysqli_real_escape_string($conexion, $inputNombre);
-$inputEmail = mysqli_real_escape_string($conexion, $inputEmail);
-$inputPais = mysqli_real_escape_string($conexion, $inputPais);
-$inputContraseña = mysqli_real_escape_string($conexion, $inputContraseña);
-$inputContraseña2 = mysqli_real_escape_string($conexion, $inputContraseña2);
+if (!defined('BASE_URL')) {
+    $base_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', ROOT_PATH);
+    define('BASE_URL', sprintf(
+        '%s://%s%s',
+        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+        $_SERVER['HTTP_HOST'],
+        $base_path
+    ));
+}
 
-$resultado = mysqli_query($conexion, 'INSERT INTO register (usuario, nombres, email, pais, contraseña) VALUES ("'.$inputUsuario.'", "'.$inputNombre.'","'.$inputEmail.'","'.$inputPais.'","'.$inputContraseña.'")');
- */
+if (isset($_POST['enviarLogin'])) {
+    if (empty($_POST['inputUsuario']) || empty($_POST['inputContraseña'])) {
+        $_SESSION['error_message'] = "Por favor, rellena todos los campos.";
+        header('Location: ' . BASE_URL . '/login');
+        exit();
+    }
 
-/*
-if($resultado)
-    echo('Comentario enviado con exito');
+    $inputUsuario = $_POST['inputUsuario'];
+    $inputContraseña = $_POST['inputContraseña'];
 
-else 
-    echo('Error intentando enviar el comentario');
-*/
+    $stmt = $conexion->prepare("SELECT * FROM register WHERE usuario = ?");
+    if ($stmt === false) {
+        error_log('Prepare failed: ' . $conexion->error);
+        $_SESSION['error_message'] = "Error interno del servidor.";
+        header('Location: ' . BASE_URL . '/login');
+        exit();
+    }
 
-// header('Location: ../index.html');
+    $stmt->bind_param("s", $inputUsuario);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-//mysqli_close($conexion)
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($inputContraseña, $row['contraseña'])) {
+            session_regenerate_id(true);
+            $_SESSION["id_usuario"] = $row['id'];
+            $_SESSION["nombre_usuario"] = $row['usuario'];
+            $_SESSION["usuario"] = $row['usuario'];
+            $_SESSION["nombre"] = $row['nombres'];
+            $_SESSION["email"] = $row['email'];
+            $_SESSION["pais"] = $row['pais'];
+            //regenerar ID de sesión para prevenir fijación de sesión
+            header('Location: ' . BASE_URL . '/');
+            exit();
+        } else {
+            $_SESSION['error_message'] = "Usuario o contraseña incorrectos.";
+            header('Location: ' . BASE_URL . '/login');
+            exit();
+        }
+    } else {
+        $_SESSION['error_message'] = "Usuario o contraseña incorrectos.";
+        header('Location: ' . BASE_URL . '/login');
+        exit();
+    }
 
+    $stmt->close();
+    $conexion->close();
+} else {
+    header('Location: ' . BASE_URL . '/login');
+    exit();
+}
 ?>
