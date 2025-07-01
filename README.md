@@ -1,6 +1,6 @@
 # ¡Bienvenido a Daino!
 
-**¡Pruébalo en vivo aquí!:  [https://daino.bernersites.com/](https://daino.bernersites.com/) 🎮**
+**¡Pruébalo en vivo aquí!:  [https://daino.bernersites.com/](https://daino.bernersites.com/)**
 
 ---
 
