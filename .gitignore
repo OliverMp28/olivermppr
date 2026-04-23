@@ -1,0 +1,43 @@
+# Private docs — Vout internals + legacy PII (mantenidos en local, fuera del remote)
+docs/legacy/
+docs/refactorizacion/pdfs/
+docs/refactorizacion/01-Estrategia-Integracion-Vout-Dino.md
+docs/refactorizacion/03-Plan-Desarrollo-Vout-Dino.md
+docs/refactorizacion/04-Decisiones-Finales.md
+
+# Claude Code local state
+.claude/
+
+# Env / secrets
+.env
+.env.*.local
+.env.local
+*.pem
+*.key
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build output
+/public/build/
+/public/hot
+
+# Storage
+/storage/logs/
+/storage/cache/
+/storage/uploads/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# PHP
+composer.phar
