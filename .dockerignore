@@ -1,0 +1,33 @@
+# Evita enviar al contexto de build de Docker cosas que no se necesitan.
+# Acelera docker build y reduce el tamaño de las imágenes.
+
+.git/
+.github/
+.vscode/
+.idea/
+.claude/
+
+node_modules/
+vendor/
+
+public/build/
+public/hot
+
+storage/logs/
+storage/cache/
+storage/uploads/
+
+# Docs e histórico — no se meten en la imagen PHP
+docs/
+*.md
+!README.md
+
+# Entornos
+.env
+.env.*
+!.env.example
+
+# Lockfiles del otro gestor — bun genera bun.lock, npm no se usa
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

@@ -1,0 +1,75 @@
+# Docker Compose para desarrollo local de Daino.
+#
+# Servicios:
+#   - php      FPM (PHP 8.5.3) compilado desde docker/php/Dockerfile.
+#   - nginx    Servidor web fronting PHP-FPM, docroot en /public.
+#   - mariadb  Base de datos (MariaDB 11.4) con volumen persistente.
+#
+# Bun/Vite NO está en docker-compose: se ejecuta en el host (mejor HMR,
+# menos overhead). Ver README.md para el flujo de desarrollo.
+#
+# Uso:
+#   docker compose up -d        # arrancar
+#   docker compose logs -f      # ver logs
+#   docker compose down         # parar (conserva volumen)
+#   docker compose down -v      # parar + borrar BD
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: daino-nginx
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - ./:/var/www/html:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - daino
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: daino-php:8.5.3
+    container_name: daino-php
+    volumes:
+      - ./:/var/www/html
+    environment:
+      PHP_IDEKEY: DAINO
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - daino
+
+  mariadb:
+    image: mariadb:11.4
+    container_name: daino-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+      MARIADB_DATABASE: ${DB_DATABASE:-daino}
+      MARIADB_USER: ${DB_USER:-daino}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-secret}
+    ports:
+      - "${DB_PORT_HOST:-3306}:3306"
+    volumes:
+      - daino-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - daino
+
+volumes:
+  daino-db:
+    driver: local
+
+networks:
+  daino:
+    driver: bridge

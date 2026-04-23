@@ -1,0 +1,24 @@
+{
+  "name": "daino",
+  "version": "2.0.0-dev",
+  "description": "Daino — audio-reactive side-scroller game (v2 rewrite). Frontend con Vite + PixiJS + Tailwind v4, gestionado con Bun.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "pixi.js": "^8.18.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^6.0.0"
+  },
+  "engines": {
+    "bun": ">=1.2.0",
+    "node": ">=20.0.0"
+  }
+}
