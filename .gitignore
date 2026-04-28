@@ -27,6 +27,7 @@ docs/refactorizacion/04-Decisiones-Finales.md
 /storage/logs/
 /storage/cache/
 /storage/uploads/
+/storage/sessions/
 
 # Editors
 .vscode/

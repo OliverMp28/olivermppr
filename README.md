@@ -12,7 +12,7 @@ Side-scroller web audio-reactivo: **cada nivel es una canción**. La duración d
 | Servidor web | Nginx 1.27 |
 | Base de datos | MariaDB 11.4 |
 | Identidad | OAuth2 (Authorization Code + PKCE) contra el IdP **Vout** — sin login local |
-| Build frontend | Vite 6 + Tailwind v4 (`@tailwindcss/vite`) |
+| Build frontend | Vite 8 + Tailwind v4 (`@tailwindcss/vite`) |
 | Motor de juego | PixiJS v8 (WebGL/WebGPU) |
 | Audio | Web Audio API nativa (+ Meyda si hace falta BPM avanzado) |
 | Package manager | **Bun** (`bun install`, `bun run dev`, `bun run build`) |

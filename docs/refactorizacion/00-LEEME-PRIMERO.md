@@ -11,9 +11,10 @@ Esta carpeta contiene la planificación completa del **nuevo Daino**. Los docume
 | 1 | `04-Decisiones-Finales.md` | ✅ **Autoridad** | Decisiones ganadoras donde los docs 02 y 03 se contradicen. **Leer siempre primero.** |
 | 2 | `05-Estructura-Proyecto.md` | ✅ **Autoridad** | Estructura de carpetas y stack definitivo del nuevo Daino. |
 | 3 | `06-UX-Interfaz-Gaming.md` | ✅ **Autoridad** | Dirección UX: Daino como videojuego web (sin navbar/footer, shader a 100% viewport, HUD discreto). Sobrescribe cualquier layout "web clásica" implícito en docs anteriores. |
-| 4 | `02-Informe-Evolucion-Tecnica-DAINO.md` | 🟢 Vigente | Detalles técnicos del juego (PixiJS, Web Audio API, shaders, generación procedural). |
-| 5 | `03-Plan-Desarrollo-Vout-Dino.md` | 🟡 Parcialmente vigente | Plan por fases. **Las fases 1 y 4 son de Vout (ya hecho). Solo son vigentes las fases 2 y 3 (Dino).** Cuando contradiga a doc 02, gana doc 02. |
-| 6 | `01-Estrategia-Integracion-Vout-Dino.md` | 🟡 Contexto | Razón arquitectónica de por qué Vout es IdP. **Sustituido por `../vout-integration/integration-guide.md` en cuanto a cómo integrar.** |
+| 4 | `07-Hallazgos-Investigacion-Tecnica.md` | ✅ **Autoridad** | Hallazgos curados de la investigación de abril 2026 (Gemini Deep Research). Refina y matiza decisiones de docs 04/05/06. Contiene gotchas críticas (PHP 8.5 magic methods, Alpine + intl, BitmapText, JWKS, etc.). |
+| 5 | `02-Informe-Evolucion-Tecnica-DAINO.md` | 🟢 Vigente | Detalles técnicos del juego (PixiJS, Web Audio API, shaders, generación procedural). |
+| 6 | `03-Plan-Desarrollo-Vout-Dino.md` | 🟡 Parcialmente vigente | Plan por fases. **Las fases 1 y 4 son de Vout (ya hecho). Solo son vigentes las fases 2 y 3 (Dino).** Cuando contradiga a doc 02, gana doc 02. |
+| 7 | `01-Estrategia-Integracion-Vout-Dino.md` | 🟡 Contexto | Razón arquitectónica de por qué Vout es IdP. **Sustituido por `../vout-integration/integration-guide.md` en cuanto a cómo integrar.** |
 
 ## Fuentes externas relevantes
 

@@ -35,9 +35,20 @@ export default defineConfig({
     },
   },
 
+  // publicDir: false porque public/ contiene index.php server-side; no hay
+  // estáticos que Vite deba copiar a outDir. Sin esto, Vite avisa con
+  // "outDir y publicDir no son carpetas separadas" (outDir vive dentro de
+  // public/, lo cual rompe la feature publicDir si se usase).
+  publicDir: false,
+
   build: {
     outDir: 'public/build',
     emptyOutDir: true,
+    // manifest: 'manifest.json' (no `true`) sobrescribe el default de Vite 5+,
+    // que es `<outDir>/.vite/manifest.json`. Lo aplanamos a
+    // `public/build/manifest.json` para que ViteAssets::renderProd lo lea
+    // sin saber del subdirectorio `.vite/`. Si en algún momento se cambia a
+    // `manifest: true`, también hay que actualizar la ruta en ViteAssets.php.
     manifest: 'manifest.json',
     rollupOptions: {
       input: {
