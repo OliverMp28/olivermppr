@@ -15,7 +15,7 @@
 | 0 — Scaffolding base | ✅ Completo | Docker, composer, bun, Vite, ViteAssets, .env, nginx |
 | 1 — Mini-framework MVC | ✅ Completo | Env, Request, Response, Session (CSRF), Database, Router, routes |
 | 2 — Persistencia (schema + modelos) | ⏳ Pendiente | — |
-| 3 — Identidad Vout (OAuth2 + JWT + iframe bridge) | ⏳ Pendiente | — |
+| 3 — Identidad Vout (OAuth2 + JWT + iframe bridge) | ✅ Completo (E2E con Vout real pendiente) | — |
 | 4 — Frontend foundation (PixiJS + audio + shader) | ⏳ Pendiente | — |
 | 5 — Game core (entidades, físicas, input, spawner) | ⏳ Pendiente | — |
 | 6 — UI / HUD / API client | ⏳ Pendiente | — |
@@ -151,6 +151,10 @@ Razones por las que `/api/me/token` gana sobre `<meta>` tag:
 - Flujo manual: `GET /auth/login` → redirige a Vout (mock o real) → callback → sesión iniciada con `vout_id`.
 - Auditoría con el subagente `vout-oauth-auditor` antes de cerrar el bloque — debe reportar 0 hallazgos críticos/altos.
 - `JwksCache` cachea en `storage/cache/jwks.json` y refresca solo cuando expira o ante `kid` desconocido.
+
+**Limitaciones conocidas — diferidas a bloques posteriores:**
+- **Cookie `daino_refresh` con `SameSite=Lax` no llega en modo iframe (cross-site).** Para el flujo embebido en Vout, el refresh lo orquesta el parent vía `postMessage AUTH_TOKEN` cuando el access_token expira; `daino_refresh` solo aplica a standalone. Cuando se cablée el bridge real con el motor (Bloque 5/6), evaluar si tiene sentido emitir `SameSite=None; Secure` condicionalmente al detectar modo embebido.
+- **`/auth/login` no es idempotente entre pestañas.** Abrir /auth/login en dos pestañas hace que la segunda sobrescriba `oauth_state`/`oauth_code_verifier`. La primera, al volver del callback, verá "State mismatch — posible CSRF" sin que haya CSRF real. Aceptado como single-flight; si la UX lo pide, almacenar un map `{state => code_verifier}` con TTL en Bloque 6 (UI).
 
 ---
 

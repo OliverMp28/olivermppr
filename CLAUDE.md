@@ -107,7 +107,33 @@ The `.sql` legacy file is reference-only — do not import it into the new schem
 - Charset `utf8mb4 / utf8mb4_unicode_ci` (no `_0900_ai_ci` que es MySQL 8, no MariaDB).
 - Sin rollback explícito en el runner; en dev se dropea+re-runea, en prod se escribe migración nueva.
 
-**Bloques 3–8 — pendientes.** La hoja de ruta operativa vive en `docs/refactorizacion/08-Bloques-Operativos.md`. Resumen: 3 = identidad Vout (OAuth2 + JWT + iframe bridge), 4 = frontend foundation (PixiJS + audio + shader), 5 = game core, 6 = UI/HUD/API client, 7 = endpoints API, 8 = hardening.
+**Bloque 3 (identidad Vout) — completo.** Existen y funcionan:
+- `app/Services/JwksCache.php` — caché PSR-16-style en `storage/cache/jwks.json`. TTL 1h. Refresh forzado en `kid` desconocido. Fetcher HTTP inyectable para tests. Conversión JWK RSA → PEM ASN.1 inline (sin deps extra).
+- `app/Services/JwtVerifier.php` — `lcobucci/jwt 5.6` con `Configuration::forAsymmetricSigner`. Whitelist `RS256` (rechaza `none`/HS*). Constraints: `SignedWith` + `IssuedBy` + `PermittedFor` + `LooseValidAt` con leeway 60s. PSR-20 clock inline (no requiere `lcobucci/clock`). Usa `LooseValidAt` no `StrictValidAt` porque Vout no emite `nbf` (per integration-guide).
+- `app/Services/VoutAuthService.php` — wrapper sobre `league/oauth2-client 2.9` (`GenericProvider`). PKCE S256 (verifier 32 bytes b64url, challenge `base64url(sha256(verifier))`). HTTP fetcher para `/api/v1/user/me` inyectable. Maneja shape `{data: {vout_id, ...}}` de Vout.
+- `app/Controllers/AuthController.php` — `showLogin/callback/refresh/logout/meToken`. Callback valida `state` con `hash_equals`, intercambia code, valida JWT, llama `/me`, `User::findOrCreateByVoutId`, `Session::regenerate`. Cookie `daino_refresh; HttpOnly; Secure-en-prod; SameSite=Lax; Path=/auth/refresh; Max-Age=30 días`. Atributos espejados en clear (auditoría ALTO). `meToken` re-valida JWT antes de devolverlo (auditoría MEDIO). Detalle de error gateado por `APP_DEBUG` (auditoría BAJO).
+- `app/Middleware/AuthMiddleware.php` — gating: `/api/*` exige Bearer válido (401 JSON si falla); rutas web exigen sesión (`vout_id`) o redirigen a `/auth/login`.
+- `app/Middleware/CsrfMiddleware.php` — POST/PUT/PATCH/DELETE exigen `X-CSRF-Token` o `_csrf` body field validado timing-safe; GET/HEAD/OPTIONS pasan.
+- `routes/web.php` — `GET /auth/login`, `GET /auth/callback`, `POST /auth/logout` (CSRF), `POST /auth/refresh` (CSRF).
+- `routes/api.php` — `GET /api/health`, `GET /api/me/token` (cookie auth, devuelve access_token + csrf_token al frontend).
+- `resources/js/iframe/bridge.js` — handshake `READY → AUTH_TOKEN` con allowlist via `<meta name="daino:vout-origin">`. `targetOrigin` jamás `"*"`. `event.origin` validado. access_token solo en variable de módulo (no localStorage). Stub: `GAME_ACTION` solo loguea hasta Bloque 5.
+
+**Decisiones aprobadas durante Bloque 3:**
+- Logout local-only (no revoke contra Vout — integration-guide no lo documenta). Acceso expira solo en 60min.
+- `LooseValidAt` no `StrictValidAt`: doc 07 §E.2 mostraba Strict, pero Vout no emite `nbf`.
+- `code_verifier` y `state` solo en `$_SESSION` (verificado: `oauth_state|s:32:`, `oauth_code_verifier|s:43:` en session file).
+- Sin `firebase/php-jwt` (verificado en composer.lock).
+- `meToken` re-valida JWT antes de devolverlo al frontend (defensa en profundidad ante rotación de claves Vout).
+
+**Limitaciones conocidas, diferidas a bloques posteriores:**
+- Cookie `daino_refresh` con `SameSite=Lax` no llega en modo iframe (cross-site). En embebido el refresh lo orquesta Vout via `postMessage AUTH_TOKEN` cuando expira el access. Evaluar `SameSite=None; Secure` condicional cuando Bloque 5/6 cablée el bridge real.
+- `/auth/login` no es idempotente entre pestañas (la 2ª sobrescribe state/verifier). Aceptado single-flight; si la UX lo pide, map `{state => verifier}` con TTL en Bloque 6.
+
+**Auditoría de cierre del subagente `vout-oauth-auditor`:** 0 críticos, 0 altos (tras fixes), 2 medios diferidos a Bloques 5/6 (documentados arriba).
+
+**E2E con Vout real — pendiente.** El callback completo (exchange + /me) no se ha probado aún porque Vout está apagado en el setup local del usuario. Se hará al inicio del Bloque 4 cuando se necesite el primer login real para alimentar el shell.
+
+**Bloques 4–8 — pendientes.** La hoja de ruta operativa vive en `docs/refactorizacion/08-Bloques-Operativos.md`. Resumen: 4 = frontend foundation (PixiJS + audio + shader), 5 = game core, 6 = UI/HUD/API client, 7 = endpoints API, 8 = hardening.
 
 **Cómo arrancar y verificar:**
 ```bash
