@@ -9,7 +9,9 @@ use App\Core\Response;
 use App\Core\Session;
 use App\Models\User;
 use App\Services\JwtVerifier;
+use App\Services\PkceCookie;
 use App\Services\VoutAuthService;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 /**
  * Auth flow contra Vout (OAuth2 Authorization Code + PKCE).
@@ -41,8 +43,10 @@ final class AuthController
         $vout = $this->voutOrEnv();
         $authz = $vout->buildAuthorizationUrl();
 
-        Session::set('oauth_state', $authz['state']);
-        Session::set('oauth_code_verifier', $authz['code_verifier']);
+        // PkceCookie en lugar de $_SESSION: vive aparte del SID, sobrevive a
+        // rotaciones del DAINO_SESSID por strict_mode/cookies stale, y se
+        // borra al consumirla en /auth/callback. Ver app/Services/PkceCookie.php.
+        PkceCookie::set($authz['state'], $authz['code_verifier']);
 
         return Response::redirect($authz['url']);
     }
@@ -52,13 +56,12 @@ final class AuthController
         $code  = $req->query('code');
         $state = $req->query('state');
         $error = $req->query('error');
-        $storedState    = Session::pull('oauth_state');
-        $storedVerifier = Session::pull('oauth_code_verifier');
 
         // Caso "Cancelar" desde Vout: viene `?error=access_denied&state=...`
-        // sin code. Es un flujo legítimo, no un error nuestro — limpiar
-        // sesión OAuth y mandar al usuario al inicio sin alarma.
+        // sin code. Es un flujo legítimo, no un error nuestro — limpiar la
+        // PkceCookie y mandar al usuario al inicio sin alarma.
         if (is_string($error) && $error !== '') {
+            PkceCookie::clear();
             return Response::html(
                 '<!doctype html><html><body style="font-family:sans-serif;padding:2rem">'
                 . '<h2>Login cancelado</h2>'
@@ -69,19 +72,24 @@ final class AuthController
             );
         }
 
-        if (!is_string($code) || $code === '') {
-            return Response::html('Callback inválido: falta code.', 400);
+        // Sub-bloque 3.5: state/verifier vienen de PkceCookie firmada, no de
+        // $_SESSION. Sobrevive a rotaciones del SID. consume() borra la
+        // cookie en cualquier caso (one-shot anti-replay).
+        $pkce = PkceCookie::consume();
+
+        // Fix #3 — redirect transparente cuando el flow OAuth llega "frío":
+        // cookie ausente, expirada (10 min sin completar), firma rota o
+        // usuario llegó al callback directamente sin pasar por /auth/login.
+        // En lugar de mostrar "Sesión OAuth expirada — vuelve a /auth/login"
+        // (que se lee como error), simplemente reiniciamos el flow.
+        if ($pkce === null
+            || !is_string($code) || $code === ''
+            || !is_string($state) || $state === ''
+        ) {
+            return Response::redirect('/auth/login');
         }
-        if (!is_string($state) || $state === '') {
-            return Response::html('Callback inválido: falta state.', 400);
-        }
-        if (!is_string($storedState) || !is_string($storedVerifier)) {
-            return Response::html(
-                'Sesión OAuth expirada — vuelve a /auth/login.',
-                400,
-            );
-        }
-        if (!hash_equals($storedState, $state)) {
+
+        if (!hash_equals($pkce['state'], $state)) {
             return Response::html('State mismatch — posible CSRF en flow OAuth.', 403);
         }
 
@@ -89,7 +97,7 @@ final class AuthController
         $verifier = $this->jwtOrEnv();
 
         try {
-            $accessToken = $vout->exchangeCodeForToken($code, $storedVerifier);
+            $accessToken = $vout->exchangeCodeForToken($code, $pkce['verifier']);
             $verifier->verify($accessToken->getToken());
             $info = $vout->fetchUserInfo($accessToken->getToken());
         } catch (\Throwable $e) {
@@ -140,13 +148,29 @@ final class AuthController
         try {
             $newToken = $vout->refresh($refresh);
             $verifier->verify($newToken->getToken());
-        } catch (\Throwable $e) {
+        } catch (IdentityProviderException $e) {
+            // Vout rechazó el refresh_token. Casos típicos:
+            //   - El user revocó Daino desde /settings/connected-apps en Vout.
+            //   - El refresh_token expiró (TTL ~30 días).
+            //   - Rotación: el refresh anterior ya fue canjeado y este es viejo.
+            // En todos: la sesión Daino debe morir y el frontend redirigir.
             $this->clearRefreshCookie();
             Session::destroy();
-            return Response::json(
-                ['error' => 'refresh_failed', 'message' => $e->getMessage()],
-                401,
-            );
+            $oauthError = self::extractOAuthError($e);
+            if ($oauthError === 'invalid_grant') {
+                return Response::json([
+                    'error'       => 'session_expired',
+                    'redirect_to' => '/auth/login',
+                ], 401);
+            }
+            error_log('[daino] refresh IdP error: ' . $e->getMessage());
+            return Response::json(['error' => 'refresh_failed'], 401);
+        } catch (\Throwable $e) {
+            // Otros fallos (red, JWT mal formado, etc.). Limpiar y reportar.
+            $this->clearRefreshCookie();
+            Session::destroy();
+            error_log('[daino] refresh error: ' . $e->getMessage());
+            return Response::json(['error' => 'refresh_failed'], 401);
         }
 
         $expiresAt = $newToken->getExpires() ?? (time() + 3600);
@@ -212,6 +236,32 @@ final class AuthController
             'expires_at'   => $expiresAt,
             'csrf_token'   => Session::csrfToken(),
         ]);
+    }
+
+    /**
+     * Extrae el `error` (RFC 6749) del body de una IdentityProviderException
+     * de league/oauth2-client. Vout responde con
+     *   400 {"error":"invalid_grant","error_description":"...","hint":"..."}
+     * y league lo guarda en getResponseBody(): puede llegar como array (ya
+     * decodeado) o como string. Devolvemos null si no se puede extraer.
+     */
+    private static function extractOAuthError(IdentityProviderException $e): ?string
+    {
+        $body = $e->getResponseBody();
+        if (is_array($body)) {
+            $err = $body['error'] ?? null;
+            return is_string($err) ? $err : null;
+        }
+        if (is_string($body) && $body !== '') {
+            try {
+                $decoded = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+                $err = is_array($decoded) ? ($decoded['error'] ?? null) : null;
+                return is_string($err) ? $err : null;
+            } catch (\JsonException) {
+                return null;
+            }
+        }
+        return null;
     }
 
     private function voutOrEnv(): VoutAuthService

@@ -33,7 +33,8 @@
     },
     "scripts": {
         "migrate": "php scripts/migrate.php",
-        "analyse": "phpstan analyse -l 6 app/"
+        "analyse": "phpstan analyse -l 6 app/",
+        "clean:sessions": "php scripts/clean-sessions.php"
     },
     "minimum-stability": "stable",
     "prefer-stable": true
