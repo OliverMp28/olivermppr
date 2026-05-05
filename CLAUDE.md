@@ -109,9 +109,10 @@ The `.sql` legacy file is reference-only — do not import it into the new schem
 
 **Bloque 3 (identidad Vout) — completo.** Existen y funcionan:
 - `app/Services/JwksCache.php` — caché PSR-16-style en `storage/cache/jwks.json`. TTL 1h. Refresh forzado en `kid` desconocido. Fetcher HTTP inyectable para tests. Conversión JWK RSA → PEM ASN.1 inline (sin deps extra).
-- `app/Services/JwtVerifier.php` — `lcobucci/jwt 5.6` con `Configuration::forAsymmetricSigner`. Whitelist `RS256` (rechaza `none`/HS*). Constraints: `SignedWith` + `IssuedBy` + `PermittedFor` + `LooseValidAt` con leeway 60s. PSR-20 clock inline (no requiere `lcobucci/clock`). Usa `LooseValidAt` no `StrictValidAt` porque Vout no emite `nbf` (per integration-guide).
+- `app/Services/JwtVerifier.php` — `lcobucci/jwt 5.6` con `Configuration::forAsymmetricSigner`. Whitelist `RS256` (rechaza `none`/HS*). Constraints: `SignedWith` + `IssuedBy` + `PermittedFor` + `StrictValidAt` con leeway 60s. PSR-20 clock inline (no requiere `lcobucci/clock`). `StrictValidAt` exige `iat`+`nbf`+`exp` — Vout actualizó la integration-guide y ahora sí emite los tres claims, así que ejercemos validación máxima.
 - `app/Services/VoutAuthService.php` — wrapper sobre `league/oauth2-client 2.9` (`GenericProvider`). PKCE S256 (verifier 32 bytes b64url, challenge `base64url(sha256(verifier))`). HTTP fetcher para `/api/v1/user/me` inyectable. Maneja shape `{data: {vout_id, ...}}` de Vout.
-- `app/Controllers/AuthController.php` — `showLogin/callback/refresh/logout/meToken`. Callback valida `state` con `hash_equals`, intercambia code, valida JWT, llama `/me`, `User::findOrCreateByVoutId`, `Session::regenerate`. Cookie `daino_refresh; HttpOnly; Secure-en-prod; SameSite=Lax; Path=/auth/refresh; Max-Age=30 días`. Atributos espejados en clear (auditoría ALTO). `meToken` re-valida JWT antes de devolverlo (auditoría MEDIO). Detalle de error gateado por `APP_DEBUG` (auditoría BAJO).
+- `app/Services/PkceCookie.php` (Sub-bloque 3.5) — cookie corta y firmada que transporta `state` y `code_verifier` entre `/auth/login` y `/auth/callback`. HMAC-SHA256 con `APP_KEY`. Cookie `daino_oauth_pkce; Path=/auth; HttpOnly; SameSite=Lax; Secure-en-prod; Max-Age=600`. One-shot: `consume()` borra la cookie aunque sea inválida (anti-replay). Sustituye al uso anterior de `$_SESSION` para state/verifier — sobrevive a rotaciones del SID por `session.use_strict_mode=1`.
+- `app/Controllers/AuthController.php` — `showLogin/callback/refresh/logout/meToken`. `showLogin` setea `PkceCookie`; `callback` la consume + valida `state` con `hash_equals`, intercambia code, valida JWT, llama `/me`, `User::findOrCreateByVoutId`, `Session::regenerate`. Si la cookie falta/expiró/firma rota: redirect transparente a `/auth/login` (sin error visible al user). Cookie `daino_refresh; HttpOnly; Secure-en-prod; SameSite=Lax; Path=/auth/refresh; Max-Age=30 días`. Atributos espejados en clear (auditoría ALTO). `meToken` re-valida JWT antes de devolverlo (auditoría MEDIO). Detalle de error en callback gateado por `APP_DEBUG` (auditoría BAJO). `refresh` distingue `IdentityProviderException` con `error=invalid_grant` (Vout revocó o caducó refresh_token) y devuelve `{error: session_expired, redirect_to: /auth/login}` para que el frontend redirija — fix #4 del Sub-bloque 3.5.
 - `app/Middleware/AuthMiddleware.php` — gating: `/api/*` exige Bearer válido (401 JSON si falla); rutas web exigen sesión (`vout_id`) o redirigen a `/auth/login`.
 - `app/Middleware/CsrfMiddleware.php` — POST/PUT/PATCH/DELETE exigen `X-CSRF-Token` o `_csrf` body field validado timing-safe; GET/HEAD/OPTIONS pasan.
 - `routes/web.php` — `GET /auth/login`, `GET /auth/callback`, `POST /auth/logout` (CSRF), `POST /auth/refresh` (CSRF).
@@ -120,18 +121,28 @@ The `.sql` legacy file is reference-only — do not import it into the new schem
 
 **Decisiones aprobadas durante Bloque 3:**
 - Logout local-only (no revoke contra Vout — integration-guide no lo documenta). Acceso expira solo en 60min.
-- `LooseValidAt` no `StrictValidAt`: doc 07 §E.2 mostraba Strict, pero Vout no emite `nbf`.
-- `code_verifier` y `state` solo en `$_SESSION` (verificado: `oauth_state|s:32:`, `oauth_code_verifier|s:43:` en session file).
+- `StrictValidAt` con leeway 60s tras actualización de Vout que añadió `iat`+`nbf`+`jti` a los claims del JWT.
+- `code_verifier` y `state` viajan en cookie firmada `daino_oauth_pkce` (no en `$_SESSION`) — Sub-bloque 3.5.
 - Sin `firebase/php-jwt` (verificado en composer.lock).
 - `meToken` re-valida JWT antes de devolverlo al frontend (defensa en profundidad ante rotación de claves Vout).
 
+**Sub-bloque 3.5 (auth resilience) — completo.** Existen y funcionan:
+- `app/Services/PkceCookie.php` — ver arriba.
+- `APP_KEY` añadida a `.env` y `.env.example` (base64 de 32 bytes, regenerable con `php -r "echo 'base64:' . base64_encode(random_bytes(32));"`).
+- `SESSION_LIFETIME_MIN` subido de 120 (2h) a 43200 (30 días) — matchea TTL del refresh_token de Vout. Adiós a "vuelvo después de comer y estoy deslogueado".
+- `AuthController::callback` con redirect transparente a `/auth/login` cuando falla validación de `PkceCookie` (Fix #3).
+- `AuthController::refresh` con catch específico de `IdentityProviderException` `invalid_grant` (Fix #4) — Vout revocó vía `/settings/connected-apps` o el refresh caducó.
+- `scripts/clean-sessions.php` + `composer clean:sessions` para limpiar archivos de sesión muertos. `--all` para wipe total.
+- Verificado con 9/9 tests unit de `PkceCookie` (set/consume/HMAC tampering/cookies malformadas) + 5/5 tests del path `invalid_grant` en `refresh` (mock GenericProvider lanzando la excepción real de `league/oauth2-client`) + smoke HTTP de `/auth/login` (cookie emitida con todos los attrs correctos) y de `/auth/callback` (redirect transparente sin cookie/HMAC roto, cancel bonito intacto con `?error=access_denied`).
+
 **Limitaciones conocidas, diferidas a bloques posteriores:**
 - Cookie `daino_refresh` con `SameSite=Lax` no llega en modo iframe (cross-site). En embebido el refresh lo orquesta Vout via `postMessage AUTH_TOKEN` cuando expira el access. Evaluar `SameSite=None; Secure` condicional cuando Bloque 5/6 cablée el bridge real.
-- `/auth/login` no es idempotente entre pestañas (la 2ª sobrescribe state/verifier). Aceptado single-flight; si la UX lo pide, map `{state => verifier}` con TTL en Bloque 6.
+- `/auth/login` no es idempotente entre pestañas (la 2ª sobrescribe la `daino_oauth_pkce`). Aceptado single-flight; si la UX lo pide, mover a server-side cache key→verifier en Bloque 6.
+- Prefijo cookie `__Host-` para `daino_oauth_pkce` pendiente de HTTPS prod (Bloque 8).
 
-**Auditoría de cierre del subagente `vout-oauth-auditor`:** 0 críticos, 0 altos (tras fixes), 2 medios diferidos a Bloques 5/6 (documentados arriba).
+**Auditoría de cierre del subagente `vout-oauth-auditor`:** 0 críticos, 0 altos (tras fixes Bloque 3 + Sub-bloque 3.5), 1 medio diferido (cookie iframe SameSite=None).
 
-**E2E con Vout real — pendiente.** El callback completo (exchange + /me) no se ha probado aún porque Vout está apagado en el setup local del usuario. Se hará al inicio del Bloque 4 cuando se necesite el primer login real para alimentar el shell.
+**E2E con Vout real — verificado.** Login completo OK contra Vout local en Apr 28 (user `id=5` creado, `vout_id=4f1ade51-...`, JWT validado contra JWKS real). Sub-bloque 3.5 verificado con smokes unit (PkceCookie, refresh) + smokes HTTP (cookies, redirects). El E2E browser tras 3.5 lo hace el user manualmente cuando retome.
 
 **Bloques 4–8 — pendientes.** La hoja de ruta operativa vive en `docs/refactorizacion/08-Bloques-Operativos.md`. Resumen: 4 = frontend foundation (PixiJS + audio + shader), 5 = game core, 6 = UI/HUD/API client, 7 = endpoints API, 8 = hardening.
 
@@ -143,6 +154,13 @@ docker compose up -d
 curl.exe -s http://localhost:8090/api/health
 # → {"status":"ok","php":"8.5.3","time":"..."}
 ```
+
+**Composer scripts (migrate, clean:sessions, etc.) van SIEMPRE dentro del contenedor PHP**, no en el host:
+```bash
+docker compose exec -T php composer migrate
+docker compose exec -T php composer clean:sessions -- --all
+```
+Razón: `composer.json` pinea `php: ~8.5.3` (matchea Vout). Si lo ejecutas en el host con otra versión (p. ej. PHP 8.5.0 que viene en algunas instalaciones Windows/Mac), Composer revienta con `platform_check` antes de invocar el script. El contenedor `php` (8.5.3-fpm-alpine) tiene la versión correcta garantizada.
 
 ## Architectural invariants (load-bearing — do not contradict)
 

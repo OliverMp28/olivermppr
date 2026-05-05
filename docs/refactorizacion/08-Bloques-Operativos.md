@@ -15,7 +15,8 @@
 | 0 — Scaffolding base | ✅ Completo | Docker, composer, bun, Vite, ViteAssets, .env, nginx |
 | 1 — Mini-framework MVC | ✅ Completo | Env, Request, Response, Session (CSRF), Database, Router, routes |
 | 2 — Persistencia (schema + modelos) | ⏳ Pendiente | — |
-| 3 — Identidad Vout (OAuth2 + JWT + iframe bridge) | ✅ Completo (E2E con Vout real pendiente) | — |
+| 3 — Identidad Vout (OAuth2 + JWT + iframe bridge) | ✅ Completo + E2E con Vout real verificado | — |
+| 3.5 — Auth resilience (PkceCookie firmada, lifetime 30d, redirect transparente, invalid_grant) | ✅ Completo | Fix de la fragilidad descubierta tras retomar el proyecto con cookies stale |
 | 4 — Frontend foundation (PixiJS + audio + shader) | ⏳ Pendiente | — |
 | 5 — Game core (entidades, físicas, input, spawner) | ⏳ Pendiente | — |
 | 6 — UI / HUD / API client | ⏳ Pendiente | — |
@@ -154,7 +155,36 @@ Razones por las que `/api/me/token` gana sobre `<meta>` tag:
 
 **Limitaciones conocidas — diferidas a bloques posteriores:**
 - **Cookie `daino_refresh` con `SameSite=Lax` no llega en modo iframe (cross-site).** Para el flujo embebido en Vout, el refresh lo orquesta el parent vía `postMessage AUTH_TOKEN` cuando el access_token expira; `daino_refresh` solo aplica a standalone. Cuando se cablée el bridge real con el motor (Bloque 5/6), evaluar si tiene sentido emitir `SameSite=None; Secure` condicionalmente al detectar modo embebido.
-- **`/auth/login` no es idempotente entre pestañas.** Abrir /auth/login en dos pestañas hace que la segunda sobrescriba `oauth_state`/`oauth_code_verifier`. La primera, al volver del callback, verá "State mismatch — posible CSRF" sin que haya CSRF real. Aceptado como single-flight; si la UX lo pide, almacenar un map `{state => code_verifier}` con TTL en Bloque 6 (UI).
+- **`/auth/login` no es idempotente entre pestañas.** Abrir /auth/login en dos pestañas hace que la segunda sobrescriba la `daino_oauth_pkce`. La primera, al volver del callback, verá una validación HMAC fallida → redirect transparente a `/auth/login` (gracias a Sub-bloque 3.5). Si la UX lo pide, server-side cache `{state → verifier}` con TTL en Bloque 6.
+
+---
+
+## Sub-bloque 3.5 — Auth resilience
+
+> **Disparador.** Tras una semana sin tocar el proyecto, retomar y entrar a `/auth/login` daba "Sesión OAuth expirada — vuelve a /auth/login" en el callback. Causa raíz: combinación de cookie `DAINO_SESSID` stale + `session.use_strict_mode=1` rotando el SID + lifetime de sesión corto (2h) + `oauth_state`/`oauth_code_verifier` viviendo en `$_SESSION`. Bug arquitectónico mío, confirmado en BD de Vout (3 `oauth_auth_codes` con `revoked=0` huérfanos = Daino jamás llamó a `/oauth/token`).
+
+**Objetivo.** Que retomar el proyecto después de días o semanas funcione sin "rituales" (limpiar cookies, borrar session files, reiniciar containers). Senior-level resilience.
+
+**Entregado.**
+- `app/Services/PkceCookie.php` — cookie corta y firmada que transporta `state`+`code_verifier` entre `/auth/login` y `/auth/callback`. HMAC-SHA256 con `APP_KEY`. Path `/auth`, `Max-Age=600`, `HttpOnly`, `SameSite=Lax`, `Secure`-en-prod. One-shot: `consume()` borra la cookie aunque la firma sea inválida (anti-replay).
+- `APP_KEY` en `.env`/`.env.example`. Base64 de 32 bytes. Documentado cómo regenerarla.
+- `SESSION_LIFETIME_MIN`: 120 → 43200 (30 días). Matchea TTL del refresh_token de Vout.
+- `AuthController::callback`: usa `PkceCookie::consume`. Si falta cookie / firma rota / falta code-state → **redirect transparente a `/auth/login`** en lugar de "Sesión expirada" hostil.
+- `AuthController::refresh`: catch específico de `IdentityProviderException` con `error=invalid_grant` (refresh revocado por el user en Vout `/settings/connected-apps` o caducado a 30 días). Devuelve `{error: session_expired, redirect_to: /auth/login}` para que el frontend redirija.
+- `scripts/clean-sessions.php` + `composer clean:sessions` — limpia archivos de sesión más viejos que `SESSION_LIFETIME_MIN`. Flag `--all` para wipe completo.
+
+**Decisiones aprobadas:**
+- HMAC sign, no encrypt: el `code_verifier` no es secreto en sí (32 bytes random), solo unguessable para un atacante externo. Lo único que necesitamos es integridad (que no se forge la cookie). HMAC con APP_KEY suficiente; encriptar añade coste sin valor extra.
+- Path=/auth (no `/auth/login` específico): la cookie debe ser legible por `/auth/callback` también, ambos comparten prefix.
+- Sin `__Host-` prefix por ahora: requiere `Secure` que requiere HTTPS, en local trabajamos HTTP. Bloque 8 cuando haya HTTPS prod.
+- file driver de sesión: una vez que sacamos PKCE de `$_SESSION`, el driver de archivos es perfectamente robusto. Cambiar a BD/Redis es premature optimization.
+
+**Verificación:**
+- 9/9 tests unit `PkceCookie` (set, consume, HMAC tampering, cookies malformadas, casos vacíos).
+- 5/5 tests del path `invalid_grant` de `refresh` (mock `GenericProvider` lanzando `IdentityProviderException` real).
+- HTTP smoke: `/auth/login` emite `daino_oauth_pkce` con todos los attrs (Path=/auth, Max-Age=600, HttpOnly, SameSite=Lax). State en cookie matchea state en URL Vout. `DAINO_SESSID` con `Max-Age=2592000` (30 días).
+- HTTP smoke: `/auth/callback` sin cookie → 302 a `/auth/login`. Con HMAC roto → 302 a `/auth/login`. Con `?error=access_denied` → cancel page bonito sigue funcionando.
+- `composer clean:sessions` borra 0 archivos cuando todos están dentro del lifetime; `--all` borra todo.
 
 ---
 
