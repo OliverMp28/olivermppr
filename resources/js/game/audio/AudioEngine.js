@@ -14,6 +14,11 @@
 //     amplitud del FFT y barato (suma de cuadrados sobre 2048 muestras).
 //   - onstatechange dispatch `audio:pause` / `audio:resume` en window. El
 //     engine.js los escucha para frenar el ticker (doc 07 §C.3).
+//   - El gainNode arranca con el volumen persistido en localStorage por el
+//     modal Settings (Bloque 6). Lectura via ../ui/settings.js para no
+//     duplicar la key entre módulos.
+
+import { getVolume } from '../../ui/settings.js';
 
 const FFT_SIZE = 2048;             // doc 07 §D.1 — pineado.
 const SMOOTHING = 0.82;
@@ -51,7 +56,8 @@ export class AudioEngine {
         this.analyser.maxDecibels = MAX_DB;
 
         this.gainNode = this.ctx.createGain();
-        this.gainNode.gain.value = 1.0;
+        // Volumen inicial desde localStorage (Bloque 6). Si nunca se tocó, 1.0.
+        this.gainNode.gain.value = getVolume();
 
         // analyser -> gain -> destination. El BufferSource va al analyser.
         this.analyser.connect(this.gainNode);
@@ -109,6 +115,12 @@ export class AudioEngine {
     /**
      * Reproduce un AudioBuffer desde el inicio. Si había uno sonando, lo
      * detiene primero. Devuelve un handle con stop().
+     *
+     * Bloque 6: recreamos el AnalyserNode en cada play() para descartar el
+     * smoothing histórico. Sin esto, los primeros ~10-20 frames de la nueva
+     * canción mezclan el FFT smoothed del frame final de la anterior — visible
+     * como "barras residuo" del intento previo. AnalyserNode no expone reset()
+     * en la spec, así que recrear es el camino limpio (coste despreciable).
      */
     play(audioBuffer) {
         if (this.ctx === null) {
@@ -120,6 +132,18 @@ export class AudioEngine {
             this.source.disconnect();
             this.source = null;
         }
+
+        // Reset del analyser. El gainNode persiste (mantiene el volumen
+        // del usuario) y solo recableamos: analyser_new → gainNode → dest.
+        if (this.analyser !== null) {
+            this.analyser.disconnect();
+        }
+        this.analyser = this.ctx.createAnalyser();
+        this.analyser.fftSize = FFT_SIZE;
+        this.analyser.smoothingTimeConstant = SMOOTHING;
+        this.analyser.minDecibels = MIN_DB;
+        this.analyser.maxDecibels = MAX_DB;
+        this.analyser.connect(this.gainNode);
 
         const src = this.ctx.createBufferSource();
         src.buffer = audioBuffer;

@@ -126,39 +126,50 @@ function tick(ticker) {
 
     timeAccum += ticker.deltaMS / 1000;
 
-    if (audio !== null) {
-        // Audio activo — alimentar FFT real y bandas.
-        const fftSlice = audio.getFrequencyData(FFT_BINS);
-        audioFilter.fftBuffer.set(fftSlice);
-        audioFilter.uploadFft();
+    // uTime y uDebugMode se actualizan SIEMPRE — el shader los respeta tanto
+    // en idle como en reactive (uTime alimenta las ondas senoidales del fondo
+    // base, uDebugMode controla los modos ?debug=N).
+    audioFilter.setUniforms({ time: timeAccum, debugMode: DEBUG_MODE });
 
-        const bands = computeBands(fftSlice);
-        const rms = audio.getRMS();
-        audioFilter.setUniforms({
-            time: timeAccum,
-            rms,
-            bass: bands.bass,
-            mid: bands.mid,
-            high: bands.high,
-            debugMode: DEBUG_MODE,
-        });
-    } else {
-        // Idle — solo uTime avanza. Las bandas y RMS quedan a 0. uFFT ya se
-        // subió en createAudioFilter() con ceros, no hace falta re-subirlo.
-        audioFilter.setUniforms({ time: timeAccum, debugMode: DEBUG_MODE });
-    }
+    // Las bands/rms/FFT solo se actualizan cuando hay audio atachado. En idle
+    // el shader ignora estos uniforms gracias al branch `if (uShaderMode > 0.5)`,
+    // así que ni siquiera necesitamos reset — pero attachAudio/detachAudio
+    // gestionan el setMode declarativo para mantener el invariante simple.
+    if (audio === null) return;
+
+    const fftSlice = audio.getFrequencyData(FFT_BINS);
+    audioFilter.fftBuffer.set(fftSlice);
+    audioFilter.uploadFft();
+
+    const bands = computeBands(fftSlice);
+    const rms = audio.getRMS();
+    audioFilter.setUniforms({
+        rms,
+        bass: bands.bass,
+        mid: bands.mid,
+        high: bands.high,
+    });
 }
 
 /**
  * Conecta un AudioEngine al ticker. Llamar tras el primer drop de MP3.
- * Idempotente — reemplaza el audio anterior si lo había.
+ * Idempotente — reemplaza el audio anterior si lo había. Pone el shader en
+ * modo reactive: el branch GLSL pasa a leer FFT/bands/BPM en cada frame.
  */
 export function attachAudio(audioEngine) {
     audio = audioEngine;
+    if (audioFilter) audioFilter.setMode('reactive');
 }
 
+/**
+ * Desconecta el audio y vuelve el shader a idle. Bloque 6 Lote E: el shader
+ * tiene un branch `if (uShaderMode > 0.5)` que ignora todos los uniforms
+ * audio cuando estamos fuera; setMode('idle') lo activa y además limpia
+ * buffers/uniforms band como defensa adicional.
+ */
 export function detachAudio() {
     audio = null;
+    if (audioFilter) audioFilter.setMode('idle');
 }
 
 function getApi() {

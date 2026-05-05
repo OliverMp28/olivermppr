@@ -199,6 +199,10 @@ final class AuthController
      * (DAINO_SESSID) es la auth aquí; el Bearer no aplica todavía. Devuelve
      * también el csrf_token para que el frontend lo use en /auth/refresh y
      * /auth/logout.
+     *
+     * Bloque 6: el response 200 incluye `user: {vout_id, username, avatar_url}`
+     * para que el HUD/menú pueda hidratar el chip de identidad en una sola
+     * llamada al boot. Cambio aditivo — bridge.js solo lee `access_token`.
      */
     public function meToken(Request $req): Response
     {
@@ -231,10 +235,26 @@ final class AuthController
             ], 401);
         }
 
+        // Cargar el user para que el frontend no tenga que hacer un round-trip
+        // adicional. Si user_id está en sesión pero el row desapareció (ej.
+        // limpieza manual de DB), tratamos como sesión inválida — devolver
+        // 401 y forzar re-login.
+        $userId = Session::get('user_id');
+        $user = is_int($userId) ? User::findById($userId) : null;
+        if ($user === null) {
+            Session::destroy();
+            return Response::json(['error' => 'user_missing'], 401);
+        }
+
         return Response::json([
             'access_token' => $accessToken,
             'expires_at'   => $expiresAt,
             'csrf_token'   => Session::csrfToken(),
+            'user'         => [
+                'vout_id'    => $user->voutId,
+                'username'   => $user->username,
+                'avatar_url' => $user->avatarUrl,
+            ],
         ]);
     }
 

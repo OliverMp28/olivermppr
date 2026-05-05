@@ -50,10 +50,26 @@ use App\Core\ViteAssets;
 <body>
     <div id="app" aria-hidden="true"></div>
 
-    <div id="hint" data-hint="drop" role="status" aria-live="polite">
-        <span class="hint-title">Suelta tu MP3 aquí</span>
-        <span class="hint-sub">o arrástralo desde tu carpeta</span>
-    </div>
+    <!-- Bloque 6: contenedores DOM donde los módulos UI montan.
+         - #menu-root  → modo "no jugando" (ui/menu.js). Estado base.
+         - #hud-root   → HUD durante partida (ui/hud.js). Oculto en menú.
+         - #modal-root → host de los <dialog> (ui/modals.js). Always-mounted.
+         Los 3 son siblings del #app para no interferir con Pixi y se posicionan
+         con `position: fixed` desde main.css. `pointer-events: none` por
+         defecto excepto en interactivos hijos. -->
+    <div id="menu-root"></div>
+    <div id="hud-root"></div>
+    <div id="modal-root"></div>
+
+    <!-- Anchor temporal del chip de identidad. Lote B lo monta aquí; Lote C
+         lo migra al header del #menu-root cuando menu.js exista. -->
+    <div id="auth-anchor"></div>
+
+    <!-- #hint = overlay efímero (Bloque 6). Oculto al boot (la pantalla
+         inicial es el menú). AppController lo muestra durante LOADING con
+         texto "Generando nivel…". Si en futuro se quiere texto durante
+         dragover, upload.js lo gestionaría aquí también. -->
+    <div id="hint" class="is-hidden" role="status" aria-live="polite"></div>
 
     <?= $content ?>
 </body>

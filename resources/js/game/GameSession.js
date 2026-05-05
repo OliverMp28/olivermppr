@@ -9,7 +9,7 @@
 
 import { Dino } from './entities/Dino.js';
 import { createSpawner } from './systems/spawner.js';
-import { createHud } from './systems/Hud.js';
+import { createHud } from '../ui/hud.js';
 import { Input } from './systems/input.js';
 import { computeGroundY, integrateDino, findCollision } from './systems/physics.js';
 import { DT_CAP_S } from './config.js';
@@ -67,9 +67,12 @@ export class GameSession {
             groundY,
         });
 
-        // HUD.
-        this.hud = createHud(layers.hudLayer);
+        // HUD ahora vive en DOM (#hud-root) — Bloque 6 Lote D. El layer
+        // hudLayer del canvas se mantiene vacío reservado para flashes
+        // visuales futuros (perfect-beat ring, damage flash).
+        this.hud = createHud();
         this.hud.update(0, 0, this.level.durationSec);
+        if (this.level.sourceName) this.hud.setSong(this.level.sourceName);
 
         // Input.
         Input.setup();
@@ -146,6 +149,13 @@ export class GameSession {
             ? `WIN  SCORE ${this._score}`
             : `GAME OVER  SCORE ${this._score}`;
         this.hud.setMessage(message);
+
+        // Bloque 6: dispatch desacoplado para que el AppController orqueste
+        // la transición a MENU sin acoplarse al callback. `onGameOver` se
+        // mantiene como fallback para callers que prefieran el camino directo.
+        window.dispatchEvent(new CustomEvent('daino:gamestate', {
+            detail: { kind: reason, score: this._score, durationSec: this.level.durationSec },
+        }));
 
         this.onGameOver({ reason, score: this._score });
     }

@@ -6,7 +6,12 @@
 // floats sueltos (doc 07 §D.2, doc 09 §2.4).
 //
 // Uniforms agrupados en `audioUniforms` (Pixi v8 los compila a un UBO):
-//   uTime      — segundos de reloj global; siempre avanza, también pre-drop.
+//   uShaderMode — 0=idle (menú), 1=reactive (en partida con audio). En idle
+//                 el shader IGNORA todos los uniforms de audio (FFT, bands,
+//                 BPM): pinta solo el degradado base + ondas suaves + vignette.
+//                 Hace el reset robusto — al cambiar de modo no dependemos
+//                 de que cada uniform band quede en 0 (Bloque 6 Lote E).
+//   uTime      — segundos de reloj global; siempre avanza, también en idle.
 //   uRMS       — energía total normalizada [0,1].
 //   uBass      — energía banda grave (bins 0..10).
 //   uMid       — energía banda media (bins 10..100).
@@ -24,6 +29,7 @@ uniform sampler2D uTexture; // input del filtro (lo inyecta Pixi). Lo ignoramos
                             // a propósito: pintamos el fondo desde cero.
 uniform sampler2D uFFT;     // textura 256x1, formato r8unorm.
 
+uniform float uShaderMode;  // 0=idle, 1=reactive
 uniform float uTime;
 uniform float uRMS;
 uniform float uBass;
@@ -75,34 +81,43 @@ void main(void) {
     }
     // ---------- /DEBUG ----------
 
-    // 1. Gradiente vertical de base, sutilmente "respira" con uBass.
+    // ---------- BASE — visible en idle y reactive ----------
+    // Gradiente vertical: deep abajo, lifted arriba.
     float gradient = smoothstep(0.0, 1.0, uv.y);
     vec3 base = mix(COLOR_BG_DEEP, COLOR_BG_LIFTED, gradient);
-    base += COLOR_BEAT * uBass * 0.18;
 
-    // 2. Ondas senoidales horizontales — frecuencia con uTime, amplitud con
-    //    uRMS. En idle (uRMS=0) las ondas siguen visibles pero muy tenues.
+    // Ondas senoidales muy tenues con uTime. NO dependen de audio.
     float wave = sin(uv.x * 16.0 + uTime * 1.2) * 0.5 + 0.5;
     wave += sin(uv.y * 24.0 - uTime * 0.7) * 0.25;
-    base += vec3(wave) * (0.04 + uRMS * 0.18);
+    base += vec3(wave) * 0.04;
 
-    // 3. Barras FFT desde arriba — uv.y=0 es la esquina superior en el filter
-    //    de Pixi (verificado con ?debug=uv). step(uv.y, barHeight) pinta para
-    //    uv.y < barHeight, que con FFT alto cubre la franja superior. La
-    //    estética se afina en bloques siguientes con HMR.
-    float bin = texture(uFFT, vec2(uv.x, 0.5)).r;
-    float barHeight = bin * 0.35;
-    float bar = step(uv.y, barHeight);
-    base = mix(base, COLOR_BEAT, bar * 0.55);
+    // ---------- REACTIVE — solo cuando hay audio atachado ----------
+    // Branching explícito en el shader. Esto hace el reset trivial: al pasar
+    // a idle, basta con bajar uShaderMode a 0 — los uniforms band pueden
+    // quedar con cualquier valor sin contaminar el render.
+    if (uShaderMode > 0.5) {
+        // 1. Bass enriquece el gradiente con tinte beat.
+        base += COLOR_BEAT * uBass * 0.18;
 
-    // 4. Brillo de agudos — destellos sutiles arriba.
-    float topGlow = smoothstep(0.65, 1.0, uv.y) * uHigh * 0.4;
-    base += COLOR_HIGH * topGlow;
+        // 2. uRMS amplifica las ondas senoidales sobre la base ya pintada.
+        base += vec3(wave) * (uRMS * 0.18);
 
-    // 5. BPM pulse — todo el frame brilla un instante en cada beat (Bloque 5).
-    base *= 1.0 + uBpmPulse * 0.15;
+        // 3. Barras FFT desde arriba.
+        float bin = texture(uFFT, vec2(uv.x, 0.5)).r;
+        float barHeight = bin * 0.35;
+        float bar = step(uv.y, barHeight);
+        base = mix(base, COLOR_BEAT, bar * 0.55);
+
+        // 4. Brillo de agudos — destellos sutiles arriba.
+        float topGlow = smoothstep(0.65, 1.0, uv.y) * uHigh * 0.4;
+        base += COLOR_HIGH * topGlow;
+
+        // 5. BPM pulse — todo el frame brilla un instante en cada beat.
+        base *= 1.0 + uBpmPulse * 0.15;
+    }
 
     // Vignette suave para dar foco al gameplay (capa 3 vive encima).
+    // Visible en ambos modos para que el menú también se sienta envolvente.
     float dx = uv.x - 0.5;
     float dy = uv.y - 0.5;
     float vignette = 1.0 - smoothstep(0.4, 0.95, sqrt(dx * dx + dy * dy));

@@ -70,27 +70,22 @@ body {
     justify-content: center;
     gap: 0.4rem;
     pointer-events: none;       /* el drag&drop lo escucha document.body */
-    z-index: 10;
+    z-index: 35;                /* sobre menú (30), bajo HUD (40) */
     transition: opacity 240ms ease-out;
     text-align: center;
     padding: 1rem;
+    font-size: clamp(1.2rem, 2.6vw, 2rem);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-daino-fg);
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
+    background: color-mix(in oklch, #05050a 60%, transparent);
+    backdrop-filter: blur(4px);
 }
 
 #hint.is-hidden {
     opacity: 0;
-}
-
-#hint .hint-title {
-    font-size: clamp(1.5rem, 3.6vw, 2.8rem);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--color-daino-fg);
-    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
-}
-
-#hint .hint-sub {
-    font-size: clamp(0.85rem, 1.4vw, 1rem);
-    color: color-mix(in oklch, var(--color-daino-fg) 70%, transparent);
+    pointer-events: none;
 }
 
 /* Estado "drag activo": el body cobra un borde sutil cuando hay un archivo
@@ -109,6 +104,611 @@ body[data-drag="active"]::after {
 @keyframes pulse {
     0%, 100% { opacity: 0.5; }
     50%      { opacity: 1.0; }
+}
+
+/* ---------------------------------------------------------------------------
+ * Bloque 6 — UI shell (menú, HUD DOM, modales).
+ *
+ * Los 3 contenedores `#menu-root`, `#hud-root`, `#modal-root` viven como
+ * siblings del `#app`. Son `position: fixed` para que vivan sobre el canvas
+ * sin afectar layout. `pointer-events: none` en la raíz; los interactivos
+ * hijos (botones, sliders, dialogs) se vuelven a `auto`.
+ *
+ * Z-index plano: app=auto (canvas) < hint=10 < hud=40 < modal=50 < toast=60.
+ * No usar valores entre medias para no perder la jerarquía mental.
+ * ------------------------------------------------------------------------- */
+
+#menu-root,
+#hud-root {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+#menu-root { z-index: 30; }
+#hud-root  { z-index: 40; }
+
+/* Children interactivos del HUD/menú deben restaurar pointer-events. Usar
+   `data-interactive="true"` en cada elemento clicable para que la regla aplique
+   sin tener que enumerar selectores específicos. */
+#menu-root [data-interactive="true"],
+#hud-root [data-interactive="true"] {
+    pointer-events: auto;
+}
+
+#modal-root {
+    /* No `inset:0` — los <dialog> son `position: fixed` por sí mismos
+       (HTML5 spec). El contenedor solo agrupa para query desde JS. */
+    position: relative;
+    z-index: 50;
+}
+
+/* ---------------------------------------------------------------------------
+ * <dialog> base — slide-in desde la derecha, backdrop semi-transparente que
+ * desatura el shader sin ocultarlo (doc 06 §5: "el shader nunca se oculta
+ * mientras un modal está abierto — solo se desatura un poco").
+ * ------------------------------------------------------------------------- */
+
+dialog.daino-modal {
+    border: none;
+    margin: 0;
+    padding: 0;
+    background: transparent;       /* el body interno define su propio fondo */
+    color: var(--color-daino-fg);
+    /* Posición: pegado al borde derecho, ocupa altura completa y un ancho
+       cómodo en desktop. En móvil se reduce a 100vw vía media query abajo. */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: min(440px, 100vw);
+    height: 100vh;
+    max-height: 100vh;
+    transform: translateX(100%);
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+}
+
+dialog.daino-modal[open] {
+    transform: translateX(0);
+}
+
+/* Variante centrada — la pausa se quiere "fuerte" sobre el viewport, no
+   un panel lateral. Sobrescribe posición y animación de entrada. */
+dialog.daino-modal--center {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    width: min(440px, 90vw);
+    height: auto;
+    max-height: 80vh;
+    transform: translate(-50%, -50%) scale(0.95);
+    border-radius: 0.85rem;
+    overflow: hidden;
+}
+
+dialog.daino-modal--center[open] {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+dialog.daino-modal--center .modal-shell {
+    border-left: none;
+    border: 1px solid color-mix(in oklch, var(--color-daino-fg) 12%, transparent);
+    border-radius: 0.85rem;
+}
+
+/* Backdrop nativo del <dialog>. Aparece SOLO con showModal() (no con show()). */
+dialog.daino-modal::backdrop {
+    background: color-mix(in oklch, #05050a 65%, transparent);
+    backdrop-filter: blur(2px) saturate(0.85);
+    animation: backdrop-in 200ms ease-out;
+}
+
+@keyframes backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Layout interno del modal — header / body / footer. Lo aplican los modales
+   concretos (ui/modals.js) usando esta misma estructura. */
+dialog.daino-modal .modal-shell {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+    background:
+        linear-gradient(180deg,
+            color-mix(in oklch, var(--color-daino-bg-lifted) 85%, transparent) 0%,
+            color-mix(in oklch, var(--color-daino-bg-deep) 90%, transparent) 100%);
+    border-left: 1px solid color-mix(in oklch, var(--color-daino-fg) 12%, transparent);
+}
+
+dialog.daino-modal .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid color-mix(in oklch, var(--color-daino-fg) 8%, transparent);
+}
+
+dialog.daino-modal .modal-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-daino-fg);
+}
+
+dialog.daino-modal .modal-close {
+    background: transparent;
+    border: none;
+    color: var(--color-daino-fg);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.4rem;
+    opacity: 0.7;
+    transition: opacity 150ms;
+}
+
+dialog.daino-modal .modal-close:hover { opacity: 1; }
+
+dialog.daino-modal .modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    color: color-mix(in oklch, var(--color-daino-fg) 90%, transparent);
+    line-height: 1.5;
+}
+
+dialog.daino-modal .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid color-mix(in oklch, var(--color-daino-fg) 8%, transparent);
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* Botón base reutilizado en menú, modal footer y otros. */
+.daino-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in oklch, var(--color-daino-fg) 18%, transparent);
+    background: color-mix(in oklch, var(--color-daino-bg-lifted) 50%, transparent);
+    color: var(--color-daino-fg);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 150ms, border-color 150ms, transform 80ms;
+}
+
+.daino-btn:hover {
+    background: color-mix(in oklch, var(--color-daino-bg-lifted) 80%, transparent);
+    border-color: color-mix(in oklch, var(--color-daino-fg) 32%, transparent);
+}
+
+.daino-btn:active { transform: translateY(1px); }
+
+.daino-btn--primary {
+    background: var(--color-daino-beat);
+    border-color: var(--color-daino-beat);
+    color: #ffffff;
+}
+
+.daino-btn--primary:hover {
+    background: color-mix(in oklch, var(--color-daino-beat) 88%, white);
+}
+
+.daino-btn--danger {
+    border-color: color-mix(in oklch, var(--color-daino-beat) 60%, transparent);
+    color: color-mix(in oklch, var(--color-daino-beat) 90%, white);
+}
+
+/* ---------------------------------------------------------------------------
+ * Menú principal (modo "no jugando") — Bloque 6 Lote C.
+ * Doc 06 §4.1: título DAINO grande centrado + lista vertical de acciones.
+ * Animación fade+slide-up al mount; .data-visible="false" lo oculta sin
+ * desmontar (transición rápida menú↔partida sin recrear DOM).
+ * ------------------------------------------------------------------------- */
+
+.daino-menu {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+    padding: 4rem 2rem;
+    transition: opacity 280ms ease-out, transform 280ms ease-out;
+}
+
+.daino-menu[data-visible="false"] {
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+}
+
+.daino-menu__main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: 560px;
+    width: 100%;
+}
+
+.daino-menu__title {
+    margin: 0;
+    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 0.95;
+    color: var(--color-daino-fg);
+    text-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
+    user-select: none;
+}
+
+.daino-menu__subtitle {
+    margin: 0;
+    font-size: clamp(0.85rem, 1.4vw, 1rem);
+    color: color-mix(in oklch, var(--color-daino-fg) 65%, transparent);
+    letter-spacing: 0.02em;
+}
+
+.daino-menu__actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 320px;
+}
+
+.daino-menu__action {
+    display: block;
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    border-radius: 0.6rem;
+    border: 1px solid color-mix(in oklch, var(--color-daino-fg) 14%, transparent);
+    background: color-mix(in oklch, var(--color-daino-bg-deep) 70%, transparent);
+    color: var(--color-daino-fg);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 150ms, border-color 150ms, transform 80ms;
+}
+
+.daino-menu__action:hover {
+    background: color-mix(in oklch, var(--color-daino-bg-lifted) 80%, transparent);
+    border-color: color-mix(in oklch, var(--color-daino-fg) 30%, transparent);
+}
+
+.daino-menu__action:active { transform: translateY(1px); }
+
+.daino-menu__action:focus-visible {
+    outline: 2px solid var(--color-daino-beat);
+    outline-offset: 2px;
+}
+
+.daino-menu__action--primary {
+    background: var(--color-daino-beat);
+    border-color: var(--color-daino-beat);
+    color: #ffffff;
+}
+
+.daino-menu__action--primary:hover {
+    background: color-mix(in oklch, var(--color-daino-beat) 88%, white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .daino-menu {
+        transition: none;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+ * HUD durante partida — DOM puro (Bloque 6 Lote D, sustituye al BitmapText
+ * del Bloque 5). Tipografía Inter sin atlas, transiciones CSS gratis.
+ * Top bar: score (izq) — timer+progress (centro) — song (der).
+ * ------------------------------------------------------------------------- */
+
+.daino-hud {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    color: var(--color-daino-fg);
+    user-select: none;
+}
+
+.daino-hud__top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 5rem 1rem 1.25rem;        /* deja hueco al chip auth */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.daino-hud__score {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.daino-hud__label {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: color-mix(in oklch, var(--color-daino-fg) 65%, transparent);
+}
+
+.daino-hud__value {
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.daino-hud__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    width: min(360px, 100%);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.daino-hud__timer {
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: color-mix(in oklch, var(--color-daino-fg) 92%, transparent);
+}
+
+.daino-hud__progress-bar {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--color-daino-fg) 14%, transparent);
+    overflow: hidden;
+}
+
+.daino-hud__progress-fg {
+    width: 0;
+    height: 100%;
+    background: var(--color-daino-fg);
+    border-radius: 999px;
+    transition: width 100ms linear;
+}
+
+.daino-hud__song {
+    text-align: right;
+    font-size: 0.85rem;
+    opacity: 0.75;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.daino-hud__message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-shadow: 0 4px 32px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+    text-transform: uppercase;
+}
+
+.daino-hud__message[data-shown="true"] {
+    opacity: 1;
+}
+
+@media (max-width: 640px) {
+    .daino-hud__top {
+        padding: 0.75rem 4rem 0.75rem 0.85rem;
+        grid-template-columns: 1fr 1fr;     /* score y timer; song se oculta */
+    }
+
+    .daino-hud__song {
+        display: none;
+    }
+
+    .daino-hud__progress {
+        align-items: flex-end;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+ * Modal AJUSTES — slider de volumen, toggle de efectos, borrar datos.
+ * ------------------------------------------------------------------------- */
+
+.daino-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.daino-settings__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: 1rem;
+    row-gap: 0.4rem;
+    align-items: center;
+}
+
+.daino-settings__label {
+    grid-column: 1 / 2;
+    font-weight: 600;
+    color: var(--color-daino-fg);
+}
+
+.daino-settings__value {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in oklch, var(--color-daino-fg) 75%, transparent);
+    min-width: 3.5em;
+    text-align: right;
+}
+
+.daino-settings__hint {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    margin: 0;
+    font-size: 0.85rem;
+    color: color-mix(in oklch, var(--color-daino-fg) 60%, transparent);
+    line-height: 1.4;
+}
+
+/* El slider: estilo cross-browser ligero. Pista + thumb. */
+.daino-settings__row input[type="range"] {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    height: 1.4rem;
+    cursor: pointer;
+}
+
+.daino-settings__row input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--color-daino-fg) 18%, transparent);
+}
+
+.daino-settings__row input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--color-daino-fg) 18%, transparent);
+}
+
+.daino-settings__row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-daino-beat);
+    border: none;
+    margin-top: -6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+.daino-settings__row input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-daino-beat);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+.daino-settings__row input[type="checkbox"] {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--color-daino-beat);
+    cursor: pointer;
+}
+
+.daino-settings__row .daino-btn {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+.daino-modal__placeholder p {
+    margin: 0 0 0.85rem 0;
+    line-height: 1.5;
+}
+
+.daino-modal__placeholder p:last-child {
+    margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * Auth chip — arriba-derecha. Bloque 6 Lote B lo monta en #auth-anchor;
+ * Lote C lo trasladará al header del menú. Visible en standalone, oculto
+ * en iframe (auth.js no monta nada en ese caso).
+ * ------------------------------------------------------------------------- */
+
+#auth-anchor {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 41;            /* sobre HUD (40), debajo de modales (50) */
+    pointer-events: auto;
+    transition: opacity 200ms ease-out;
+}
+
+/* Solo visible en MENU. En LOADING/PLAYING/PAUSED/GAME_OVER queda fuera de
+   foco para no permitir abrir modales que se quedan atravesados al cambiar
+   de estado. El HUD del juego ocupa esa esquina con su propio padding. */
+body:not([data-app-state="MENU"]) #auth-anchor {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.daino-auth-chip {
+    display: inline-flex;
+    align-items: center;
+}
+
+.daino-auth-chip__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.3rem 0.65rem 0.3rem 0.3rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklch, var(--color-daino-fg) 14%, transparent);
+    background: color-mix(in oklch, var(--color-daino-bg-deep) 70%, transparent);
+    color: var(--color-daino-fg);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: border-color 150ms, background 150ms;
+}
+
+.daino-auth-chip__button:hover {
+    border-color: color-mix(in oklch, var(--color-daino-fg) 28%, transparent);
+    background: color-mix(in oklch, var(--color-daino-bg-lifted) 70%, transparent);
+}
+
+.daino-auth-chip__name {
+    max-width: 14ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* ---------------------------------------------------------------------------
@@ -160,6 +760,22 @@ body[data-drag="active"]::after {
     }
 
     .daino-toast {
+        animation: none;
+    }
+
+    /* Modales sin slide-in: pop directo. El backdrop sigue apareciendo
+       pero sin animación para mantener señal de "esto está modal". */
+    dialog.daino-modal,
+    dialog.daino-modal[open] {
+        transition: none;
+    }
+
+    dialog.daino-modal--center,
+    dialog.daino-modal--center[open] {
+        transform: translate(-50%, -50%);
+    }
+
+    dialog.daino-modal::backdrop {
         animation: none;
     }
 }

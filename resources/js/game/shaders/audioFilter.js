@@ -50,13 +50,14 @@ export function createAudioFilter() {
         }),
         resources: {
             audioUniforms: {
-                uTime:      { value: 0.0, type: 'f32' },
-                uRMS:       { value: 0.0, type: 'f32' },
-                uBass:      { value: 0.0, type: 'f32' },
-                uMid:       { value: 0.0, type: 'f32' },
-                uHigh:      { value: 0.0, type: 'f32' },
-                uBpmPulse:  { value: 0.0, type: 'f32' },
-                uDebugMode: { value: 0.0, type: 'f32' },
+                uShaderMode: { value: 0.0, type: 'f32' },  // 0=idle, 1=reactive
+                uTime:       { value: 0.0, type: 'f32' },
+                uRMS:        { value: 0.0, type: 'f32' },
+                uBass:       { value: 0.0, type: 'f32' },
+                uMid:        { value: 0.0, type: 'f32' },
+                uHigh:       { value: 0.0, type: 'f32' },
+                uBpmPulse:   { value: 0.0, type: 'f32' },
+                uDebugMode:  { value: 0.0, type: 'f32' },
             },
             // CRÍTICO: pasar el TextureSource (BufferImageSource extiende de él),
             // no una Texture wrapper. Si pones `Texture` aquí, Pixi v8 deja el
@@ -80,6 +81,32 @@ export function createAudioFilter() {
         if (high      !== undefined) u.uHigh      = high;
         if (bpmPulse  !== undefined) u.uBpmPulse  = bpmPulse;
         if (debugMode !== undefined) u.uDebugMode = debugMode;
+    }
+
+    /**
+     * Cambia el modo del shader de forma declarativa. En idle el shader
+     * ignora todos los uniforms de audio; al pasar a reactive vuelven a
+     * leerse. Esto reemplaza el patrón frágil de "resetear cada band uniform
+     * a 0 en cada salida del juego".
+     *
+     * @param {'idle' | 'reactive'} mode
+     */
+    function setMode(mode) {
+        const u = filter.resources.audioUniforms.uniforms;
+        u.uShaderMode = mode === 'reactive' ? 1.0 : 0.0;
+        if (mode === 'idle') {
+            // Defensa adicional: limpiar los floats band y la textura FFT
+            // para que cualquier debug que mire los uniforms vea ceros, y
+            // para que el siguiente attach reactive arranque "desde cero"
+            // sin un primer frame con valores stale.
+            u.uRMS = 0;
+            u.uBass = 0;
+            u.uMid = 0;
+            u.uHigh = 0;
+            u.uBpmPulse = 0;
+            fftBuffer.fill(0);
+            fftSource.update();
+        }
     }
 
     function uploadFft() {
@@ -113,5 +140,5 @@ export function createAudioFilter() {
         });
     }
 
-    return { filter, fftBuffer, fftSource, setUniforms, uploadFft };
+    return { filter, fftBuffer, fftSource, setUniforms, setMode, uploadFft };
 }

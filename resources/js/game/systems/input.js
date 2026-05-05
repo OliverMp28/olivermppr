@@ -18,6 +18,7 @@
 import { setOnGameAction, isBridgeEmbedded } from '../../iframe/bridge.js';
 
 const KEYS_JUMP = new Set(['Space', 'ArrowUp']);
+const KEYS_PAUSE = new Set(['Escape']);
 
 class InputHub {
     constructor() {
@@ -62,6 +63,16 @@ class InputHub {
                 // configuraciones del viewport (overflow visible, etc.).
                 ev.preventDefault();
                 this.emit('jump');
+                return;
+            }
+            if (KEYS_PAUSE.has(ev.code)) {
+                // Si hay un <dialog open>, dejamos al cierre nativo del
+                // dialog manejar el ESC. Sin esto, abrir Settings durante
+                // partida y pulsar ESC cerraba ese dialog Y abría el modal
+                // de pausa (los dos visibles).
+                if (document.querySelector('dialog[open]') !== null) return;
+                ev.preventDefault();
+                this.emit('pause');
             }
         };
         window.addEventListener('keydown', this._keyDown);

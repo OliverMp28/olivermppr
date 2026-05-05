@@ -128,6 +128,26 @@ function onDrop(ev) {
 }
 
 /**
+ * Abre el selector de archivos nativo y procesa el primer MP3 elegido.
+ * Bloque 6 — el botón JUGAR del menú la usa. Internamente reutiliza el
+ * mismo `handleFile` que el drag&drop, así el flujo (validar → decode →
+ * play → audio:ready) es idéntico.
+ */
+export function pickFileViaInput() {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'audio/mpeg,.mp3';
+    inp.style.display = 'none';
+    document.body.appendChild(inp);
+    inp.addEventListener('change', () => {
+        const file = inp.files?.[0];
+        if (file) void handleFile(file);
+        inp.remove();
+    }, { once: true });
+    inp.click();
+}
+
+/**
  * @param {{ engine: { attachAudio: (e: AudioEngine) => void } }} opts
  */
 export function setupUpload(opts) {
