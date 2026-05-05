@@ -5,8 +5,9 @@ docs/refactorizacion/01-Estrategia-Integracion-Vout-Dino.md
 docs/refactorizacion/03-Plan-Desarrollo-Vout-Dino.md
 docs/refactorizacion/04-Decisiones-Finales.md
 
-# Claude Code local state
+# Claude Code local state + project guide (contexto interno, no se publica)
 .claude/
+CLAUDE.md
 
 # Env / secrets
 .env

@@ -3,9 +3,25 @@
 /*
  * Daino — estilos base.
  *
- * La UI se compone sobre un único <canvas> a 100vw × 100vh (ver doc 06).
- * El body y el contenedor #app solo proveen el marco — el render lo hace PIXI.
+ * La UI se compone sobre un único <canvas> a 100vw × 100vh (doc 06 §3, §8).
+ * El body y el contenedor #app solo proveen el marco; el render lo hace Pixi.
+ * El HUD (Bloque 6) será DOM `fixed` con `pointer-events: none` salvo en los
+ * elementos interactivos — ver doc 06 §8.
+ *
+ * Tokens en @theme: expuestos como CSS custom properties para que JS pueda
+ * leerlos en runtime (`getComputedStyle(document.documentElement).getPropertyValue('--color-daino-beat')`).
+ * Mantener sincronizados con la paleta del fragment shader background.frag.
  */
+
+@theme {
+    --color-daino-bg-deep:   oklch(0.18 0.02 270);
+    --color-daino-bg-lifted: oklch(0.26 0.05 290);
+    --color-daino-fg:        oklch(0.96 0.01 80);
+    --color-daino-beat:      oklch(0.66 0.21 15);
+    --color-daino-high:      oklch(0.85 0.13 220);
+
+    --font-display: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
 
 :root {
     color-scheme: dark;
@@ -18,10 +34,11 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #000;
-    color: #fff;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #05050a;
+    color: var(--color-daino-fg);
+    font-family: var(--font-display);
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 #app {
@@ -29,4 +46,120 @@ body {
     inset: 0;
     width: 100vw;
     height: 100vh;
+    /* El canvas Pixi se inserta dentro y ocupa todo el wrapper. Cualquier
+       overlay DOM (#hint, futuro HUD del Bloque 6) vive aparte como sibling. */
+}
+
+#app > canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ---------------------------------------------------------------------------
+ * Drop hint (Bloque 4) — overlay centrado con el mensaje "Suelta tu MP3 aquí".
+ * Visible por defecto; al primer audio:ready, JS le pone .is-hidden.
+ * ------------------------------------------------------------------------- */
+
+#hint {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    pointer-events: none;       /* el drag&drop lo escucha document.body */
+    z-index: 10;
+    transition: opacity 240ms ease-out;
+    text-align: center;
+    padding: 1rem;
+}
+
+#hint.is-hidden {
+    opacity: 0;
+}
+
+#hint .hint-title {
+    font-size: clamp(1.5rem, 3.6vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-daino-fg);
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
+}
+
+#hint .hint-sub {
+    font-size: clamp(0.85rem, 1.4vw, 1rem);
+    color: color-mix(in oklch, var(--color-daino-fg) 70%, transparent);
+}
+
+/* Estado "drag activo": el body cobra un borde sutil cuando hay un archivo
+   siendo arrastrado encima. JS le pone data-drag="active" en dragover. */
+body[data-drag="active"]::after {
+    content: "";
+    position: fixed;
+    inset: 1.5rem;
+    border: 2px dashed color-mix(in oklch, var(--color-daino-beat) 80%, transparent);
+    border-radius: 1.25rem;
+    pointer-events: none;
+    z-index: 20;
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 1.0; }
+}
+
+/* ---------------------------------------------------------------------------
+ * Toasts simples (errores de upload, etc.). DOM lo inyecta upload.js.
+ * ------------------------------------------------------------------------- */
+
+.daino-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 5, 15, 0.92);
+    color: var(--color-daino-fg);
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid color-mix(in oklch, var(--color-daino-beat) 60%, transparent);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    animation: toast-in 200ms ease-out;
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translate(-50%, 8px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ---------------------------------------------------------------------------
+ * prefers-reduced-motion — fallback estático. Sin shader audio-reactivo, sin
+ * pulse animado del drag. El gameplay (Bloque 5+) se monta encima igual.
+ * Ver doc 06 §6 / doc 07 §C.4.
+ * ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    body {
+        background:
+            radial-gradient(ellipse at 50% 30%,
+                var(--color-daino-bg-lifted) 0%,
+                var(--color-daino-bg-deep) 70%);
+    }
+
+    body[data-drag="active"]::after {
+        animation: none;
+        opacity: 0.7;
+    }
+
+    #hint {
+        transition: none;
+    }
+
+    .daino-toast {
+        animation: none;
+    }
 }

@@ -9,16 +9,10 @@ declare(strict_types=1);
  * @var \App\Core\Router $router
  */
 
-use App\Core\Response;
-
-$router->get('/', static function (): Response {
-    $body = <<<'HTML'
-        <!doctype html>
-        <html lang="es"><head><meta charset="utf-8"><title>Daino v2</title></head>
-        <body><h1>Daino v2 — OK</h1><p>Bloque 3 (auth Vout) operativo.</p></body></html>
-    HTML;
-    return Response::html($body);
-});
+// Home pública — Daino se juega sin login obligatorio (decisión Bloque 4).
+// El AuthMiddleware se aplicará en Bloque 7 a los endpoints API que requieran
+// identidad (submit ranking, comentar, subir MP3 público).
+$router->get('/', 'HomeController@index');
 
 // --- OAuth flow contra Vout ----------------------------------------------
 // CSRF aplica solo a POST/PUT/PATCH/DELETE. /auth/login y /auth/callback son

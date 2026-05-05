@@ -17,7 +17,7 @@
 | 2 — Persistencia (schema + modelos) | ⏳ Pendiente | — |
 | 3 — Identidad Vout (OAuth2 + JWT + iframe bridge) | ✅ Completo + E2E con Vout real verificado | — |
 | 3.5 — Auth resilience (PkceCookie firmada, lifetime 30d, redirect transparente, invalid_grant) | ✅ Completo | Fix de la fragilidad descubierta tras retomar el proyecto con cookies stale |
-| 4 — Frontend foundation (PixiJS + audio + shader) | ⏳ Pendiente | — |
+| 4 — Frontend foundation (PixiJS + audio + shader) | ✅ Completo | Canvas full-viewport, shader audio-reactivo, AudioEngine, MP3 drag&drop. Decisión: Daino jugable sin login obligatorio |
 | 5 — Game core (entidades, físicas, input, spawner) | ⏳ Pendiente | — |
 | 6 — UI / HUD / API client | ⏳ Pendiente | — |
 | 7 — Persistencia API (progress, ranking, levels, comments) | ⏳ Pendiente | — |
@@ -188,8 +188,15 @@ Razones por las que `/api/me/token` gana sobre `<meta>` tag:
 
 ---
 
-## Bloque 4 — Frontend foundation: PixiJS + audio + shader
+## Bloque 4 — Frontend foundation: PixiJS + audio + shader ✅
 
+> **Cerrado.** Ver `CLAUDE.md` § "Bloque 4 (frontend foundation) — completo" para la lista exhaustiva de archivos creados, decisiones y limitaciones.
+>
+> **Disparador de decisión arquitectónica:** durante el bloque se aclaró con el user que **Daino se juega sin login obligatorio**. Login (vía Vout) solo desbloquea features secundarias (submit ranking global, comentar, subir MP3 público). Eso obliga a:
+> - `/` queda **pública** (sin AuthMiddleware).
+> - Bloque 7 aplicará AuthMiddleware solo a los endpoints API que requieran identidad — no a los de "leer/jugar".
+> - `CLAUDE.md` actualizado con esta decisión vinculante.
+>
 > **Bundler ya alineado.** El proyecto corre Vite 8.0.10 + `@tailwindcss/vite` 4.2.4 + Tailwind 4.2.4 desde el Bloque 0; `bun run build` produce manifest válido. La gotcha de doc 07 §A.4 / §H.1 está superada — no hay spike pendiente. Si en algún bump futuro vuelven los peer-dep warnings, esta es la nota a revisar.
 
 **Objetivo.** Tener el canvas único a full-viewport con shader audio-reactivo de fondo, `AudioEngine` operativo y MP3 drag&drop funcional. Sin gameplay todavía.
