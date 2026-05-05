@@ -18,7 +18,7 @@
 | 3 — Identidad Vout (OAuth2 + JWT + iframe bridge) | ✅ Completo + E2E con Vout real verificado | — |
 | 3.5 — Auth resilience (PkceCookie firmada, lifetime 30d, redirect transparente, invalid_grant) | ✅ Completo | Fix de la fragilidad descubierta tras retomar el proyecto con cookies stale |
 | 4 — Frontend foundation (PixiJS + audio + shader) | ✅ Completo | Canvas full-viewport, shader audio-reactivo, AudioEngine, MP3 drag&drop. Decisión: Daino jugable sin login obligatorio |
-| 5 — Game core (entidades, físicas, input, spawner) | ⏳ Pendiente | — |
+| 5 — Game core (entidades, físicas, input, spawner) | ✅ Completo | Dino + Obstacle + spawner determinista desde ObstacleTimeline pre-computada (Spectral Flux + BPM por autocorrelación, casero, sin Meyda). Single-hit, solo salto. HUD con BitmapText. Bundle 129.69 KB gzipped |
 | 6 — UI / HUD / API client | ⏳ Pendiente | — |
 | 7 — Persistencia API (progress, ranking, levels, comments) | ⏳ Pendiente | — |
 | 8 — Hardening (PHPStan 9, Pest, CSP, bundle budget) | ⏳ Pendiente | — |
@@ -226,7 +226,9 @@ Razones por las que `/api/me/token` gana sobre `<meta>` tag:
 
 ---
 
-## Bloque 5 — Game core: entidades, físicas, input, spawner
+## Bloque 5 — Game core: entidades, físicas, input, spawner ✅
+
+> **Cerrado.** Ver `CLAUDE.md` § "Bloque 5 (game core) — completo" para la lista exhaustiva de archivos creados, decisiones y limitaciones.
 
 **Objetivo.** Que el Dino salte sobre obstáculos en respuesta al audio, en standalone (teclado/touch) y en iframe (`GAME_ACTION` desde Vout).
 

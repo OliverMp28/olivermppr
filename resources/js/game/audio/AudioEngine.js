@@ -29,6 +29,7 @@ export class AudioEngine {
         this._freqBuffer = null;     // Uint8Array(FFT_SIZE/2) — 1024 bins
         this._timeBuffer = null;     // Uint8Array(FFT_SIZE) — 2048 muestras
         this._currentBuffer = null;  // último AudioBuffer reproducido (para test)
+        this._playStartedAt = 0;     // ctx.currentTime cuando arrancó el play actual
         this._onVisibilityChange = null;
     }
 
@@ -127,6 +128,9 @@ export class AudioEngine {
 
         this.source = src;
         this._currentBuffer = audioBuffer;
+        // Stamp del reloj del ctx en el momento del start. getAudioTime()
+        // resta esto a ctx.currentTime para devolver el "song time".
+        this._playStartedAt = this.ctx.currentTime;
 
         return {
             stop: () => {
@@ -184,5 +188,27 @@ export class AudioEngine {
     /** Estado actual del contexto, o 'closed' si nunca se inició. */
     get state() {
         return this.ctx?.state ?? 'closed';
+    }
+
+    /**
+     * Último AudioBuffer reproducido (o null). Bloque 5 lo usa el
+     * LevelGenerator si hace falta releer el buffer sin pasarlo a mano.
+     */
+    get currentBuffer() {
+        return this._currentBuffer;
+    }
+
+    /**
+     * Reloj relativo a cuándo arrancó el play() actual. Si no hay source o
+     * el ctx aún no existe, devuelve 0. La GameSession lo consume cada tick
+     * para alimentar al spawner — la única fuente de verdad temporal.
+     */
+    getAudioTime() {
+        if (this.ctx === null || this.source === null) return 0;
+        // ctx.currentTime avanza siempre que el contexto está running. El
+        // source.start(0) del play() lo arrancó en este reloj, así que el
+        // delta directo es el tiempo de canción reproducido.
+        const t = this.ctx.currentTime - this._playStartedAt;
+        return t < 0 ? 0 : t;
     }
 }

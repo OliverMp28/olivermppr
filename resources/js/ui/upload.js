@@ -85,8 +85,17 @@ async function handleFile(file) {
         audioEngine.play(audioBuffer);
         hideHint();
 
+        // Bloque 5: el AudioBuffer viaja en el evento. La GameSession lo
+        // pasa al LevelGenerator para precomputar la ObstacleTimeline antes
+        // del start. Cambio aditivo — claves antiguas (`duration`, `name`)
+        // se mantienen.
         window.dispatchEvent(new CustomEvent('audio:ready', {
-            detail: { duration: audioBuffer.duration, name: file.name },
+            detail: {
+                audioBuffer,
+                audioEngine,
+                duration: audioBuffer.duration,
+                name: file.name,
+            },
         }));
     } catch (err) {
         console.error('[upload] decode/play failed:', err);

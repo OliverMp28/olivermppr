@@ -40,6 +40,14 @@ let bgSprite = null;
 let isPaused = false;
 let timeAccum = 0;         // segundos desde init — siempre avanza salvo pausa
 
+// Layers expuestos a module-scope para que `getApi().getLayers()` pueda
+// devolver referencias estables sin filtrar internals (lo consume Bloque 5
+// para añadir Dino/Obstacle al gameLayer y BitmapText al hudLayer).
+let bgLayer = null;
+let gameLayer = null;
+let particleLayer = null;
+let hudLayer = null;
+
 /**
  * Inicializa Pixi y monta el escenario. Idempotente — segunda llamada es no-op.
  *
@@ -63,13 +71,13 @@ export async function startEngine(mountTarget = document.body) {
     mountTarget.appendChild(app.canvas);  // OJO: app.canvas en v8 (no app.view).
 
     // Layers — 4 contenedores apilados, mismo orden que doc 06 §3.
-    const bgLayer       = new Container({ label: 'bg' });
-    const gameLayer     = new Container({ label: 'game' });
-    const particleLayer = createParticleLayer({
+    bgLayer       = new Container({ label: 'bg' });
+    gameLayer     = new Container({ label: 'game' });
+    particleLayer = createParticleLayer({
         width: window.innerWidth,
         height: window.innerHeight,
     });
-    const hudLayer      = new Container({ label: 'hud' });
+    hudLayer      = new Container({ label: 'hud' });
     app.stage.addChild(bgLayer, gameLayer, particleLayer, hudLayer);
 
     // Si el user pidió reducir movimiento, no montamos el filter — el body
@@ -159,6 +167,13 @@ function getApi() {
         attachAudio,
         detachAudio,
         getCanvas: () => app?.canvas ?? null,
+        // Bloque 5: la GameSession monta Dino/Obstacle en gameLayer y HUD en
+        // hudLayer. Devolvemos refs vivas — no copiamos para evitar el
+        // foot-gun de "monté en una copia y nada se ve".
+        getLayers: () => ({ bgLayer, gameLayer, particleLayer, hudLayer }),
+        // Passthrough del ticker. La GameSession registra su tick aquí; no
+        // creamos un rAF propio (un solo loop, ya pausa con audio:pause).
+        getTicker: () => app?.ticker ?? null,
         get reducedMotion() { return REDUCED_MOTION; },
     };
 }
