@@ -35,16 +35,31 @@ final class Comment
     /**
      * @return list<self>
      */
-    public static function findByLevel(int $levelId, bool $onlyVisible = true): array
+    public static function findByLevel(int $levelId, bool $onlyVisible = true, int $limit = 50, int $offset = 0): array
     {
         $sql = 'SELECT * FROM comments WHERE level_id = :level_id';
         if ($onlyVisible) {
             $sql .= ' AND is_visible = TRUE';
         }
-        $sql .= ' ORDER BY created_at DESC';
+        $sql .= ' ORDER BY created_at DESC LIMIT :lim OFFSET :off';
+        $stmt = Database::getInstance()->prepare($sql);
+        $stmt->bindValue(':level_id', $levelId, \PDO::PARAM_INT);
+        $stmt->bindValue(':lim', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
+        $stmt->execute();
+        return array_map(self::fromRow(...), $stmt->fetchAll());
+    }
+
+    public static function countByLevel(int $levelId, bool $onlyVisible = true): int
+    {
+        $sql = 'SELECT COUNT(*) AS c FROM comments WHERE level_id = :level_id';
+        if ($onlyVisible) {
+            $sql .= ' AND is_visible = TRUE';
+        }
         $stmt = Database::getInstance()->prepare($sql);
         $stmt->execute(['level_id' => $levelId]);
-        return array_map(self::fromRow(...), $stmt->fetchAll());
+        $row = $stmt->fetch();
+        return $row === false ? 0 : (int) $row['c'];
     }
 
     /**

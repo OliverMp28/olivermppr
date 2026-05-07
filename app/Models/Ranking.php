@@ -37,14 +37,22 @@ final class Ranking
     /**
      * @return list<self>
      */
-    public static function topN(int $n = 10): array
+    public static function topN(int $n = 10, int $offset = 0): array
     {
         $stmt = Database::getInstance()->prepare(
-            'SELECT * FROM rankings ORDER BY total_points DESC, levels_played DESC LIMIT :n',
+            'SELECT * FROM rankings ORDER BY total_points DESC, levels_played DESC LIMIT :n OFFSET :off',
         );
         $stmt->bindValue(':n', $n, \PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
         $stmt->execute();
         return array_map(self::fromRow(...), $stmt->fetchAll());
+    }
+
+    public static function countAll(): int
+    {
+        $stmt = Database::getInstance()->query('SELECT COUNT(*) AS c FROM rankings');
+        $row = $stmt->fetch();
+        return $row === false ? 0 : (int) $row['c'];
     }
 
     /**

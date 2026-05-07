@@ -41,26 +41,64 @@ final class Level
     /**
      * @return list<self>
      */
-    public static function findByUser(int $userId): array
+    public static function findByUser(int $userId, int $limit = 50, int $offset = 0): array
     {
         $stmt = Database::getInstance()->prepare(
-            'SELECT * FROM levels WHERE user_id = :user_id ORDER BY created_at DESC',
+            'SELECT * FROM levels WHERE user_id = :user_id ORDER BY created_at DESC LIMIT :lim OFFSET :off',
         );
-        $stmt->execute(['user_id' => $userId]);
+        $stmt->bindValue(':user_id', $userId, \PDO::PARAM_INT);
+        $stmt->bindValue(':lim', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
+        $stmt->execute();
         return array_map(self::fromRow(...), $stmt->fetchAll());
     }
 
     /**
      * @return list<self>
      */
-    public static function findPublic(int $limit = 50): array
+    public static function findPublic(int $limit = 50, int $offset = 0): array
     {
         $stmt = Database::getInstance()->prepare(
-            'SELECT * FROM levels WHERE is_public = TRUE ORDER BY created_at DESC LIMIT :lim',
+            'SELECT * FROM levels WHERE is_public = TRUE ORDER BY created_at DESC LIMIT :lim OFFSET :off',
         );
         $stmt->bindValue(':lim', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
         $stmt->execute();
         return array_map(self::fromRow(...), $stmt->fetchAll());
+    }
+
+    public static function countByUser(int $userId): int
+    {
+        $stmt = Database::getInstance()->prepare('SELECT COUNT(*) AS c FROM levels WHERE user_id = :user_id');
+        $stmt->execute(['user_id' => $userId]);
+        $row = $stmt->fetch();
+        return $row === false ? 0 : (int) $row['c'];
+    }
+
+    public static function countPublic(): int
+    {
+        $stmt = Database::getInstance()->query('SELECT COUNT(*) AS c FROM levels WHERE is_public = TRUE');
+        $row = $stmt->fetch();
+        return $row === false ? 0 : (int) $row['c'];
+    }
+
+    /**
+     * Existe ya un nivel público con este (user_id, title)? Anti-spam para
+     * cuando un user intenta publicar dos veces el mismo título. Case-insensitive
+     * gracias al collation `utf8mb4_unicode_ci` del schema.
+     */
+    public static function publicTitleExistsForUser(int $userId, string $title, ?int $excludeId = null): bool
+    {
+        $sql = 'SELECT 1 FROM levels WHERE user_id = :user_id AND title = :title AND is_public = TRUE';
+        $params = ['user_id' => $userId, 'title' => $title];
+        if ($excludeId !== null) {
+            $sql .= ' AND id <> :exclude';
+            $params['exclude'] = $excludeId;
+        }
+        $sql .= ' LIMIT 1';
+        $stmt = Database::getInstance()->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchColumn() !== false;
     }
 
     /**

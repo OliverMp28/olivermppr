@@ -128,6 +128,20 @@ function onDrop(ev) {
 }
 
 /**
+ * Devuelve el AudioEngine singleton, creándolo si no existía. Bloque 7 lo
+ * usa el modal de NIVELES para reproducir un MP3 público descargado del
+ * servidor sin tener que pasar por el flujo drag&drop.
+ *
+ * @returns {AudioEngine}
+ */
+export function getOrCreateAudioEngine() {
+    if (audioEngine === null) {
+        audioEngine = new AudioEngine();
+    }
+    return audioEngine;
+}
+
+/**
  * Abre el selector de archivos nativo y procesa el primer MP3 elegido.
  * Bloque 6 — el botón JUGAR del menú la usa. Internamente reutiliza el
  * mismo `handleFile` que el drag&drop, así el flujo (validar → decode →

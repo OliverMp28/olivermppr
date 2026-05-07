@@ -36,6 +36,7 @@ services:
     container_name: daino-php
     volumes:
       - ./:/var/www/html
+      - ./docker/php/daino-uploads.ini:/usr/local/etc/php/conf.d/99-daino-uploads.ini:ro
     environment:
       PHP_IDEKEY: DAINO
     depends_on:
@@ -49,7 +50,8 @@ services:
     container_name: daino-mariadb
     restart: unless-stopped
     environment:
-      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
       MARIADB_DATABASE: ${DB_DATABASE:-daino}
       MARIADB_USER: ${DB_USER:-daino}
       MARIADB_PASSWORD: ${DB_PASSWORD:-secret}

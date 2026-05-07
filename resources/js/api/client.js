@@ -212,6 +212,56 @@ async function tryRefresh() {
     }
 }
 
+/**
+ * Upload multipart con Bearer (sin Content-Type explícito — el browser lo
+ * setea con el boundary correcto). Same retry-on-401 behavior que `request()`.
+ * `formData` debe ser una instancia de FormData.
+ *
+ * @param {string} path
+ * @param {FormData} formData
+ * @returns {Promise<{ ok: boolean, status: number, data: any }>}
+ */
+export async function upload(path, formData) {
+    const res = await doUpload(path, formData);
+    if (res.status === 401 && res.data?.must_refresh) {
+        const refreshed = await tryRefresh();
+        if (refreshed) {
+            // FormData es reusable según spec — el reintento crea un nuevo
+            // Request con la misma instancia. Si en el futuro encontramos
+            // un browser que la consume, clonar manualmente.
+            return doUpload(path, formData);
+        }
+        if (res.data?.redirect_to) {
+            window.location.href = res.data.redirect_to;
+        }
+    }
+    return res;
+}
+
+async function doUpload(path, formData) {
+    const headers = { 'Accept': 'application/json' };
+    if (accessToken !== null) headers['Authorization'] = `Bearer ${accessToken}`;
+    // Ojo: NO setear `Content-Type: multipart/form-data` manualmente — el
+    // browser inyecta el boundary correcto solo cuando lo deja calcular.
+    let r;
+    try {
+        r = await fetch(path, {
+            method: 'POST',
+            headers,
+            credentials: 'same-origin',
+            body: formData,
+        });
+    } catch (err) {
+        return { ok: false, status: 0, data: { error: 'network', detail: String(err) } };
+    }
+    let data = null;
+    const ctype = r.headers.get('Content-Type') ?? '';
+    if (ctype.includes('application/json')) {
+        try { data = await r.json(); } catch { data = null; }
+    }
+    return { ok: r.ok, status: r.status, data };
+}
+
 /** Devuelve el user hidratado, o null si anónimo. */
 export function getUser() {
     return user;

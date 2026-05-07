@@ -20,7 +20,7 @@
 | 4 — Frontend foundation (PixiJS + audio + shader) | ✅ Completo | Canvas full-viewport, shader audio-reactivo, AudioEngine, MP3 drag&drop. Decisión: Daino jugable sin login obligatorio |
 | 5 — Game core (entidades, físicas, input, spawner) | ✅ Completo | Dino + Obstacle + spawner determinista desde ObstacleTimeline pre-computada (Spectral Flux + BPM por autocorrelación, casero, sin Meyda). Single-hit, solo salto. HUD con BitmapText. Bundle 129.69 KB gzipped |
 | 6 — UI / HUD / API client / modales | ✅ Completo | Menú DAINO + HUD migrado a DOM Tailwind + modales `<dialog>` slide-in (PERFIL real, RANKING/NIVELES placeholder, SETTINGS funcional, PAUSA centrado) + API client con refresh transparente + chip auth + pausa con ESC. Refactor del shader con `uShaderMode` para reset declarativo idle/reactive. Bundle 121.86 KB gzipped (–7.83 KB tras eliminar Hud canvas) |
-| 7 — Persistencia API (progress, ranking, levels, comments) | ⏳ Pendiente | — |
+| 7 — Persistencia API (progress, ranking, levels, comments) | ✅ Completo | AuthContext + Validator + Soft/Auth middlewares. Endpoints CRUD para Levels (con upload MP3 multipart, MIME real via finfo + magic-byte fallback para ID3v2 en Alpine), Progress (upsert + recompute Ranking sync), Ranking (top N paginado, JOIN sin N+1), Comments. Frontend: modales NIVELES/RANKING reales reemplazan placeholders, AppController crea Level antes de partida si hay sesión, GameSession persiste progreso fire-and-forget. AuthMiddleware ahora resuelve User vía claim `vout_id` del JWT (Vout actualizó el contrato tras feedback). Bundle 123.74 KB gzipped (+1.88 KB sobre B6) |
 | 8 — Hardening (PHPStan 9, Pest, CSP, bundle budget) | ⏳ Pendiente | — |
 
 ---
@@ -301,6 +301,8 @@ Razones por las que `/api/me/token` gana sobre `<meta>` tag:
 - Tras game over: `POST /api/progress` registra y `GET /api/ranking` lo refleja.
 - Subir nivel: aparece en `GET /api/levels?mine=1`.
 - Comentario en nivel: aparece en `GET /api/comments?level_id={id}` y respeta `is_visible`.
+
+> **Cerrado.** Ver `CLAUDE.md` § "Bloque 7 — completo" para la lista exhaustiva de archivos creados, decisiones y limitaciones diferidas.
 
 ---
 

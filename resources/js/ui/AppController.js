@@ -23,6 +23,7 @@ import * as menu from './menu.js';
 import { fadeOverlay } from './transitions.js';
 import { closeAllModals, openSettingsModal, openPauseModal } from './modals.js';
 import { Input } from '../game/systems/input.js';
+import { getUser, request as apiRequest } from '../api/client.js';
 
 const STATE = Object.freeze({
     MENU: 'MENU',
@@ -166,6 +167,35 @@ async function handleAudioReady(ev) {
         durationSec: level.durationSec.toFixed(1),
     });
 
+    // Bloque 7: si hay sesión, crear Level row server-side antes de jugar
+    // para que GameSession pueda persistir progreso al final. Anónimo: levelId
+    // queda null y GameSession no llama POST /api/progress. Hacemos esto
+    // ANTES del fadeOverlay para que la latencia (10-50ms) no se note —
+    // se solapa con el final del análisis offline. Si la creación falla,
+    // logueamos y seguimos en modo "anónimo de facto" — la UX no debe
+    // bloquearse por un fallo de persistencia.
+    let levelId = null;
+    if (getUser() !== null) {
+        try {
+            const res = await apiRequest('POST', '/api/levels', {
+                body: {
+                    title: level.sourceName ?? 'Untitled',
+                    duration_sec: Math.max(1, Math.round(level.durationSec)),
+                    bpm: Math.max(30, Math.min(300, Math.round(level.bpm))),
+                    difficulty: 3,
+                    generator_seed: String(level.seed),
+                },
+            });
+            if (res.ok && typeof res.data?.id === 'number') {
+                levelId = res.data.id;
+            } else {
+                console.warn('[AppController] POST /api/levels falló:', res.status, res.data);
+            }
+        } catch (err) {
+            console.warn('[AppController] POST /api/levels error:', err);
+        }
+    }
+
     // 2. fadeToBlack 600ms total — durante el black mountamos la sesión
     //    y arrancamos el audio desde 0. El user no ve el "flash" del cambio.
     //    El menú ya está oculto desde LOADING; aquí solo escondemos el hint
@@ -191,6 +221,7 @@ async function handleAudioReady(ev) {
                 engine: engineApi,
                 audioEngine,
                 level,
+                levelId,
                 // onGameOver se queda como fallback — la transición real la
                 // dispara `daino:gamestate` que escuchamos arriba.
                 onGameOver: () => {},

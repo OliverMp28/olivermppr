@@ -64,6 +64,35 @@ date_default_timezone_set('UTC');
 // 503 Service Unavailable (BD caída, credenciales mal). Resto → 500.
 
 set_exception_handler(static function (\Throwable $e) use ($debug): void {
+    // ValidationException → 422 con shape estable {error, fields}. No se
+    // logea: 4xx por entrada del cliente no es ruido digno de error_log.
+    if ($e instanceof \App\Core\ValidationException) {
+        if (!headers_sent()) {
+            http_response_code(422);
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        echo json_encode(
+            ['error' => 'validation', 'fields' => $e->fields],
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+        );
+        return;
+    }
+
+    // PayloadTooLargeException → 413. Solo aplica a uploads que pasan el
+    // límite de UPLOAD_MAX_SIZE_MB del .env (o el ini_get si PHP rechazó
+    // el upload antes incluso de leerlo).
+    if ($e instanceof \App\Core\PayloadTooLargeException) {
+        if (!headers_sent()) {
+            http_response_code(413);
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        echo json_encode(
+            ['error' => 'payload_too_large', 'message' => $e->getMessage()],
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+        );
+        return;
+    }
+
     $isPdo = $e instanceof \PDOException;
     $status = $isPdo ? 503 : 500;
     $reason = $isPdo ? 'Service Unavailable' : 'Internal Server Error';

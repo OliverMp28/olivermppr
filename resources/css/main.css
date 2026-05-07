@@ -779,3 +779,208 @@ body:not([data-app-state="MENU"]) #auth-anchor {
         animation: none;
     }
 }
+
+/* ---------------------------------------------------------------------------
+ * Modal NIVELES — Bloque 7. Tabs "Públicos" / "Mis niveles" + lista de rows
+ * con título + metadata + acción. Estado loading (aria-busy) y error inline.
+ * ------------------------------------------------------------------------- */
+
+.daino-levels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 260px;
+}
+
+.daino-levels__tabs {
+    display: flex;
+    gap: 0.25rem;
+    border-bottom: 1px solid color-mix(in oklch, var(--color-daino-fg) 12%, transparent);
+}
+
+.daino-levels__tab {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: color-mix(in oklch, var(--color-daino-fg) 70%, transparent);
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 150ms, border-color 150ms;
+}
+
+.daino-levels__tab.is-active {
+    color: var(--color-daino-fg);
+    border-bottom-color: var(--color-daino-beat);
+}
+
+.daino-levels__tab:hover:not(.is-active) {
+    color: var(--color-daino-fg);
+}
+
+.daino-levels__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.daino-levels__list[aria-busy="true"] .daino-levels__loading {
+    opacity: 0.7;
+}
+
+.daino-levels__loading,
+.daino-levels__empty,
+.daino-levels__error {
+    padding: 1rem 0.5rem;
+    margin: 0;
+    text-align: center;
+    color: color-mix(in oklch, var(--color-daino-fg) 70%, transparent);
+    font-size: 0.9rem;
+}
+
+.daino-levels__error {
+    color: color-mix(in oklch, var(--color-daino-beat) 80%, white);
+}
+
+.daino-levels__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: color-mix(in oklch, var(--color-daino-bg-lifted) 50%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-daino-fg) 8%, transparent);
+    border-radius: 0.5rem;
+}
+
+.daino-levels__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.daino-levels__meta strong {
+    font-size: 1rem;
+    color: var(--color-daino-fg);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.daino-levels__sub {
+    font-size: 0.8rem;
+    color: color-mix(in oklch, var(--color-daino-fg) 60%, transparent);
+}
+
+.daino-levels__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.daino-levels__inline-error {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: color-mix(in oklch, var(--color-daino-beat) 20%, transparent);
+    color: color-mix(in oklch, var(--color-daino-beat) 90%, white);
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Modal RANKING — Bloque 7. Top 10 con avatar+username+puntos. Highlight
+ * `.is-me` para el usuario actual.
+ * ------------------------------------------------------------------------- */
+
+.daino-ranking {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.daino-ranking__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-height: 240px;
+}
+
+.daino-ranking__loading,
+.daino-ranking__empty,
+.daino-ranking__error,
+.daino-ranking__hint {
+    padding: 0.75rem 0.5rem;
+    margin: 0;
+    text-align: center;
+    color: color-mix(in oklch, var(--color-daino-fg) 70%, transparent);
+    font-size: 0.9rem;
+}
+
+.daino-ranking__error {
+    color: color-mix(in oklch, var(--color-daino-beat) 80%, white);
+}
+
+.daino-ranking__hint {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.daino-ranking__row {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    background: color-mix(in oklch, var(--color-daino-bg-lifted) 50%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-daino-fg) 8%, transparent);
+    border-radius: 0.5rem;
+}
+
+.daino-ranking__row.is-me {
+    border-color: var(--color-daino-beat);
+    background: color-mix(in oklch, var(--color-daino-beat) 12%, transparent);
+}
+
+.daino-ranking__rank {
+    font-weight: 700;
+    color: var(--color-daino-beat);
+    font-size: 1.1rem;
+}
+
+.daino-ranking__user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.daino-ranking__username {
+    color: var(--color-daino-fg);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.daino-ranking__stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+}
+
+.daino-ranking__stats strong {
+    font-size: 1rem;
+    color: var(--color-daino-fg);
+}
+
+.daino-ranking__detail {
+    font-size: 0.75rem;
+    color: color-mix(in oklch, var(--color-daino-fg) 55%, transparent);
+}

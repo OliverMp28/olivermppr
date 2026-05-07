@@ -27,7 +27,10 @@ CLAUDE.md
 # Storage
 /storage/logs/
 /storage/cache/
-/storage/uploads/
+/storage/uploads/*
+!/storage/uploads/levels/
+/storage/uploads/levels/*
+!/storage/uploads/levels/.gitkeep
 /storage/sessions/
 
 # Editors

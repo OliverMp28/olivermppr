@@ -13,6 +13,7 @@ import { createHud } from '../ui/hud.js';
 import { Input } from './systems/input.js';
 import { computeGroundY, integrateDino, findCollision } from './systems/physics.js';
 import { DT_CAP_S } from './config.js';
+import { request as apiRequest } from '../api/client.js';
 
 export class GameSession {
     /**
@@ -20,12 +21,16 @@ export class GameSession {
      * @param {ReturnType<import('./engine.js').startEngine> extends Promise<infer T> ? T : never} cfg.engine
      * @param {import('./audio/AudioEngine.js').AudioEngine} cfg.audioEngine
      * @param {import('./levels/LevelGenerator.js').Level} cfg.level
+     * @param {number | null} [cfg.levelId]   Id del row `levels` en el servidor.
+     *        Si != null y la run termina con 'win'|'collision', dispara
+     *        POST /api/progress fire-and-forget. Anónimo: null → no llama.
      * @param {() => void} [cfg.onGameOver]   Callback cuando el run termina (lose/win).
      */
     constructor(cfg) {
         this.engine = cfg.engine;
         this.audioEngine = cfg.audioEngine;
         this.level = cfg.level;
+        this.levelId = cfg.levelId ?? null;
         this.onGameOver = cfg.onGameOver ?? (() => {});
 
         this.dino = null;
@@ -149,6 +154,30 @@ export class GameSession {
             ? `WIN  SCORE ${this._score}`
             : `GAME OVER  SCORE ${this._score}`;
         this.hud.setMessage(message);
+
+        // Bloque 7: persistir progreso fire-and-forget si hay levelId
+        // (sesión activa). 'stopped' NO persiste — pulsar "Salir al menú" no
+        // debería contar como un intento real. La UI no espera la respuesta;
+        // si falla, log a consola — el toast del menú ya muestra el score.
+        if (this.levelId !== null && (reason === 'win' || reason === 'collision')) {
+            const audioTime = this.audioEngine.getAudioTime();
+            const percentage = this.level.durationSec > 0
+                ? Math.min(100, Math.max(0, Math.round((audioTime / this.level.durationSec) * 100)))
+                : 0;
+            apiRequest('POST', '/api/progress', {
+                body: {
+                    level_id: this.levelId,
+                    percentage,
+                    points: this._score,
+                },
+            }).then((res) => {
+                if (!res.ok) {
+                    console.warn('[GameSession] POST /api/progress falló:', res.status, res.data);
+                }
+            }).catch((err) => {
+                console.warn('[GameSession] POST /api/progress error:', err);
+            });
+        }
 
         // Bloque 6: dispatch desacoplado para que el AppController orqueste
         // la transición a MENU sin acoplarse al callback. `onGameOver` se
